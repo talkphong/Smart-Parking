@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload File</title>
+</head>
+<body>
+  <input id="txtSend" type="text">
+  <button onclick="btnGui_click()">gửi</button>
+  <br>
+  <label id="txtReceive">đây là nội dung nhận được từ server</label>
+</body>
+</html>
+
+<script>
+  var url = window.location.host;
+  var ws = new WebSocket('ws://' + url + '/ws');
+  ws.onopen = function () {};
+
+  var msg = "đây là nội dung nhận được từ server"
+  // sự kiện nhận được tin nhắn từ sv
+  ws.onmessage = function (evt) { 
+    msg = evt.data; 
+  };
+
+  // hàm này tự động đc gọi lại sau mỗi khoảng thời gian (ở đây là sau 0s)
+  setInterval(function(){
+    const txtReceive = document.getElementById("txtReceive");
+    txtReceive.textContent = msg;
+  })
+  
+
+  function btnGui_click(){
+    const txtSend = document.getElementById("txtSend");
+    ws.send(txtSend.value)
+  }
+</script>

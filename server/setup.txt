@@ -1,0 +1,6 @@
+npm install
+npm i --save express
+npm install ws
+npm install --save-dev nodemon 
+npm init --i
+npm install --save-dev nodemon
