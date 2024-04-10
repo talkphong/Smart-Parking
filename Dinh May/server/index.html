@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload File</title>
+</head>
+<body>
+  <input id="txtSendIn" type="text">
+  <button onclick="btnGuiIn_click()">gửi</button>
+  <br>
+  <label id="txtReceiveIn">đây là nội dung nhận được từ ArduinoIn</label>
+  <br> <br>
+  <input id="txtSendOut" type="text">
+  <button onclick="btnGuiOut_click()">gửi</button>
+  <br>
+  <label id="txtReceiveOut">đây là nội dung nhận được từ ArduinoOut</label>
+</body>
+</html>
+
+<script>
+  var url = window.location.host;
+  var ws = new WebSocket('ws://' + url + '/ws');
+  ws.onopen = function () {};
+
+  var msg = "đây là nội dung nhận được từ ArduinoIn"
+  // sự kiện nhận được tin nhắn từ sv
+  ws.onmessage = function (evt) { 
+    msg = evt.data; 
+  };
+  
+  // hàm này tự động đc gọi lại sau mỗi khoảng thời gian (ở đây là sau 0s)
+  setInterval(function(){
+    const txtReceiveIn = document.getElementById("txtReceiveIn");
+    txtReceiveIn.textContent = msg;
+  })
+
+  function btnGuiIn_click(){
+    const txtSendIn = document.getElementById("txtSendIn");
+    ws.send(txtSendIn.value)
+  }
+
+  var msg2 = "đây là nội dung nhận được từ ArduinoOut"
+  // sự kiện nhận được tin nhắn từ sv
+  ws.onmessage = function (evt2) { 
+    msg2 = evt2.data; 
+  };
+
+  setInterval(function(){
+    const txtReceiveOut = document.getElementById("txtReceiveOut");
+    txtReceiveOut.textContent = msg2;
+  })
+
+  function btnGuiOut_click(){
+    const txtSendOut = document.getElementById("txtSendOut");
+    ws.send(txtSendOut.value)
+  }
+</script>
