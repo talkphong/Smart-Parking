@@ -1,0 +1,21 @@
+//https://longnv.name.vn/lap-trinh-nodejs/lap-trinh-mvc-trong-nodejs#1-tao-project-voi-express
+
+// Tạo cấu trúc folder
+npm install -g express
+npm -g install express-generator
+express --view=ejs Server
+
+// Cài module (Chuyển vào folder vứa tạo sau đó chạy lệnh)
+npm install
+
+// Chạy project
+npm start HOẶC node bin/www
+
+// Tạo thêm folder models
+
+// Cài module sql
+npm install mysql
+
+
+// Tự động chạy lại server khi thay đổi code (Thay đổi package.json -> script -> start : "nodemon")
+npm i nodemon --save-dev
