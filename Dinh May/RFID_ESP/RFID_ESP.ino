@@ -53,10 +53,15 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
       break;
     case WStype_TEXT: // NHẬN DỮ LIỆU TỪ SERVER
       String message = String((char*)payload);
-      String message2 = String((char*)payload);
       Serial.println("From Server: " + message );
-      sendArduino_In(message); //Sau khi nhận dữ liệu từ sv thì gửi nó đến arduino_In
-      sendArduino_Out(message2); //Sau khi nhận dữ liệu từ sv thì gửi nó đến arduino_Out
+       //Sau khi nhận dữ liệu từ sv thì gửi nó đến arduino_In
+      sendArduino_Out(message); //Sau khi nhận dữ liệu từ sv thì gửi nó đến arduino_Out
+      if (message[0] == "I"){
+        sendArduino_In(message);
+      }
+      else if (message[0] == "O"){
+        sendArduino_Out(message);
+      }
       break;
   }
 }
