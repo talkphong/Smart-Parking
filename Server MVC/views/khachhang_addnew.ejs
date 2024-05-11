@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thêm khách hàng</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 100px;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Thêm khách hàng</h5>
+          </div>
+          <div class="card-body">
+            <form action="/khachhang/themkhachhang" method="post" id="form-themkhachhang">
+              <div class="form-group">
+                <label for="hoten">Họ tên:</label>
+                <input type="text" class="form-control" id="hoten" name="hoten" required>
+              </div>
+              <div class="form-group">
+                <label for="socanho">Số căn hộ:</label>
+                <input type="text" class="form-control" id="socanho" name="socanho" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Thêm khách hàng</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('form-themkhachhang').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+  
+        // Lấy giá trị từ các ô nhập liệu
+        var hoten = document.getElementById('hoten').value;
+        var socanho = document.getElementById('socanho').value;
+  
+        // Kiểm tra xem có ô nào trống không
+        if (!hoten || !socanho) {
+          alert('Vui lòng nhập đầy đủ thông tin');
+          return;
+        }
+
+        // Gửi form nếu dữ liệu hợp lệ
+        this.submit();
+      });
+    });
+  </script>
+  
+
+<!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

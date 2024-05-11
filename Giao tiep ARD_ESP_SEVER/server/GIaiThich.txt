@@ -1,0 +1,56 @@
+Để kết hợp Express và WebSocket trong Node.js, bạn có thể sử dụng Express để xử lý các yêu cầu HTTP và sử dụng WebSocket để tạo một kênh giao tiếp hai chiều giữa máy khách và máy chủ. Dưới đây là một ví dụ cách làm điều đó:
+
+1. **Cài đặt các thư viện cần thiết**:
+
+Đầu tiên, hãy cài đặt Express và thư viện `ws` (WebSocket) bằng npm:
+
+```
+npm install express ws
+```
+
+2. **Tạo máy chủ Express**:
+
+```javascript
+const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
+
+const app = express();
+const server = http.createServer(app);
+
+// Định nghĩa route cho Express
+app.get('/', (req, res) => {
+  res.send('Hello from Express!');
+});
+
+// Khởi động máy chủ Express trên cổng 3000
+server.listen(3000, () => {
+  console.log('Express server is running on port 3000');
+});
+```
+
+3. **Tạo máy chủ WebSocket**:
+
+```javascript
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', function connection(ws) {
+  console.log('Client connected');
+
+  ws.on('message', function incoming(message) {
+    console.log('Received: %s', message);
+    // Phản hồi lại client
+    ws.send('Server received: ' + message);
+  });
+
+  ws.on('close', function() {
+    console.log('Client disconnected');
+  });
+});
+```
+
+4. **Kết nối máy chủ WebSocket với máy chủ HTTP của Express**:
+
+Chúng ta sử dụng `server` được tạo bởi Express để tạo máy chủ WebSocket bằng cách truyền nó vào constructor của `WebSocket.Server`.
+
+Khi bạn chạy mã này, bạn sẽ có một máy chủ Express chạy trên cổng 3000 và một máy chủ WebSocket đang lắng nghe các kết nối trên cùng một cổng. Điều này cho phép bạn xử lý cả yêu cầu HTTP thông thường và giao tiếp thời gian thực hai chiều qua WebSocket trong ứng dụng của mình.

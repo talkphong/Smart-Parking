@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quản lý khách hàng</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+      /* Định dạng khi hover vào dòng của bảng */
+      .table-hover tbody tr:hover {
+          background-color: #f5f5f5;
+      }
+
+      .table-hover thead th:hover {
+        background-color: initial; /* Hoặc một giá trị màu nền mặc định khác */
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <section class="myheader">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-center bg-light">
+                <h1>VMU</h1>
+                <p>Welcome to VMU</p>
+            </div>
+            <div class="col-12 text-right mb-4">
+              <a href="/dangnhap"><button type="button" class="btn btn-secondary mt-4">Đăng xuất</button></a>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mymainmenu">
+      <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Trang chủ</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active text-muted" aria-current="page" href="/khachhang">Khách hàng</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link"  href="#">Nhân viên</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/the">Thẻ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/phuongtien">Phương tiện</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Tài khoản</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Cổng</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Máy quẹt thẻ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Camera</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Lịch sử</a>
+              </li>
+            </ul>
+            <form class="d-flex" id="search-khachhang"action="/khachhang/search" method="GET">
+              <input class="form-control me-2" type="search" id="khachhang-input" placeholder="Tìm kiếm" aria-label="Search">
+              <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+            </form>
+          </div>
+        </div>
+      </nav>    
+    </section>
+    <section class="mymaincontent">
+        <div class="row">
+            <div class="col-11">
+                <table class="table table-hover w-75 m-auto text-center">
+                    <tr>
+                        <th>ID Khách hàng</th>
+                        <th>Số thẻ</th>
+                        <th>Họ tên</th>
+                        <th>Số căn hộ</th>
+                        <th>Số lượng phương tiện</th>
+                        <th colspan="2">
+                          <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                              <a href="/khachhang/form-them-khachhang">
+                                  <button type="button" class="btn btn-secondary">
+                                      <i class="fas fa-plus"></i>
+                                  </button>
+                              </a>               
+                          </div>
+                        </th>
+                    </tr>
+                
+                    <% for (let c of list ) {  %>
+                        <tr>
+                            <td> <%= c.id_khachhang %> </td>
+                            <td> <%= c.sothe %> </td>
+                            <td> <%= c.hoten %> </td>
+                            <td> <%= c.socanho %> </td>
+                            <td> <%= c.so_luong_phuongtien %> </td>
+                            <td>
+                              <a href="/khachhang/sua-khachhang/<%= c.id_khachhang %>"><i class="fas fa-edit text-primary mr-2"></i></a>
+                              <a href="/khachhang/xoa/<%= c.id_khachhang %>"><i class="fas fa-trash-alt text-danger"></i></a>
+                            </td>
+                        </tr>
+                    <% } %>        
+                </table>
+            </div>
+        </div>
+        
+    </section>
+
+    <section class="myfooter">
+      <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">© 2024 Quản Lý Phương Tiện Bãi Xe Chung Cư</span>
+        </div>
+      </footer>
+    </section>
+
+    <script>
+      document.getElementById('search-khachhang').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn form submit mặc định
+        var keyword = document.getElementById('khachhang-input').value;
+        search(keyword);
+      });
+
+      function search(keyword) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', `/khachhang/search?keyword=${keyword}`, true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            var data = JSON.parse(xhr.responseText);
+            // Hiển thị kết quả tìm kiếm lên bảng
+            displaySearchResult(data);
+          }
+        };
+        xhr.send();
+      }
+
+      function displaySearchResult(data) {
+        var table = document.querySelector('.table');
+        table.innerHTML = ''; // Xóa hết nội dung trong bảng trước khi thêm kết quả mới
+
+        var tableHead = document.createElement('thead'); // Tạo thead mới
+        var tableHeadRow = document.createElement('tr'); // Tạo dòng của thead
+        tableHeadRow.innerHTML = `
+          <th>ID Khách hàng</th>
+          <th>Số thẻ</th>
+          <th>Họ tên</th>
+          <th>Số căn hộ</th>
+          <th>Số lượng phương tiện</th>
+          <th colspan="2">
+            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                <a href="/khachhang/form-them-khachhang">
+                    <button type="button" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </a>               
+            </div>
+          </th> 
+        `;
+        tableHead.appendChild(tableHeadRow); // Thêm dòng vào thead
+        table.appendChild(tableHead); // Thêm thead vào bảng
+
+        var tableBody = document.createElement('tbody'); // Tạo tbody mới
+        data.forEach(function(item) {
+          var row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.id_khachhang}</td>
+            <td>${item.sothe}</td>
+            <td>${item.hoten}</td>
+            <td>${item.socanho}</td>
+            <td>${item.so_luong_phuongtien}</td>
+            <td>
+              <a href="/khachhang/chinhsua/${item.id_khachhang}"><i class="fas fa-edit text-primary mr-2"></i></a>
+              <a href="/khachhang/xoa/${item.id_khachhang}"><i class="fas fa-trash-alt text-danger"></i></a>
+            </td>
+          `;
+          tableBody.appendChild(row); // Thêm dòng vào tbody
+        });
+        table.appendChild(tableBody); // Thêm tbody vào bảng
+      }
+
+    </script>
+
+    <!-- Thêm các thư viện JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+  <body>
+
+    <section class="myheader">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 text-center bg-light">
+            <h1><%= title %></h1>
+            <p>Welcome to <%= title %></p>
+          </div>
+          <div class="col-12 text-right mb-4">
+              <a href="/dangnhap"><button type="button" class="btn btn-secondary mt-4">Đăng xuất</button></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mymainmenu">
+      <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand active text-muted" href="/">Trang chủ</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/khachhang">Khách hàng</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">Nhân viên</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/the">Thẻ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/phuongtien">Phương tiện</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Tài khoản</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Cổng</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Máy quẹt thẻ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/camera">Camera</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Lịch sử</a>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+              <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+            </form>
+          </div>
+        </div>
+      </nav>    
+    </section>
+    <section class="mymaincontent">
+      <div class="container-fluid">
+        <!-- Ảnh -->
+        <div class="text-center">
+          <img src="https://lh3.googleusercontent.com/proxy/b27PS1vxGraRtTTINi34wlqE2WoyxXJeBr9FABXSbarjGuqOD1sxRW8AvTtqEJ-wlBTjZAxMDC46sVkfkhPvLVz3W1PO9ngseoGPsZtum_tuPFMRGjUyV7g" alt="Logo" class="img-fluid">
+        </div>
+      </div>
+    </section>
+    <section class="myfooter">
+      <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">© 2024 Quản Lý Phương Tiện Bãi Xe Chung Cư</span>
+        </div>
+      </footer>
+    </section>
+
+    
+
+    <!-- Thêm các thư viện JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

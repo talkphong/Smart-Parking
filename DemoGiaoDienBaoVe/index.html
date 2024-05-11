@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="PortIN" style="width:50% ;float: left; background-color: aquamarine; text-align: center" >
+        <div id="Camera">
+            Camera IN
+            <video id="CameraIN" autoplay style="width: 100%;"></video>
+        </div>
+        <div id="result" style="height: 200px;">
+            <img id="LpRegionIN" style="width: 100%;" src="" alt="Ảnh đã cắt">
+            <p id="LpNumberIN">Biển số xe</p>
+            <button type="submit" onclick="submitIN()" >Gửi ảnh IN</button>
+        </div>
+    </div>
+
+    <div id="PortOUT" style="width:50%; float: right; background-color: crimson; text-align: center" >
+        <div id="Camera">
+            Camera OUT
+            <video id="CameraOUT" autoplay style="width: 100%;"></video>
+        </div>
+        <div id="result" style="height: 200px;">
+            <img id="LpRegionOUT" style="width: 100%;" src="" alt="Ảnh đã cắt">
+            <p id="LpNumberOUT">Biển số xe</p>
+            <button type="submit" onclick="submitOUT()" >Gửi ảnh OUT</button>
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- Hiển thị các IDCamera và mở luồng stream đến cái thiết bị đó -->
+<script >
+    navigator.mediaDevices.enumerateDevices()
+        .then(function(devices) {
+            // Tìm deviceId của camera
+            var laptopCameraId;
+            var usbCameraId;
+
+            devices.forEach(function(device) {
+                if (device.kind === 'videoinput') {
+                    console.log(device.deviceId);
+                }
+            });
+          });
+
+      navigator.mediaDevices.getUserMedia({ video: { deviceId: "20e294fda5731dc1d04112bc3faf6fda17a43d82316f3cfe7d93c0864500e62e" } })
+          .then(function (stream1) {
+              var videoElement = document.getElementById('CameraIN');
+              videoElement.srcObject = stream1;
+          })
+          .catch(function (err) {
+              console.log("An error occurred: " + err);
+          });
+
+      navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: "947e0070755ed6c4c65baf332e79335b0e46a11a5c48e1498fe739c63f88e88f" } } })
+          .then(function (stream2) {
+              var videoElement = document.getElementById('CameraOUT');
+              videoElement.srcObject = stream2;
+          })
+          .catch(function (err) {
+              console.log("An error occurred: " + err);
+          });        
+  </script>
+
+<!-- nút nhấn -->
+<script>
+    function submitIN(){
+        var videoElement = document.getElementById('CameraIN');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        
+        // Đặt kích thước của canvas bằng kích thước của video
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        
+        // Vẽ frame hiện tại của video lên canvas
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+   
+        canvas.toBlob(function(blob) {
+          // Tạo một đối tượng FormData để gửi dữ liệu lên server
+          var formData = new FormData();
+          formData.append('image', blob, 'image.jpg');
+
+          // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
+          fetch('/upload', {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+                .then(data => {
+                    // Lấy phần tử hình ảnh và thiết lập src cho nó
+                    const imageElement = document.getElementById('LpRegionIN');
+                    imageElement.src = data.croppedImg;
+
+                    // Lấy phần tử container và thiết lập nội dung của nó
+                    const textContainer = document.getElementById('LpNumberIN');
+                    textContainer.innerText = data.LpNumber;
+                })
+                .catch(error => console.error('Lỗi:', error));
+      }, 'image/jpeg');
+    }
+
+    function submitOUT(){
+        var videoElement = document.getElementById('CameraOUT');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        
+        // Đặt kích thước của canvas bằng kích thước của video
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        
+        // Vẽ frame hiện tại của video lên canvas
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+   
+        canvas.toBlob(function(blob) {
+          // Tạo một đối tượng FormData để gửi dữ liệu lên server
+          var formData = new FormData();
+          formData.append('image', blob, 'image.jpg');
+
+          // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
+          fetch('/upload', {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+                .then(data => {
+                    // Lấy phần tử hình ảnh và thiết lập src cho nó
+                    const imageElement = document.getElementById('LpRegionOUT');
+                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
+
+                    // Lấy phần tử container và thiết lập nội dung của nó
+                    const textContainer = document.getElementById('LpNumberOUT');
+                    textContainer.innerText = data.LpNumber;
+                })
+                .catch(error => console.error('Lỗi:', error));
+      }, 'image/jpeg');
+    }
+</script>
+
+<!-- Socket (tạm thời để yên) -->
+<script src="/socket.io/socket.io.js">
+    const socket = io();
+    
+    socket.on('callIN', () => {
+        var videoElement = document.getElementById('CameraIN');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        
+        // Đặt kích thước của canvas bằng kích thước của video
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        
+        // Vẽ frame hiện tại của video lên canvas
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+   
+        canvas.toBlob(function(blob) {
+          // Tạo một đối tượng FormData để gửi dữ liệu lên server
+          var formData = new FormData();
+          formData.append('image', blob, 'image.jpg');
+
+          // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
+          fetch('/upload', {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+                .then(data => {
+                    // Lấy phần tử hình ảnh và thiết lập src cho nó
+                    const imageElement = document.getElementById('croppedImgIN');
+                    imageElement.src = data.croppedImg;
+
+                    // Lấy phần tử container và thiết lập nội dung của nó
+                    const textContainer = document.getElementById('LpNumberIN');
+                    textContainer.innerText = data.LpNumber;
+                })
+                .catch(error => console.error('Lỗi:', error));
+      }, 'image/jpeg');
+    })
+
+   
+  
+    socket.on('callOUT', () => {
+        var videoElement = document.getElementById('CameraOUT');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        
+        // Đặt kích thước của canvas bằng kích thước của video
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        
+        // Vẽ frame hiện tại của video lên canvas
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+   
+        canvas.toBlob(function(blob) {
+          // Tạo một đối tượng FormData để gửi dữ liệu lên server
+          var formData = new FormData();
+          formData.append('image', blob, 'image.jpg');
+
+          // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
+          fetch('/upload', {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+                .then(data => {
+                    // Lấy phần tử hình ảnh và thiết lập src cho nó
+                    const imageElement = document.getElementById('croppedImgOUT');
+                    imageElement.src = data.croppedImg;
+
+                    // Lấy phần tử container và thiết lập nội dung của nó
+                    const textContainer = document.getElementById('LpNumberOUT');
+                    textContainer.innerText = data.LpNumber;
+                })
+                .catch(error => console.error('Lỗi:', error));
+      }, 'image/jpeg');
+    })   
+</script>

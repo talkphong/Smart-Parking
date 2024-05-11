@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quản lý phương tiện</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+      /* Định dạng khi hover vào dòng của bảng */
+      .table-hover tbody tr:hover {
+          background-color: #f5f5f5;
+      }
+
+      .table-hover thead th:hover {
+        background-color: initial; /* Hoặc một giá trị màu nền mặc định khác */
+      }
+
+      .table td,
+      .table th {
+          max-width: 200px; /* Đặt độ rộng tối đa cho các cột */
+          overflow: hidden; /* Ẩn phần nội dung vượt quá độ rộng */
+          text-overflow: ellipsis; /* Hiển thị dấu chấm (...) khi nội dung bị cắt */
+          white-space: nowrap; /* Ngăn chặn các dòng mới trong cột */
+      }
+
+    </style>
+
+  </head>
+  <body>
+
+    <section class="myheader">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-center bg-light">
+                <h1>VMU</h1>
+                <p>Welcome to VMU</p>
+            </div>
+            <div class="col-12 text-right mb-4">
+              <a href="/dangnhap"><button type="button" class="btn btn-secondary mt-4">Đăng xuất</button></a>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mymainmenu">
+      <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Trang chủ</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="/khachhang">Khách hàng</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Nhân viên</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/the">Thẻ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-muted" aria-current="page" href="/phuongtien">Phương tiện</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Tài khoản</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Cổng</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Máy quẹt thẻ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Camera</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Lịch sử</a>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+              <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+            </form>
+          </div>
+        </div>
+      </nav>    
+    </section>
+    <section class="mymaincontent">
+        <div class="row">
+            <div class="col-11">
+                <table class="table table-hover w-75 m-auto text-center">
+                    <tr>
+                        <th>ID phương tiện</th>
+                        <th>Tên chủ phương tiện</th>
+                        <th>Biển số</th>
+                        <th>Loại phương tiện</th>
+                        <th>Ảnh phương tiện</th>
+                        <th>Ảnh biển số</th>
+                        <th colspan="2">
+                          <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                              <a href="#">
+                                  <button type="button" class="btn btn-secondary">
+                                      <i class="fas fa-plus"></i>
+                                  </button>
+                              </a>               
+                          </div>
+                        </th>
+                    </tr>
+                    
+                    <% for (let c of list ) { %>
+                        <tr>
+                            <td> <%= c.id_phuongtien %> </td>
+                            <td> <%= c.hoten %> </td>
+                            <td> <%= c.bienso %> </td>
+                            <td> <%= c.loaiphuongtien %> </td>
+                            <td title="<%= c.path_anhphuongtien %>">
+                              <img src="<%= c.path_anhphuongtien %>" alt="Ảnh phương tiện">
+                            </td>
+                            <td title="<%= c.path_anhbienso %>"> <%= c.path_anhbienso %> </td>
+                            <td>
+                              <a href="/the/chinhsua/<%= c.id_the %>"><i class="fas fa-edit text-primary mr-2"></i></a>
+                              <a href="/the/xoa/<%= c.id_the %>"><i class="fas fa-trash-alt text-danger"></i></a>
+                            </td>
+                        </tr>
+                    <% } %>        
+                </table>
+            </div>
+        </div>
+        
+    </section>
+
+    <section class="myfooter">
+      <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">© 2024 Quản Lý Phương Tiện Bãi Xe Chung Cư</span>
+        </div>
+      </footer>
+    </section>
+
+    <!-- Thêm các thư viện JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

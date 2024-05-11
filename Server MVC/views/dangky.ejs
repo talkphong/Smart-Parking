@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid" style="width: 50%; display: flexbox; background: rgb(243, 243, 243); background-size: auto;">
+        <div class="container-fluid" style="width: auto; margin-top: 25%; padding-bottom: 1%; padding-top: 2%;">
+          <div class="container text-center" style="width: 70%; padding-bottom: 20px;">
+            <div class="btn-group">
+                <form action="/dangnhap" method="get" enctype="multipart/form-data">
+                    <button type="submit" class="btn" aria-current="page">Đăng nhập</button>
+                </form>
+                <form action="/dangky" method="get" enctype="multipart/form-data">
+                    <button type="submit" class="btn active" aria-current="page" style="margin-left: 10px;">Đăng ký</button>
+                </form>
+              </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="tendangnhap" class="col-sm-2 col-form-label">Tên đăng nhập:</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="tendangnhap">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="matkhau" class="col-sm-2 col-form-label">Mật khẩu:</label>
+            <div class="col-sm-6">
+              <input type="password" class="form-control" id="matkhau">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="hoten" class="col-sm-2 col-form-label">Họ tên:</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="hoten">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="id-khachhang" class="col-sm-2 col-form-label">ID Khách hàng:</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="id-khachhang">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button type="submit" class="btn" style="background-color: rgb(222, 222, 222);">Xác nhận đăng ký</button>
+          </div>
+        </div>
+    </div>
+    
+
+<!--BootstrapJS-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
