@@ -141,11 +141,16 @@
     }
 </script>
 
-<!-- Socket (tạm thời để yên) -->
-<script src="/socket.io/socket.io.js">
-    const socket = io();
-    
-    socket.on('callIN', () => {
+<!-- WebSocket -->
+<script>
+  var url = window.location.host;
+  var ws = new WebSocket('ws://' + url + '/ws');
+  ws.onopen = function () {};
+
+  var msg = "đây là nội dung nhận được từ server"
+  // sự kiện nhận được tin nhắn từ sv
+  ws.onmessage = function (evt) { 
+    if(evt.data == "CallIN"){
         var videoElement = document.getElementById('CameraIN');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
@@ -163,14 +168,14 @@
           formData.append('image', blob, 'image.jpg');
 
           // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
-          fetch('/upload', {
+          fetch('camera/upload', {
               method: 'POST',
               body: formData
           })
           .then(response => response.json())
                 .then(data => {
                     // Lấy phần tử hình ảnh và thiết lập src cho nó
-                    const imageElement = document.getElementById('croppedImgIN');
+                    const imageElement = document.getElementById('LpRegionIN');
                     imageElement.src = data.croppedImg;
 
                     // Lấy phần tử container và thiết lập nội dung của nó
@@ -179,11 +184,8 @@
                 })
                 .catch(error => console.error('Lỗi:', error));
       }, 'image/jpeg');
-    })
-
-   
-  
-    socket.on('callOUT', () => {
+    }
+    else if (evt.data == "CallOUT"){
         var videoElement = document.getElementById('CameraOUT');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
@@ -201,15 +203,15 @@
           formData.append('image', blob, 'image.jpg');
 
           // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
-          fetch('/upload', {
+          fetch('camera/upload', {
               method: 'POST',
               body: formData
           })
           .then(response => response.json())
                 .then(data => {
                     // Lấy phần tử hình ảnh và thiết lập src cho nó
-                    const imageElement = document.getElementById('croppedImgOUT');
-                    imageElement.src = data.croppedImg;
+                    const imageElement = document.getElementById('LpRegionOUT');
+                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
 
                     // Lấy phần tử container và thiết lập nội dung của nó
                     const textContainer = document.getElementById('LpNumberOUT');
@@ -217,5 +219,6 @@
                 })
                 .catch(error => console.error('Lỗi:', error));
       }, 'image/jpeg');
-    })   
+    }
+  };
 </script>

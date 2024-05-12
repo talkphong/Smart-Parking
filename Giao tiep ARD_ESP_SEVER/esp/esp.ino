@@ -35,7 +35,8 @@ void setup() {
 
 void loop() {
   webSocket.loop();
-  receiveArduinoIN();
+  // receiveArduinoIN();
+  sendServer();
 }
 
 //các sự kiện websocket
@@ -64,6 +65,15 @@ void sendServer(String message){
   //   Serial.println("You entered: " + input);  //hiển thị chuỗi đó lên terminal
   // }
   webSocket.sendTXT(message);
+}
+
+void sendServer(){
+  //nhập chuỗi từ bàn phím sau đó gửi chuỗi đó lên sv, in ra màn hình
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n'); //nhập chuỗi input từ bàn phím
+    webSocket.sendTXT(input); // gửi chuỗi input lên sv
+    Serial.println("You entered: " + input);  //hiển thị chuỗi đó lên terminal
+  }
 }
 
 // GỬI DỮ LIỆU ĐẾN ARDUINO

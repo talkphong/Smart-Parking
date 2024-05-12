@@ -17,7 +17,8 @@
     "mysql": "^2.18.1",
     "sharp": "^0.33.3",
     "socket.io": "^4.7.5",
-    "sql": "^0.78.0"
+    "sql": "^0.78.0",
+    "ws": "^8.17.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

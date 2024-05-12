@@ -12,12 +12,7 @@ const { Blob } = require('buffer');
 const multer  = require('multer');
 const sharp = require('sharp');
 
-const http = require('http');
-const socketIO = require('socket.io');
-
 const app = express()
-const server = http.createServer(app);
-const io = socketIO(server);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -36,6 +31,9 @@ async function cropImage(inputPath, outputPath, xmin, ymin, xmax, ymax) {
         .extract({ left: xmin, top: ymin, width: xmax-xmin, height: ymax-ymin })
         .toFile(outputPath);
 }
+
+
+
 
 app.get('/', function (req, res, next) {
     res.render('camera');
@@ -96,7 +94,5 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 //         socket.emit('callOUT');
 //     })  
 // });
-
-
 
 module.exports = app;

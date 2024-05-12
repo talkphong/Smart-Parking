@@ -13,7 +13,6 @@ var dangkyRouter = require('./routes/dangky');
 var phuongtienRouter = require('./routes/phuongtien');
 var cameraRouter = require('./routes/camera');
 
-
 var app = express();
 
 // view engine setup

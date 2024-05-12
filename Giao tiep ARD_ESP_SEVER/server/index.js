@@ -50,3 +50,4 @@ ws.on('connection', function connection(socket) {
     clients.splice(index, 1); // khi 1 cl ngắt kết nối, loại bỏ cl đó ra khỏi danh sách
   });
 });
+
