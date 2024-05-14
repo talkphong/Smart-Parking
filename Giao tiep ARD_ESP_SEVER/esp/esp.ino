@@ -8,9 +8,9 @@
 #define SDA_PIN 5           // Định nghĩa chân SDA là chân D1
 #define SCL_PIN 4           // Định nghĩa chân SCL là chân D2
 
-const char* ssid = "Phong Truong";            //tên wifi
-const char* password = "cuong1972";           //mật khẩu wifi
-const char* serverAddress = "192.168.55.104"; // Địa chỉ IP của máy chủ Node.js (cmd -> ipconfig)
+const char* ssid = "";            //tên wifi
+const char* password = "";           //mật khẩu wifi
+const char* serverAddress = ""; // Địa chỉ IP của máy chủ Node.js (cmd -> ipconfig)
 const int serverPort = 3000;                  // Cổng của máy chủ Node.js
 
 WiFiClient wifiClient;
@@ -58,12 +58,6 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 
 // GỬI DỮ LIỆU ĐẾN SERVER
 void sendServer(String message){
-  // //nhập chuỗi từ bàn phím sau đó gửi chuỗi đó lên sv, in ra màn hình
-  // if (Serial.available() > 0) {
-  //   String input = Serial.readStringUntil('\n'); //nhập chuỗi input từ bàn phím
-  //   webSocket.sendTXT(input); // gửi chuỗi input lên sv
-  //   Serial.println("You entered: " + input);  //hiển thị chuỗi đó lên terminal
-  // }
   webSocket.sendTXT(message);
 }
 
@@ -78,17 +72,19 @@ void sendServer(){
 
 // GỬI DỮ LIỆU ĐẾN ARDUINO
 void sendArduino(String message){
-  // if (Serial.available() > 0) {
-  //   Wire.beginTransmission(arduinoIN); // Bắt đầu luồng đến thiết bị số 8
-  //   String input = Serial.readStringUntil('\n'); //nhập chuỗi input từ bàn phím
-  //   Wire.write(input.c_str());  // gửi dữ liệu 
-  //   Serial.println("You entered: " + input);  //hiển thị chuỗi đó lên terminal
-  //   Wire.endTransmission();    // Kết thúc
-  // }
-
   Wire.beginTransmission(arduinoIN); // Bắt đầu luồng đến thiết bị số 8
   Wire.write(message.c_str());  // gửi dữ liệu 
   Wire.endTransmission();    // Kết thúc
+}
+
+void sendArduino(){
+  if (Serial.available() > 0) {
+    Wire.beginTransmission(arduinoIN); // Bắt đầu luồng đến thiết bị số 8
+    String input = Serial.readStringUntil('\n'); //nhập chuỗi input từ bàn phím
+    Wire.write(input.c_str());  // gửi dữ liệu 
+    Serial.println("You entered: " + input);  //hiển thị chuỗi đó lên terminal
+    Wire.endTransmission();    // Kết thúc
+  }
 }
 
 // NHẬN DỮ LIỆU TỪ ARDUINO
