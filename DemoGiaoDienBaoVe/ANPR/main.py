@@ -8,8 +8,8 @@ from keras.models import load_model
 import sys
 from pathlib import Path
 
-model = YOLO(Path(__file__).with_name("./best.pt"))
-model_detect_text = load_model(Path(__file__).with_name("./alexnet_model.h5"))
+model = YOLO(Path(__file__).with_name("best.pt"))
+model_detect_text = load_model(Path(__file__).with_name("alexnet_model.h5"))
 print('load xong model')
 sys.stdout.flush()
 
@@ -130,20 +130,12 @@ def recognize(image):
 
 
 # def main():
-    
-    # img = cv2.imread(r"C:\Users\Windows\Desktop\Nhan dien bien so xe\dataset\xe may\1 (56).jpg")
-    # plate = recognize(img)
-    # cv2.waitKey()
-
-
-
     # cap = cv2.VideoCapture(0)
     # cap = cv2.VideoCapture("video.mp4")
     # while True:
     #     ret, frame = cap.read()
 
     #     # frame = cv2.resize(frame, (600,1000), interpolation=cv2.INTER_LINEAR)
-
 
     #     cv2.imshow('Original Frame', frame)
     #     string = recognize(frame)
