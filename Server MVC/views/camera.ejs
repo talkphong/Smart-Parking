@@ -36,34 +36,35 @@
 <script >
     navigator.mediaDevices.enumerateDevices()
         .then(function(devices) {
-            // Tìm deviceId của camera
-            var laptopCameraId;
-            var usbCameraId;
+            // devices.forEach(function(device) {
+            //     if (device.kind === 'videoinput') {
+            //         console.log(device.deviceId);
+            //     }
+            // });
+            const devideID1 = devices[1].deviceId
+            const devideID2 = devices[2].deviceId
+            streamVideo(devideID1, devideID2)
+        });
 
-            devices.forEach(function(device) {
-                if (device.kind === 'videoinput') {
-                    console.log(device.deviceId);
-                }
+    function streamVideo(devideID1, devideID2){
+        navigator.mediaDevices.getUserMedia({ video: { deviceId: devideID1 } })
+            .then(function (stream1) {
+                var videoElement = document.getElementById('CameraIN');
+                videoElement.srcObject = stream1;
+            })
+            .catch(function (err) {
+                console.log("Lỗi khi stream video1: " + err);
             });
-          });
 
-      navigator.mediaDevices.getUserMedia({ video: { deviceId: "20e294fda5731dc1d04112bc3faf6fda17a43d82316f3cfe7d93c0864500e62e" } })
-          .then(function (stream1) {
-              var videoElement = document.getElementById('CameraIN');
-              videoElement.srcObject = stream1;
-          })
-          .catch(function (err) {
-              console.log("An error occurred: " + err);
-          });
-
-      navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: "fd1103bf245b790e5e09f3987e9fb95ec6bdcd371bd8453121941ceead31a246" } } })
-          .then(function (stream2) {
-              var videoElement = document.getElementById('CameraOUT');
-              videoElement.srcObject = stream2;
-          })
-          .catch(function (err) {
-              console.log("An error occurred: " + err);
-          });        
+        navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: devideID2 } } })
+            .then(function (stream2) {
+                var videoElement = document.getElementById('CameraOUT');
+                videoElement.srcObject = stream2;
+            })
+            .catch(function (err) {
+                console.log("Lỗi khi stream video2: " + err);
+            });        
+    }
   </script>
 
 <!-- nút nhấn -->
@@ -94,7 +95,7 @@
                 .then(data => {
                     // Lấy phần tử hình ảnh và thiết lập src cho nó
                     const imageElement = document.getElementById('LpRegionIN');
-                    imageElement.src = data.croppedImg;
+                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
 
                     // Lấy phần tử container và thiết lập nội dung của nó
                     const textContainer = document.getElementById('LpNumberIN');
