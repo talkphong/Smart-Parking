@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thêm tài khoản</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Thêm tài khoản</h5>
+          </div>
+          <div class="card-body">
+            <form action="/taikhoan/themtaikhoan" method="post" id="form-themtaikhoan">
+              <div class="form-group">
+                <label for="toggle_id_khachhang">Thêm tài khoản khách hàng:</label>
+                <input type="checkbox" id="toggle_id_khachhang">
+                <select id="them_id_khachhang" name="them_id_khachhang" disabled>
+                  <% listkhachhang.forEach(khachhang => { %>
+                    <option value="<%= khachhang.id_khachhang %>"><%= khachhang.id_khachhang %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="toggle_id_nhanvien">Thêm tài khoản nhân viên:</label>
+                <input type="checkbox" id="toggle_id_nhanvien">
+                <select id="them_id_nhanvien" name="them_id_nhanvien" disabled>
+                  <% listnhanvien.forEach(nhanvien => { %>
+                    <option value="<%= nhanvien.id_nhanvien %>"><%= nhanvien.id_nhanvien %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="them_tendangnhap">Tên đăng nhập:</label>
+                <input type="text" class="form-control" id="them_tendangnhap" name="them_tendangnhap" required>
+              </div>
+              <div class="form-group">
+                <label for="them_matkhau">Mật khẩu:</label>
+                <input type="password" class="form-control" id="them_matkhau" name="them_matkhau" required>
+              </div>
+              <div class="form-group">
+                <label for="them_phanquyen">Phân quyền:</label>
+                <input type="text" class="form-control" id="them_phanquyen" name="them_phanquyen" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Thêm tài khoản</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggle_id_khachhang = document.getElementById('toggle_id_khachhang');
+      const them_id_khachhang = document.getElementById('them_id_khachhang');
+      const toggle_id_nhanvien = document.getElementById('toggle_id_nhanvien');
+      const them_id_nhanvien = document.getElementById('them_id_nhanvien');
+
+      toggle_id_khachhang.addEventListener('change', function() {
+        them_id_khachhang.disabled = !this.checked;
+      });
+
+      toggle_id_nhanvien.addEventListener('change', function() {
+        them_id_nhanvien.disabled = !this.checked;
+      });
+
+      document.getElementById('form-themtaikhoan').addEventListener('submit', function(event) {
+        const khachhangChecked = toggle_id_khachhang.checked;
+        const nhanvienChecked = toggle_id_nhanvien.checked;
+
+        const khachhangValue = them_id_khachhang.value;
+        const nhanvienValue = them_id_nhanvien.value;
+        const tendangnhap = document.getElementById('them_tendangnhap').value;
+        const matkhau = document.getElementById('them_matkhau').value;
+        const phanquyen = document.getElementById('them_phanquyen').value;
+
+        if ((!khachhangChecked && !nhanvienChecked) ||
+            (khachhangChecked && !khachhangValue) ||
+            (nhanvienChecked && !nhanvienValue) ||
+            !tendangnhap || !matkhau || !phanquyen) {
+          event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+          alert('Vui lòng nhập đầy đủ thông tin');
+        }
+      });
+    });
+  </script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

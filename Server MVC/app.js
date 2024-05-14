@@ -12,6 +12,8 @@ var dangxuatRouter = require('./routes/dangxuat');
 var dangkyRouter = require('./routes/dangky');
 var phuongtienRouter = require('./routes/phuongtien');
 var cameraRouter = require('./routes/camera');
+var nhanvienRouter = require('./routes/nhanvien');
+var taikhoanRouter = require('./routes/taikhoan');
 
 var app = express();
 
@@ -33,6 +35,8 @@ app.use('/dangxuat', dangxuatRouter);
 app.use('/dangky', dangkyRouter);
 app.use('/phuongtien', phuongtienRouter);
 app.use('/camera', cameraRouter);
+app.use('/nhanvien', nhanvienRouter);
+app.use('/taikhoan', taikhoanRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
