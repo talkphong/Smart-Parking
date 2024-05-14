@@ -8,11 +8,9 @@ const sharp = require('sharp');
 
 const express = require('express');
 const http = require('http');
-const socketIO = require('socket.io');
 
 const app = express()
 const server = http.createServer(app);
-const io = socketIO(server);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -79,22 +77,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     fs.unlink(path.join(__dirname + "/uploads/", "image.jpg"), (err) => {});
   })
 
-//   Socket (tạm thời để yên)
-// io.on('connection', (socket) => {
-//     console.log('A client connected');
-//     socket.on('CardIN', () => {
-//         socket.emit('callIN');
-//     })
-
-//     socket.on('CardOUT', () => {
-//         socket.emit('callOUT');
-//     })  
-// });
-
-
 app.get('/', (req, res) => { 
     res.sendFile(path.join(__dirname, 'index.html'))
 }) 
 
-// app.listen(3000)
 server.listen(3000)
