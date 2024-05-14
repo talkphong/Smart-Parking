@@ -4,8 +4,7 @@ const db = mysql.createConnection({
     user: "root",
     host: "localhost",
     password: "",
-    // database: "baixe",
-    database: "smart_parking",
+    database: "baixe",
 }); 
 db.connect(() => console.log('Da ket noi database !'));
 module.exports = db; 
