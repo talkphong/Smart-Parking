@@ -25,13 +25,13 @@ router.post('/xulydangnhap', function(req, res, next) {
       req.session.user = results[0].phanquyen;
       switch (req.session.user){
         case "Admin":
-          res.redirect('../index', { title: results[0].tendangnhap });
+          res.redirect('/index');
           break;
         case "Nhân viên":
-          res.redirect('../camera');
+          res.redirect('/camera');
           break;
         case "Khách hàng":
-          res.redirect('../khachhang');
+          res.redirect('/khachhang');
           break;
       }
       // res.send(`Đăng nhập thành công, quyền người dùng là: ${results[0].phanquyen}`)

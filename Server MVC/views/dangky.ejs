@@ -19,35 +19,37 @@
                 </form>
               </div>
           </div>
-          <div class="mb-3 row">
-            <label for="tendangnhap" class="col-sm-2 col-form-label">Tên đăng nhập:</label>
-            <div class="col-sm-6">
-              <input type="text" class="form-control" id="tendangnhap">
+          <form action="/dangky/xulydangky" method="post">
+            <div class="mb-3 row">
+              <label for="tendangnhap" class="col-sm-2 col-form-label">Tên đăng nhập:</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" name="tendangnhap">
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="matkhau" class="col-sm-2 col-form-label">Mật khẩu:</label>
+              <div class="col-sm-6">
+                <input type="password" class="form-control" name="matkhau">
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="hoten" class="col-sm-2 col-form-label">Họ tên:</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" name="hoten">
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="id-khachhang" class="col-sm-2 col-form-label">ID Khách hàng:</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" name="id_khachhang">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button type="submit" class="btn" style="background-color: rgb(222, 222, 222);">Xác nhận đăng ký</button>
             </div>
           </div>
-          <div class="mb-3 row">
-            <label for="matkhau" class="col-sm-2 col-form-label">Mật khẩu:</label>
-            <div class="col-sm-6">
-              <input type="password" class="form-control" id="matkhau">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="hoten" class="col-sm-2 col-form-label">Họ tên:</label>
-            <div class="col-sm-6">
-              <input type="text" class="form-control" id="hoten">
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="id-khachhang" class="col-sm-2 col-form-label">ID Khách hàng:</label>
-            <div class="col-sm-6">
-              <input type="text" class="form-control" id="id-khachhang">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <button type="submit" class="btn" style="background-color: rgb(222, 222, 222);">Xác nhận đăng ký</button>
-          </div>
-        </div>
+        </form>
     </div>
     
 
