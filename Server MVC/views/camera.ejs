@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- NÚT ĐĂNG XUẤT -->
+    <button id="logoutBtn">Đăng xuất</button>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Gửi yêu cầu đăng xuất đến máy chủ
+            fetch('/dangxuat', {
+                method: 'POST',
+                credentials: 'same-origin' // Đảm bảo gửi cùng các cookie với trang
+            }).then(function(response) {
+                // Kiểm tra phản hồi từ máy chủ
+                if (response.ok) {
+                    // Chuyển hướng hoặc thực hiện các hành động phù hợp sau khi đăng xuất thành công
+                    window.location.href = '/';
+                } else {
+                    console.error('Đã xảy ra lỗi khi đăng xuất');
+                }
+            }).catch(function(error) {
+                console.error('Lỗi kết nối: ', error);
+            });
+        });
+    </script>
 </head>
 <body>
     <div id="PortIN" style="width:50% ;float: left; background-color: aquamarine; text-align: center" >

@@ -33,9 +33,10 @@ async function cropImage(inputPath, outputPath, xmin, ymin, xmax, ymax) {
 }
 
 
+const authMiddleware = require('../middleware/authMiddleware');
 
 
-app.get('/', function (req, res, next) {
+app.get('/', authMiddleware.isStaff, function (req, res, next) {
     res.render('camera');
 });
 
