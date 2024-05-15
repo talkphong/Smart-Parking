@@ -22,7 +22,7 @@ router.post('/xulydangnhap', function(req, res, next) {
     if (results.length > 0) {
       res.send(`Đăng nhập thành công, quyền người dùng là: ${results[0].phanquyen}`)
     } else {
-      res.status(401);
+      res.status(401).send("Ten dang nhap hoac mat khau khong dung");
     }
   });
 });
