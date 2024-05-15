@@ -11,9 +11,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/xulydangnhap', function(req, res, next) {
-  let tendangnhap = req.body.tendangnhap;
-  let matkhau = req.body.matkhau;
-  let sql = `SELECT tendangnhap, matkhau FROM taikhoan WHERE tendangnhap = ? AND matkhau = ?`;
+  const { tendangnhap, matkhau } = req.body;
+  let sql = `SELECT tendangnhap, matkhau, phanquyen FROM taikhoan WHERE tendangnhap = ? AND matkhau = ?`;
   db.query(sql, [tendangnhap, matkhau], function(err, results, fields) {
     if (err) {
       res.status(500).send("Loi truy van co so du lieu");
@@ -21,9 +20,9 @@ router.post('/xulydangnhap', function(req, res, next) {
     }
 
     if (results.length > 0) {
-      res.redirect('/index.html');
+      res.send(`Đăng nhập thành công, quyền người dùng là: ${results[0].phanquyen}`)
     } else {
-      res.status(401).send("Ten dang nhap hoac mat khau khong dung");
+      res.status(401);
     }
   });
 });

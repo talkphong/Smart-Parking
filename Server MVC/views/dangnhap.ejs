@@ -19,7 +19,7 @@
           </form>
         </div>
       </div>
-      <form action="/dangnhap/xulydangnhap" method="post" enctype="multipart/form-data" id="form-dangnhap">
+      <form action="/dangnhap/xulydangnhap" method="post" id="form-dangnhap">
         <div class="mb-3 row">
           <label for="tendangnhap" class="col-sm-2 col-form-label">Tên đăng nhập:</label>
           <div class="col-sm-6">
@@ -46,24 +46,18 @@
   // Script xử lý nút đăng nhập
   document.getElementById('form-dangnhap').addEventListener('submit', function(event) {
     event.preventDefault(); // Ngăn chặn hành vi mặc định của form
-
-    const formData = new FormData(this); // Lấy dữ liệu từ form
-
-    fetch('/dangnhap/xulydangnhap', {
-      method: 'POST',
-      body: formData
-    })
+    this.submit();
+  })
     .then(response => {
-      if (!response.ok) {
-          throw new Error('Đăng nhập không thành công');
-      }
-      // Đăng nhập thành công, chuyển hướng đến trang chủ hoặc xử lý kết quả tùy theo yêu cầu
-      window.location.href = '/index.html';
+        if (!response.ok) {
+            throw new Error('Đăng nhập không thành công');
+        }
+        // Đăng nhập thành công, chuyển hướng đến trang chủ hoặc xử lý kết quả tùy theo yêu cầu
+        window.location.href = '/index.html';
     })
     .catch(error => {
       alert(error.message); // Hiển thị thông báo lỗi
     });
-  });
 </script>
 
 
