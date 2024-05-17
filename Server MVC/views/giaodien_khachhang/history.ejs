@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch sử ra vào</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .navbar {
+      background-color: #343a40;
+    }
+
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .table th,
+    .table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .table img {
+      max-width: 100px;
+    }
+
+    .card {
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      background-color: #007bff;
+      color: #fff;
+      border-bottom: none;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      padding: 1rem;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">Smart Parking</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/thongtin">Thông tin cá nhân</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/taikhoan">Thông tin tài khoản</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/phuongtien">Thông tin phương tiện</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/thexe">Thông tin thẻ xe</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/lichsu">Lịch sử ra vào</a>
+        </li>
+        <li class="nav-item">
+          <form id="logoutForm" action="/dangxuat" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-link nav-link" style="color: #fff; cursor: pointer;">Đăng xuất</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            Lịch sử ra vào
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Ngày giờ</th>
+                  <th>Hình ảnh biển số</th>
+                  <th>Hình ảnh toàn xe</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>01/05/2024 08:00 AM</td>
+                  <td><img src="/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg" alt="Biển số xe"></td>
+                  <td><img src="/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg" alt="Toàn xe"></td>
+                </tr>
+                <tr>
+                  <td>01/05/2024 05:00 PM</td>
+                  <td><img src="[URL hình ảnh biển số]" alt="Biển số xe"></td>
+                  <td><img src="[URL hình ảnh toàn xe]" alt="Toàn xe"></td>
+                </tr>
+                <!-- Các dòng lịch sử khác -->
+              </tbody>
+            </table>
+            <div class="text-right">
+              <a href="/khachhang" class="btn btn-primary">Quay lại</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
