@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2024 at 08:28 AM
+-- Generation Time: May 18, 2024 at 03:52 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -29,9 +29,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `camera` (
   `id_camera` int(11) NOT NULL,
-  `tencamera` int(11) NOT NULL,
-  `trangthai` int(11) NOT NULL
+  `tencamera` varchar(50) NOT NULL,
+  `trangthai` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `camera`
+--
+
+INSERT INTO `camera` (`id_camera`, `tencamera`, `trangthai`) VALUES
+(1, 'CAMIN', 'Hoạt động'),
+(2, 'CAMOUT', 'Hoạt động');
 
 -- --------------------------------------------------------
 
@@ -42,7 +50,7 @@ CREATE TABLE `camera` (
 CREATE TABLE `cong` (
   `id_cong` int(11) NOT NULL,
   `tencong` varchar(255) NOT NULL,
-  `trangthai` varchar(255) NOT NULL,
+  `trangthai` varchar(255) DEFAULT NULL,
   `thoigianmo` datetime DEFAULT current_timestamp(),
   `thoigiandong` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -52,7 +60,7 @@ CREATE TABLE `cong` (
 --
 
 INSERT INTO `cong` (`id_cong`, `tencong`, `trangthai`, `thoigianmo`, `thoigiandong`) VALUES
-(1, 'Cổng vào A', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(1, 'Cổng vào A', '', '2024-05-18 16:15:45', '2024-05-18 16:15:45'),
 (2, 'Cổng ra A', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
@@ -77,7 +85,8 @@ INSERT INTO `khachhang` (`id_khachhang`, `hoten`, `socanho`) VALUES
 (3, 'Lee Minh Hieu', 'PARIS 12-03'),
 (4, 'Nguyễn Thanh Bình', 'VENICE 01-02'),
 (5, 'Hoàng Thị Thùy Linh', 'MONACO 01-01'),
-(6, 'Nguyễn Thái Minh', 'VENICE 01-01');
+(6, 'Nguyễn Thái Minh', 'VENICE 01-01'),
+(7, 'Phạm Minh Thái', 'TNH430');
 
 -- --------------------------------------------------------
 
@@ -94,9 +103,17 @@ CREATE TABLE `lichsu` (
   `id_khachhang` int(11) NOT NULL,
   `id_the` int(11) NOT NULL,
   `id_phuongtien` int(11) NOT NULL,
-  `thoigianra` datetime NOT NULL DEFAULT current_timestamp(),
-  `thoigianvao` datetime NOT NULL DEFAULT current_timestamp()
+  `thoigianra` datetime DEFAULT current_timestamp(),
+  `thoigianvao` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `lichsu`
+--
+
+INSERT INTO `lichsu` (`id_lichsu`, `id_nhanvien`, `id_cong`, `id_mayquetthe`, `id_camera`, `id_khachhang`, `id_the`, `id_phuongtien`, `thoigianra`, `thoigianvao`) VALUES
+(1, 3, 1, 1, 1, 1, 1, 1, NULL, '2024-05-17 16:33:44'),
+(2, 3, 2, 2, 2, 1, 1, 1, '2024-05-18 16:17:39', NULL);
 
 -- --------------------------------------------------------
 
@@ -108,9 +125,17 @@ CREATE TABLE `mayquetthe` (
   `id_mayquetthe` int(11) NOT NULL,
   `id_cong` int(11) NOT NULL,
   `id_camera` int(11) NOT NULL,
-  `id_the` int(11) NOT NULL,
+  `id_the` int(11) DEFAULT NULL,
   `tenmay` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `mayquetthe`
+--
+
+INSERT INTO `mayquetthe` (`id_mayquetthe`, `id_cong`, `id_camera`, `id_the`, `tenmay`) VALUES
+(1, 1, 1, 6, 'Máy vào'),
+(2, 2, 2, 6, 'Máy ra');
 
 -- --------------------------------------------------------
 
@@ -120,7 +145,7 @@ CREATE TABLE `mayquetthe` (
 
 CREATE TABLE `nhanvien` (
   `id_nhanvien` int(11) NOT NULL,
-  `id_cong` int(11) NOT NULL,
+  `id_cong` int(11) DEFAULT NULL,
   `hoten` varchar(255) NOT NULL,
   `ngayvaolam` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -132,7 +157,8 @@ CREATE TABLE `nhanvien` (
 INSERT INTO `nhanvien` (`id_nhanvien`, `id_cong`, `hoten`, `ngayvaolam`) VALUES
 (1, 1, 'Phong Trần', '2024-04-05'),
 (2, 1, 'Phát Nguyễn', '2024-04-05'),
-(3, 2, 'Hiếu Lê', '2024-04-05');
+(3, 2, 'Hiếu Lê', '2024-04-05'),
+(4, NULL, 'Lee Minh Hieu', '2024-05-14');
 
 -- --------------------------------------------------------
 
@@ -154,7 +180,8 @@ CREATE TABLE `phuongtien` (
 --
 
 INSERT INTO `phuongtien` (`id_phuongtien`, `id_khachhang`, `bienso`, `loaiphuongtien`, `path_anhphuongtien`, `path_anhbienso`) VALUES
-(1, 1, '15B397428', 'Xe máy', 'F:\\DoAn\\Server_4-5-24\\public\\images\\anhphuongtien\\1\\2933362ce1ae682e4b699c0481c097cc.jpg', 'F:\\DoAn\\Server_4-5-24\\public\\images\\anhbienso\\1\\2c462ab845c8a91ac0ef9b5feb249bdf.jpg');
+(1, 1, '15B397428', 'Xe máy', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
+(2, 1, '15B413594', 'Ô tô', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg');
 
 -- --------------------------------------------------------
 
@@ -176,10 +203,13 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`id_taikhoan`, `id_khachhang`, `id_nhanvien`, `tendangnhap`, `matkhau`, `phanquyen`) VALUES
-(1, NULL, 1, 'phongtran', '89940', 'Admin'),
-(2, NULL, 2, 'phatnguyen', '86940', 'Admin'),
-(3, NULL, 3, 'hieule', '123456', 'Nhân viên'),
-(4, 1, NULL, 'phong', '89940', 'Khách hàng');
+(1, NULL, 1, 'phongtran', '89940', 'admin'),
+(2, NULL, 2, 'phatnguyen', '86940', 'admin'),
+(3, NULL, 3, 'hieule', '123456', 'nhanvien'),
+(4, 1, NULL, 'phong', '89940', 'khachhang'),
+(5, 6, NULL, 'minhcaca', 'thaiminh', 'khachhang'),
+(6, NULL, 4, 'leehieu', 'hieulee', 'nhanvien'),
+(7, 7, NULL, 'mocmeo', '050302', 'khachhang');
 
 -- --------------------------------------------------------
 
@@ -189,7 +219,7 @@ INSERT INTO `taikhoan` (`id_taikhoan`, `id_khachhang`, `id_nhanvien`, `tendangnh
 
 CREATE TABLE `the` (
   `id_the` int(11) NOT NULL,
-  `id_khachhang` int(11) NOT NULL,
+  `id_khachhang` int(11) DEFAULT NULL,
   `sothe` varchar(50) NOT NULL,
   `loaithe` varchar(50) NOT NULL,
   `ngaytaothe` date NOT NULL,
@@ -204,7 +234,9 @@ INSERT INTO `the` (`id_the`, `id_khachhang`, `sothe`, `loaithe`, `ngaytaothe`, `
 (1, 1, '89940', 'Thẻ VIP', '2024-04-04', '0đ'),
 (2, 2, '86940', 'Thẻ VIP', '2024-04-04', '0đ'),
 (3, 3, '12345', 'Thẻ VIP', '2024-05-02', '0đ'),
-(4, 5, '11111', 'Thẻ VIP', '2024-05-02', '0đ');
+(4, 5, '88888', 'Thẻ VIP', '2024-05-02', '0đ'),
+(5, 4, '112233', 'Thẻ VIP', '2024-05-14', '0đ'),
+(6, 6, '332244', 'Thẻ VIP', '2024-05-14', '0đ');
 
 --
 -- Indexes for dumped tables
@@ -214,13 +246,13 @@ INSERT INTO `the` (`id_the`, `id_khachhang`, `sothe`, `loaithe`, `ngaytaothe`, `
 -- Indexes for table `camera`
 --
 ALTER TABLE `camera`
-  ADD KEY `id_camera` (`id_camera`);
+  ADD PRIMARY KEY (`id_camera`);
 
 --
 -- Indexes for table `cong`
 --
 ALTER TABLE `cong`
-  ADD KEY `id_cong` (`id_cong`);
+  ADD PRIMARY KEY (`id_cong`);
 
 --
 -- Indexes for table `khachhang`
@@ -284,46 +316,58 @@ ALTER TABLE `the`
 --
 
 --
+-- AUTO_INCREMENT for table `camera`
+--
+ALTER TABLE `camera`
+  MODIFY `id_camera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `cong`
+--
+ALTER TABLE `cong`
+  MODIFY `id_cong` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `lichsu`
 --
 ALTER TABLE `lichsu`
-  MODIFY `id_lichsu` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_lichsu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `mayquetthe`
 --
 ALTER TABLE `mayquetthe`
-  MODIFY `id_mayquetthe` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mayquetthe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `nhanvien`
 --
 ALTER TABLE `nhanvien`
-  MODIFY `id_nhanvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_nhanvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `phuongtien`
 --
 ALTER TABLE `phuongtien`
-  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `id_taikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_taikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `the`
 --
 ALTER TABLE `the`
-  MODIFY `id_the` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_the` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
     // res.send('Danh sách khách hàng');  
     let sql = `SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(phuongtien.id_phuongtien) AS so_luong_phuongtien FROM khachhang LEFT JOIN phuongtien ON phuongtien.id_khachhang = khachhang.id_khachhang LEFT JOIN the ON the.id_khachhang = khachhang.id_khachhang GROUP BY khachhang.id_khachhang`;
     db.query(sql, function(err, data, fields) {      
-        res.render("khachhang_list",{list:data});
+        res.render("khachhang_",{list:data});
         // console.log(data);
     }); 
 });
@@ -44,7 +44,7 @@ router.get('/sua-khachhang/:id', function(req, res, next) {
     }
 
     // Render trang chỉnh sửa với dữ liệu khách hàng
-    res.render('sua_khachhang', { khachhang: result[0], the: result[0] });
+    res.render('khachhang_update', { khachhang: result[0], the: result[0] });
   });
 });
 

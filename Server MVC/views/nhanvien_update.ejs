@@ -20,25 +20,21 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Sửa thông tin khách hàng</h5>
+            <h5 class="mb-0">Sửa thông tin nhân viên</h5>
           </div>
           <div class="card-body">
-            <form id="form-suakhachhang">
+            <form id="form-nhanvien_update">
               <div class="form-group">
-                <label for="id_khachhang">ID khách hàng:</label>
-                <input type="text" class="form-control" id="sua-id_khachhang" name="sua-id_khachhang" value="<%=khachhang.id_khachhang%>" readonly>
+                <label>ID nhân viên:</label>
+                <input type="text" class="form-control" id="id_nhanvien" value="<%=nhanvien.id_nhanvien%>" readonly>
               </div>
               <div class="form-group">
-                <label for="sua-sothe">Số thẻ:</label>
-                <input type="text" class="form-control" id="sua-sothe" name="sua-sothe" value="<%=khachhang.sothe%>" required>
+                <label>Họ tên:</label>
+                <input type="text" class="form-control" id="hoten" value="<%=nhanvien.hoten%>" required>
               </div>
               <div class="form-group">
-                <label for="sua-hoten">Họ tên:</label>
-                <input type="text" class="form-control" id="sua-hoten" name="sua-hoten" value="<%=khachhang.hoten%>" required>
-              </div>
-              <div class="form-group">
-                <label for="sua-socanho">Số căn hộ:</label>
-                <input type="text" class="form-control" id="sua-socanho" name="sua-socanho" value="<%=khachhang.socanho%>" required>
+                <label>Ngày vào làm:</label>
+                <input type="date"  class="form-control" id="ngayvaolam" value="<%= new Date(nhanvien.ngayvaolam).toISOString().split('T')[0] %>"required>
               </div>
               <button type="submit" class="btn btn-primary">Cập nhật</button>
             </form>
@@ -50,30 +46,28 @@
 
   <script>
     // Xử lý sự kiện submit form sửa thông tin khách hàng
-    document.getElementById('form-suakhachhang').addEventListener('submit', function(event) {
+    document.getElementById('form-nhanvien_update').addEventListener('submit', function(event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của form
 
       // Lấy giá trị từ các ô nhập liệu
-      var id_khachhang = document.getElementById('sua-id_khachhang').value;
-      var sothe = document.getElementById('sua-sothe').value;
-      var hoten = document.getElementById('sua-hoten').value;
-      var socanho = document.getElementById('sua-socanho').value;
+      var id_nhanvien = document.getElementById('id_nhanvien').value;
+      var hoten = document.getElementById('hoten').value;
+      var ngayvaolam= document.getElementById('ngayvaolam').value;
 
       // Tạo object chứa dữ liệu cần gửi lên server
       var params = new URLSearchParams();
-      params.append('id', id_khachhang)
-      params.append('sothe', sothe);
+      params.append('id_nhanvien', id_nhanvien)
       params.append('hoten', hoten);
-      params.append('socanho', socanho);
+      params.append('ngayvaolam', ngayvaolam);
 
       // Gửi request POST đến server để cập nhật thông tin khách hàng
-      fetch(`/khachhang/capnhat-khachhang/`, {
+      fetch(`/nhanvien/update_nhanvien/`, {
         method: 'POST',
         body: params
       })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Cập nhật thông tin khách hàng thất bại');
+          throw new Error('Cập nhật thông tin nhân viên thất bại');
         }
         return response;
       })
@@ -86,7 +80,7 @@
           timer: 1500
         }).then(()=>{
             // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
-            window.location.href = '/khachhang';
+            window.location.href = '/nhanvien';
           });
       })
       .catch(error => {

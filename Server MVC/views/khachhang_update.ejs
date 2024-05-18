@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa thông tin khách hàng</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Sửa thông tin khách hàng</h5>
+          </div>
+          <div class="card-body">
+            <form id="form-suakhachhang">
+              <div class="form-group">
+                <label>ID khách hàng:</label>
+                <input type="text" class="form-control" id="sua-id_khachhang" name="sua-id_khachhang" value="<%=khachhang.id_khachhang%>" readonly>
+              </div>
+              <div class="form-group">
+                <label>Số thẻ:</label>
+                <input type="text" class="form-control" id="sua-sothe" name="sua-sothe" value="<%=khachhang.sothe%>" required>
+              </div>
+              <div class="form-group">
+                <label>Họ tên:</label>
+                <input type="text" class="form-control" id="sua-hoten" name="sua-hoten" value="<%=khachhang.hoten%>" required>
+              </div>
+              <div class="form-group">
+                <label>Số căn hộ:</label>
+                <input type="text" class="form-control" id="sua-socanho" name="sua-socanho" value="<%=khachhang.socanho%>" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Xử lý sự kiện submit form sửa thông tin khách hàng
+    document.getElementById('form-suakhachhang').addEventListener('submit', function(event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+
+      // Lấy giá trị từ các ô nhập liệu
+      var id_khachhang = document.getElementById('sua-id_khachhang').value;
+      var sothe = document.getElementById('sua-sothe').value;
+      var hoten = document.getElementById('sua-hoten').value;
+      var socanho = document.getElementById('sua-socanho').value;
+
+      // Tạo object chứa dữ liệu cần gửi lên server
+      var params = new URLSearchParams();
+      params.append('id', id_khachhang)
+      params.append('sothe', sothe);
+      params.append('hoten', hoten);
+      params.append('socanho', socanho);
+
+      // Gửi request POST đến server để cập nhật thông tin khách hàng
+      fetch(`/khachhang/capnhat-khachhang/`, {
+        method: 'POST',
+        body: params
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Cập nhật thông tin khách hàng thất bại');
+        }
+        return response;
+      })
+      .then(data => {
+        // Hiển thị thông báo thành công khi cập nhật thành công
+        Swal.fire({
+          icon: 'success',
+          title: 'Cập nhật thành công',
+          showConfirmButton: false,
+          timer: 1500
+        }).then(()=>{
+            // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
+            window.location.href = '/khachhang';
+          });
+      })
+      .catch(error => {
+        // Hiển thị thông báo lỗi khi cập nhật thất bại
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.message
+        });
+      });
+    });
+  </script>
+  
+
+<!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

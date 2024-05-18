@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa thông tin khách hàng</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Sửa thông tin khách hàng</h5>
+          </div>
+          <div class="card-body">
+            <form id="form-the_update">
+              <div class="form-group">
+                <label>ID thẻ:</label>
+                <input type="text" class="form-control" id="id_the" value="<%=the.id_the%>" readonly>
+              </div>
+              <div class="form-group">
+                <label>ID khách hàng:</label>
+                <input type="text" class="form-control" id="id_khachhang" value="<%=the.id_khachhang%>" required>
+              </div>
+              <div class="form-group">
+                <label>Số thẻ:</label>
+                <input type="text" class="form-control" id="sothe" value="<%=the.sothe%>" required>
+              </div>
+              <div class="form-group">
+                <label>Loại thẻ:</label>
+                <input type="text" class="form-control" id="loaithe" value="<%=the.loaithe%>" required>
+              </div>
+              <div class="form-group">
+                <label>Ngày tạo thẻ:</label>
+                <input type="date"  class="form-control" id="ngaytaothe" value="<%= new Date(the.ngaytaothe).toISOString().split('T')[0] %>"required>
+              </div>
+              <div class="form-group">
+                <label>Giá tiền:</label>
+                <input type="text" class="form-control" id="giatien" value="<%=the.giatien%>" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Xử lý sự kiện submit form sửa thông tin khách hàng
+    document.getElementById('form-the_update').addEventListener('submit', function(event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+
+      // Lấy giá trị từ các ô nhập liệu
+      var id_the = document.getElementById('id_the').value;
+      var id_khachhang = document.getElementById('id_khachhang').value;
+      var sothe = document.getElementById('sothe').value;
+      var loaithe = document.getElementById('loaithe').value;
+      var ngaytaothe= document.getElementById('ngaytaothe').value;
+      var giatien = document.getElementById('giatien').value;
+
+      // Tạo object chứa dữ liệu cần gửi lên server
+      var params = new URLSearchParams();
+      params.append('id_the', id_the)
+      params.append('id_khachhang', id_khachhang);
+      params.append('sothe', sothe);
+      params.append('loaithe', loaithe)
+      params.append('ngaytaothe', ngaytaothe);
+      params.append('giatien', giatien);
+
+      // Gửi request POST đến server để cập nhật thông tin thẻ
+      fetch(`/the/update_the/`, {
+        method: 'POST',
+        body: params
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Cập nhật thông tin nhân viên thất bại');
+        }
+        return response;
+      })
+      .then(data => {
+        // Hiển thị thông báo thành công khi cập nhật thành công
+        Swal.fire({
+          icon: 'success',
+          title: 'Cập nhật thành công',
+          showConfirmButton: false,
+          timer: 1500
+        }).then(()=>{
+            // Redirect về trang danh sách thẻ sau khi cập nhật thành công
+            window.location.href = '/the';
+          });
+      })
+      .catch(error => {
+        // Hiển thị thông báo lỗi khi cập nhật thất bại
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.message
+        });
+      });
+    });
+  </script>
+  
+
+<!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
