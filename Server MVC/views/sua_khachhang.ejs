@@ -15,7 +15,6 @@
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
@@ -24,7 +23,7 @@
             <h5 class="mb-0">Sửa thông tin khách hàng</h5>
           </div>
           <div class="card-body">
-            <form action="" method="post" id="form-suakhachhang">
+            <form id="form-suakhachhang">
               <div class="form-group">
                 <label for="id_khachhang">ID khách hàng:</label>
                 <input type="text" class="form-control" id="sua-id_khachhang" name="sua-id_khachhang" value="<%=khachhang.id_khachhang%>" readonly>
@@ -61,21 +60,22 @@
       var socanho = document.getElementById('sua-socanho').value;
 
       // Tạo object chứa dữ liệu cần gửi lên server
-      var formData = new FormData();
-      formData.append('sothe', sothe);
-      formData.append('hoten', hoten);
-      formData.append('socanho', socanho);
+      var params = new URLSearchParams();
+      params.append('id', id_khachhang)
+      params.append('sothe', sothe);
+      params.append('hoten', hoten);
+      params.append('socanho', socanho);
 
       // Gửi request POST đến server để cập nhật thông tin khách hàng
-      fetch(`/khachhang/capnhat-khachhang/${id_khachhang}`, {
+      fetch(`/khachhang/capnhat-khachhang/`, {
         method: 'POST',
-        body: formData
+        body: params
       })
       .then(response => {
         if (!response.ok) {
           throw new Error('Cập nhật thông tin khách hàng thất bại');
         }
-        return response.json();
+        return response;
       })
       .then(data => {
         // Hiển thị thông báo thành công khi cập nhật thành công
@@ -84,9 +84,10 @@
           title: 'Cập nhật thành công',
           showConfirmButton: false,
           timer: 1500
-        });
-        // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
-        window.location.href = '/khachhang';
+        }).then(()=>{
+            // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
+            window.location.href = '/khachhang';
+          });
       })
       .catch(error => {
         // Hiển thị thông báo lỗi khi cập nhật thất bại

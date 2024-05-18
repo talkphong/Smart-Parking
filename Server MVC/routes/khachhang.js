@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
     let sql = `SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(phuongtien.id_phuongtien) AS so_luong_phuongtien FROM khachhang LEFT JOIN phuongtien ON phuongtien.id_khachhang = khachhang.id_khachhang LEFT JOIN the ON the.id_khachhang = khachhang.id_khachhang GROUP BY khachhang.id_khachhang`;
     db.query(sql, function(err, data, fields) {      
         res.render("khachhang_list",{list:data});
-        console.log(data);
+        // console.log(data);
     }); 
 });
 router.get('/form-them-khachhang', function(req, res, next) {
@@ -47,36 +47,28 @@ router.get('/sua-khachhang/:id', function(req, res, next) {
     res.render('sua_khachhang', { khachhang: result[0], the: result[0] });
   });
 });
-router.post('/capnhat-khachhang/:id', function(req, res, next) {
-  // Lấy ID của khách hàng từ URL
-  const id = req.params.id;
 
+router.post('/capnhat-khachhang/', function(req, res, next) {
   // Lấy thông tin mới từ form
-  const newData = {
-    sothe: req.body.sothe,
-    hoten: req.body.hoten,
-    socanho: req.body.socanho
-  };
+  const {id, sothe, hoten, socanho} = req.body
+  const newData = {id: id, sothe: sothe, hoten: hoten, socanho: socanho}
 
   // Cập nhật thông tin khách hàng trong database
   db.query(`UPDATE khachhang AS k
             INNER JOIN the AS t ON k.id_khachhang = t.id_khachhang
             SET t.sothe = ?, k.hoten = ?, k.socanho = ?
-            WHERE k.id_khachhang = ?`, [newData.sothe, newData.hoten, newData.socanho, id], function(err, result) {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-      return;
-    }
-
+            WHERE k.id_khachhang = ?`, [newData.sothe, newData.hoten, newData.socanho, newData.id], function(err, result) {
+    if (err) throw err;
     // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
-    res.redirect('/khachhang');
+    res.send("Cập nhật khách hàng thành công");
   });
 });
-router.get('/delete/:id', function(req, res) {
-//   var id = req.params.id;
-//   res.send('Xóa khách hàng' + id);
+
+router.get('/xoa/:id', function(req, res) {
+  // var id = req.params.id;
+  // res.send('Xóa khách hàng' + id);
   let id_khachhang = req.params.id;
+  console.log(id_khachhang)
   let sql= "DELETE FROM `khachhang` WHERE id_khachhang = ?;";
   db.query(sql, [id_khachhang], function(err, data) {    
     if (data.affectedRows==0) {
@@ -84,7 +76,7 @@ router.get('/delete/:id', function(req, res) {
     }
     res.redirect('/khachhang');
   })
-});
+}); 
 
 router.get('/search', function(req, res, next) {
   const keyword = req.query.keyword;
