@@ -42,23 +42,23 @@
   </div>
     
 <!-- script -->
-<script>
-  // Script xử lý nút đăng nhập
-  document.getElementById('form-dangnhap').addEventListener('submit', function(event) {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của form
-    this.submit();
-  })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Đăng nhập không thành công');
-        }
-        // Đăng nhập thành công, chuyển hướng đến trang chủ hoặc xử lý kết quả tùy theo yêu cầu
-        window.location.href = '/index.html';
+  <script>
+    // Script xử lý nút đăng nhập
+    document.getElementById('form-dangnhap').addEventListener('submit', function(event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+      this.submit();
     })
-    .catch(error => {
-      alert(error.message); // Hiển thị thông báo lỗi
-    });
-</script>
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Đăng nhập không thành công');
+          }
+          // Đăng nhập thành công, chuyển hướng đến trang chủ hoặc xử lý kết quả tùy theo yêu cầu
+          //window.location.href = '/index.html';
+      })
+      .catch(error => {
+        alert(error.message); // Hiển thị thông báo lỗi
+      });
+  </script>
 
 
 

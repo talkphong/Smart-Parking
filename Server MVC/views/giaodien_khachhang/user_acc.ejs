@@ -55,7 +55,7 @@
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">Smart Parking</a>
+    <a class="navbar-brand" href="/customer">Smart Parking</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -63,22 +63,25 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/thongtin">Thông tin cá nhân</a>
+          <label for="hoTen" style="padding-top: 8px; padding-right: 8px; color: rgb(190, 68, 99);"><%= hoTen %></label>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/taikhoan">Thông tin tài khoản</a>
+          <a class="nav-link" href="/info">Thông tin cá nhân</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/phuongtien">Thông tin phương tiện</a>
+          <a class="nav-link" href="/account">Thông tin tài khoản</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/thexe">Thông tin thẻ xe</a>
+          <a class="nav-link" href="/vehicle">Thông tin phương tiện</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/lichsu">Lịch sử ra vào</a>
+          <a class="nav-link" href="/card">Thông tin thẻ xe</a>
         </li>
         <li class="nav-item">
-          <form id="logoutForm" action="/dangxuat" method="POST" style="display: inline;">
+          <a class="nav-link" href="/history">Lịch sử ra vào</a>
+        </li>
+        <li class="nav-item">
+          <form id="logoutForm" action="/logout" method="POST" style="display: inline;">
             <button type="submit" class="btn btn-link nav-link" style="color: #fff; cursor: pointer;">Đăng xuất</button>
           </form>
         </li>
@@ -97,32 +100,20 @@
           <div class="card-body">
             <form>
               <div class="form-group row">
-                <label for="username" class="col-sm-3 col-form-label">Tên đăng nhập</label>
+                <label for="userN" class="col-sm-3 col-form-label">Tên đăng nhập</label>
                 <div class="col-sm-9">
-                  <input type="text" readonly class="form-control" id="username" value="[Tên đăng nhập]">
+                  <input type="text" readonly class="form-control" id="userN" value="<%= userN %>">
                 </div>
               </div>
               <div class="form-group row">
-                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                <label for="passWord" class="col-sm-3 col-form-label">Mật khẩu</label>
                 <div class="col-sm-9">
-                  <input type="email" readonly class="form-control" id="email" value="[Email]">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="role" class="col-sm-3 col-form-label">Vai trò</label>
-                <div class="col-sm-9">
-                  <input type="text" readonly class="form-control" id="role" value="[Vai trò]">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="created_at" class="col-sm-3 col-form-label">Ngày tạo</label>
-                <div class="col-sm-9">
-                  <input type="text" readonly class="form-control" id="created_at" value="[Ngày tạo]">
+                  <input type="text" readonly class="form-control" id="passWord" value="<%= passWord %>">
                 </div>
               </div>
               <div class="form-group row">
                 <div class="col-sm-12 text-right">
-                  <a href="/khachhang" class="btn btn-primary">Quay lại</a>
+                  <a href="/customer" class="btn btn-primary">Quay lại</a>
                 </div>
               </div>
             </form>

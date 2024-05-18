@@ -49,13 +49,18 @@
       background-color: #007bff;
       border: none;
     }
+
+    .mb-4-custom {
+      margin-bottom: 20px; /* Thêm khoảng cách tùy chỉnh */
+    }
+
   </style>
 </head>
 
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">Smart Parking</a>
+    <a class="navbar-brand" href="/customer">Smart Parking</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -63,22 +68,25 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/thongtin">Thông tin cá nhân</a>
+          <label for="hoTen" style="padding-top: 8px; padding-right: 8px; color: rgb(190, 68, 99);"><%= hoTen %></label>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/taikhoan">Thông tin tài khoản</a>
+          <a class="nav-link" href="/info">Thông tin cá nhân</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/phuongtien">Thông tin phương tiện</a>
+          <a class="nav-link" href="/account">Thông tin tài khoản</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/thexe">Thông tin thẻ xe</a>
+          <a class="nav-link" href="/vehicle">Thông tin phương tiện</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/lichsu">Lịch sử ra vào</a>
+          <a class="nav-link" href="/card">Thông tin thẻ xe</a>
         </li>
         <li class="nav-item">
-          <form id="logoutForm" action="/dangxuat" method="POST" style="display: inline;">
+          <a class="nav-link" href="/history">Lịch sử ra vào</a>
+        </li>
+        <li class="nav-item">
+          <form id="logoutForm" action="/logout" method="POST" style="display: inline;">
             <button type="submit" class="btn btn-link nav-link" style="color: #fff; cursor: pointer;">Đăng xuất</button>
           </form>
         </li>
@@ -88,54 +96,58 @@
 
   <!-- Main content -->
   <div class="container">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <div class="card">
-          <div class="card-header">
-            Thông tin phương tiện cá nhân
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="form-group row">
-                <label for="licensePlate" class="col-sm-3 col-form-label">Biển số xe</label>
-                <div class="col-sm-9">
-                  <input type="text" readonly class="form-control" id="licensePlate" value="[Biển số xe]">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="vehicleType" class="col-sm-3 col-form-label">Loại xe</label>
-                <div class="col-sm-9">
-                  <input type="text" readonly class="form-control" id="vehicleType" value="[Loại xe]">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="manufacturer" class="col-sm-3 col-form-label">Hãng sản xuất</label>
-                <div class="col-sm-9">
-                  <input type="text" readonly class="form-control" id="manufacturer" value="[Hãng sản xuất]">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="model" class="col-sm-3 col-form-label">Model</label>
-                <div class="col-sm-9">
-                  <input type="text" readonly class="form-control" id="model" value="[Model]">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="color" class="col-sm-3 col-form-label">Màu sắc</label>
-                <div class="col-sm-9">
-                  <input type="text" readonly class="form-control" id="color" value="[Màu sắc]">
-                </div>
-              </div>
-              <div class="form-group row">
-                <div class="col-sm-12 text-right">
-                  <a href="/khachhang" class="btn btn-primary">Quay lại</a>
-                </div>
-              </div>
-            </form>
-          </div>
+    <% if (message) { %>
+      <div class="alert alert-warning" role="alert">
+        <%= message %>
+      </div>
+    <% } else { %>
+      <!-- Back Button -->
+      <div class="row mb-4-custom">
+        <div class="col-12 text-right back-button">
+          <a href="/customer" class="btn btn-primary">Quay lại</a>
         </div>
       </div>
-    </div>
+
+      <div class="row">
+        <% vehicles.forEach(vehicle => { %>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                Thông tin phương tiện cá nhân <%= vehicle.id_phuongtien %>
+              </div>
+              <div class="card-body">
+                <form>
+                  <div class="form-group row">
+                    <label for="bienSo" class="col-sm-3 col-form-label">Biển số xe</label>
+                    <div class="col-sm-9">
+                      <input type="text" readonly class="form-control" id="bienSo" value="<%= vehicle.bienso %>">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="loaiPhuongTien" class="col-sm-3 col-form-label">Loại phương tiện</label>
+                    <div class="col-sm-9">
+                      <input type="text" readonly class="form-control" id="loaiPhuongTien" value="<%= vehicle.loaiphuongtien %>">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="pathAnhPhuongTien" class="col-sm-3 col-form-label">Ảnh phương tiện</label>
+                    <div class="col-sm-9">
+                      <img src="<%= vehicle.path_anhphuongtien %>" alt="Ảnh phương tiện" class="img-fluid">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="pathAnhBienSo" class="col-sm-3 col-form-label">Ảnh biển số</label>
+                    <div class="col-sm-9">
+                      <img src="<%= vehicle.path_anhbienso %>" alt="Ảnh biển số" class="img-fluid">
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
   </div>
 
   <!-- Bootstrap JS -->

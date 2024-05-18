@@ -1,45 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sửa thông tin khách hàng</title>
+  <title>Lịch sử ra vào</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container">
-    <h1 class="my-4">Sửa thông tin khách hàng</h1>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
+    }
 
-    <!-- Form sửa dữ liệu -->
-    <div id="editForm">
-      <h3>Sửa thông tin khách hàng</h3>
-      <form action="" method="post" id="form-suakhachhang">
-        <div class="form-group">
-          <label for="id_khachhang">ID khách hàng:</label>
-          <input type="hidden" class="form-control" id="sua-id_khachhang" name="sua-id_khachhang" value="<%=khachhang.id_khachhang%>" readonly>
+    .navbar {
+      background-color: #343a40;
+    }
+
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .table th,
+    .table td {
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .table img {
+      max-width: 100px;
+    }
+
+    .card {
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      background-color: #007bff;
+      color: #fff;
+      border-bottom: none;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      padding: 1rem;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">Smart Parking</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/thongtin">Thông tin cá nhân</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/taikhoan">Thông tin tài khoản</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/phuongtien">Thông tin phương tiện</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/thexe">Thông tin thẻ xe</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/khachhang/lichsu">Lịch sử ra vào</a>
+        </li>
+        <li class="nav-item">
+          <form id="logoutForm" action="/dangxuat" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-link nav-link" style="color: #fff; cursor: pointer;">Đăng xuất</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            Lịch sử ra vào
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Số thẻ</th>
+                  <th>Biển số</th>
+                  <th>Loại phương tiện</th>
+                  <th>Ảnh biển số</th>
+                  <th>Ảnh phương tiện</th>
+                  <th>Thời gian vào</th>
+                  <th>Thời gian ra</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (history.length > 0) { %>
+                  <% history.forEach(function(entry) { %>
+                    <tr>
+                      <td><%= entry.sothe %></td>
+                      <td><%= entry.bienso %></td>
+                      <td><%= entry.loaiphuongtien %></td>
+                      <td><img src="<%= entry.path_anhbienso %>" alt="Biển số xe"></td>
+                      <td><img src="<%= entry.path_anhphuongtien %>" alt="Toàn xe"></td>
+                      <td><%= entry.thoigianvao %></td>
+                      <td><%= entry.thoigianra %></td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="7">Quý khách chưa có lịch sử ra vào nào</td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+            <div class="text-right">
+              <a href="/khachhang" class="btn btn-primary">Quay lại</a>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="sua-sothe">Số thẻ:</label>
-          <input type="text" class="form-control" id="sua-sothe" name="sua-sothe" value="<%=the.sothe%>" required>
-        </div>
-        <div class="form-group">
-          <label for="sua-loaithe">Loại thẻ:</label>
-          <input type="text" class="form-control" id="sua-loaithe" name="sua-loaithe" value="<%=the.loaithe%>" required>
-        </div>
-        <div class="form-group">
-          <label for="sua-ngaytaothe">Ngày tạo thẻ:</label>
-          <input type="date" class="form-control" id="sua-ngaytaothe" name="sua-ngaytaothe" value="<%=the.ngaytaothe%>" required>
-        </div>
-        <div class="form-group">
-          <label for="sua-giatien">Giá tiền:</label>
-          <input type="text" class="form-control" id="sua-giatien" name="sua-giatien" value="<%=the.giatien%>" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Cập nhật</button>
+      </div>
     </div>
   </div>
 
-  <script>
-    
-  </script>
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
+
 </html>

@@ -37,7 +37,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/customer-info">Thông tin cá nhân</a>
+          <label for="hoTen" style="padding-top: 8px; padding-right: 8px; color: rgb(190, 68, 99);"><%= hoTen %></label>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/info">Thông tin cá nhân</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/account">Thông tin tài khoản</a>
@@ -62,7 +65,7 @@
 
   <!-- Header -->
   <div class="jumbotron text-center">
-    <h1 class="display-4">Chào mừng, [Tên khách hàng]!</h1>
+    <h1 class="display-4">Chào mừng, <%= hoTen %>!</h1>
     <p class="lead">Chào mừng bạn đến với hệ thống quản lý bãi đỗ xe thông minh.</p>
   </div>
 

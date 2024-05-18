@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/form-them-the', function (req, res, next) {
-  res.render('them_the')
+  res.render('them_the');
 });
 
 router.post('/themthe', function (req, res, next) {

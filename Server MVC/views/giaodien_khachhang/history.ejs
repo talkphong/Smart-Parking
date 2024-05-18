@@ -65,7 +65,7 @@
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">Smart Parking</a>
+    <a class="navbar-brand" href="/customer">Smart Parking</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -73,22 +73,25 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/thongtin">Thông tin cá nhân</a>
+          <label for="hoTen" style="padding-top: 8px; padding-right: 8px; color: rgb(190, 68, 99);"><%= hoTen %></label>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/taikhoan">Thông tin tài khoản</a>
+          <a class="nav-link" href="/info">Thông tin cá nhân</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/phuongtien">Thông tin phương tiện</a>
+          <a class="nav-link" href="/account">Thông tin tài khoản</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/thexe">Thông tin thẻ xe</a>
+          <a class="nav-link" href="/vehicle">Thông tin phương tiện</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/khachhang/lichsu">Lịch sử ra vào</a>
+          <a class="nav-link" href="/card">Thông tin thẻ xe</a>
         </li>
         <li class="nav-item">
-          <form id="logoutForm" action="/dangxuat" method="POST" style="display: inline;">
+          <a class="nav-link" href="/history">Lịch sử ra vào</a>
+        </li>
+        <li class="nav-item">
+          <form id="logoutForm" action="/logout" method="POST" style="display: inline;">
             <button type="submit" class="btn btn-link nav-link" style="color: #fff; cursor: pointer;">Đăng xuất</button>
           </form>
         </li>
@@ -108,27 +111,37 @@
             <table class="table table-bordered">
               <thead>
                 <tr>
-                  <th>Ngày giờ</th>
-                  <th>Hình ảnh biển số</th>
-                  <th>Hình ảnh toàn xe</th>
+                  <th>Số thẻ</th>
+                  <th>Biển số</th>
+                  <th>Loại phương tiện</th>
+                  <th>Ảnh biển số</th>
+                  <th>Ảnh phương tiện</th>
+                  <th>Thời gian vào</th>
+                  <th>Thời gian ra</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>01/05/2024 08:00 AM</td>
-                  <td><img src="/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg" alt="Biển số xe"></td>
-                  <td><img src="/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg" alt="Toàn xe"></td>
-                </tr>
-                <tr>
-                  <td>01/05/2024 05:00 PM</td>
-                  <td><img src="[URL hình ảnh biển số]" alt="Biển số xe"></td>
-                  <td><img src="[URL hình ảnh toàn xe]" alt="Toàn xe"></td>
-                </tr>
-                <!-- Các dòng lịch sử khác -->
+                <% if (history.length > 0) { %>
+                  <% history.forEach(his => { %>
+                    <tr>
+                      <td><%= his.sothe %></td>
+                      <td><%= his.bienso %></td>
+                      <td><%= his.loaiphuongtien %></td>
+                      <td><img src="<%= his.path_anhbienso %>" alt="Biển số xe"></td>
+                      <td><img src="<%= his.path_anhphuongtien %>" alt="Toàn xe"></td>
+                      <td><%= his.thoigianvao %></td>
+                      <td><%= his.thoigianra %></td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="7">Quý khách chưa có lịch sử ra vào nào</td>
+                  </tr>
+                <% } %>
               </tbody>
             </table>
             <div class="text-right">
-              <a href="/khachhang" class="btn btn-primary">Quay lại</a>
+              <a href="/customer" class="btn btn-primary">Quay lại</a>
             </div>
           </div>
         </div>

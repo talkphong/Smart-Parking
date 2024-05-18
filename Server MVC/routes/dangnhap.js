@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/xulydangnhap', function(req, res, next) {
   const { tendangnhap, matkhau } = req.body;
-  let sql = `SELECT tendangnhap, matkhau, phanquyen FROM taikhoan WHERE tendangnhap = ? AND matkhau = ?`;
+  let sql = `SELECT taikhoan.tendangnhap, taikhoan.matkhau, taikhoan.phanquyen, khachhang.id_khachhang, khachhang.hoten FROM taikhoan LEFT JOIN khachhang ON taikhoan.id_khachhang = khachhang.id_khachhang WHERE tendangnhap = ? AND matkhau = ?`;
   db.query(sql, [tendangnhap, matkhau], function(err, results, fields) {
     if (err) {
       res.status(500).send("Loi truy van co so du lieu");
@@ -22,17 +22,24 @@ router.post('/xulydangnhap', function(req, res, next) {
     }
 
     if (results.length > 0) {
-      req.session.user = results[0].phanquyen;
-      switch (req.session.user){
-        case "Admin":
-          res.redirect('/index');
+      req.session.user = {
+        tendangnhap: results[0].tendangnhap,
+        phanquyen: results[0].phanquyen,
+        id_khachhang: results[0].id_khachhang, // Lưu id_khachhang vào session
+        hoten: results[0].hoten // Lưu hoten vào session
+      };
+      switch (results[0].phanquyen){
+        case "admin":
+          res.redirect('../index');
           break;
-        case "Nhân viên":
-          res.redirect('/camera');
+        case "nhanvien":
+          res.redirect('../camera');
           break;
-        case "Khách hàng":
-          res.redirect('/khachhang');
+        case "khachhang":
+          res.redirect('../customer');
           break;
+          default:
+            res.status(401).send("Phân quyền không hợp lệ");
       }
       // res.send(`Đăng nhập thành công, quyền người dùng là: ${results[0].phanquyen}`)
     } else {
@@ -44,4 +51,4 @@ router.post('/xulydangnhap', function(req, res, next) {
 
 
   
-  module.exports = router;
+module.exports = router;

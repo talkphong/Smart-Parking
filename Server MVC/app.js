@@ -14,6 +14,13 @@ var phuongtienRouter = require('./routes/phuongtien');
 var cameraRouter = require('./routes/camera');
 var nhanvienRouter = require('./routes/nhanvien');
 var taikhoanRouter = require('./routes/taikhoan');
+var cus_indexRouter = require('./routes/cus_index');
+var cus_infoRouter = require('./routes/customer');
+var accountRouter = require('./routes/account');
+var vehicleRouter = require('./routes/vehicle');
+var cardRouter = require('./routes/card');
+var historyRouter = require('./routes/history');
+var logoutRouter = require('./routes/logout');
 
 var app = express();
 
@@ -45,6 +52,13 @@ app.use('/phuongtien', phuongtienRouter);
 app.use('/camera', cameraRouter);
 app.use('/nhanvien', nhanvienRouter);
 app.use('/taikhoan', taikhoanRouter);
+app.use('/customer', cus_indexRouter);
+app.use('/info', cus_infoRouter);
+app.use('/account', accountRouter);
+app.use('/vehicle', vehicleRouter);
+app.use('/card', cardRouter);
+app.use('/history', historyRouter);
+app.use('/logout', logoutRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
