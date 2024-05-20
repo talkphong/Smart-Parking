@@ -11,7 +11,7 @@
 
 const char* ssid = "Galaxy A235A0C"; //tên wifi
 const char* password = "012345678"; //mật khẩu wifi
-const char* serverAddress = "192.168.50.72"; // Địa chỉ IP của máy chủ Node.js
+const char* serverAddress = "192.168.55.109"; // Địa chỉ IP của máy chủ Node.js
 const int serverPort = 3000; 
 
 // khai báo các đối tượng
@@ -100,7 +100,7 @@ void receiveArduinoIN(){
   myArray[i - 1] = 0x00;   //thêm tín hiệu kết thúc vào chuỗi khi gặp ký tự \n
   if( String( myArray)!= ""){
     Serial.println("Du lieu nhan duoc tu ArduinoIN: " + String(myArray));
-    sendServer("IN: "+ String(myArray)); // gọi hàm gủi đến server
+    sendServer("I: "+ String(myArray)); // gọi hàm gủi đến server
   }
 }
 
@@ -119,6 +119,6 @@ void receiveArduinoOUT(){
   myArray[i - 1] = 0x00;   //thêm tín hiệu kết thúc vào chuỗi khi gặp ký tự \n
   if( String( myArray)!= ""){
     Serial.println("Du lieu nhan duoc tu ArduinoOUT: " + String(myArray));
-    sendServer("OUT: "+ String(myArray)); // gọi hàm gủi đến server
+    sendServer("O: "+ String(myArray)); // gọi hàm gủi đến server
   }
 }
