@@ -8,9 +8,9 @@
 #define SDA_PIN 5           // Định nghĩa chân SDA là chân D1
 #define SCL_PIN 4           // Định nghĩa chân SCL là chân D2
 
-const char* ssid = "Phong Truong";            //tên wifi
-const char* password = "cuong1972";           //mật khẩu wifi
-const char* serverAddress = "192.168.55.109"; // Địa chỉ IP của máy chủ Node.js (cmd -> ipconfig)
+const char* ssid = "redmi10";            //tên wifi
+const char* password = "24242424";           //mật khẩu wifi
+const char* serverAddress = "192.168.215.226"; // Địa chỉ IP của máy chủ Node.js (cmd -> ipconfig)
 const int serverPort = 3000;                  // Cổng của máy chủ Node.js
 
 WiFiClient wifiClient;

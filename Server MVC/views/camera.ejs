@@ -35,7 +35,7 @@
         <div id="result" style="height: 200px;">
             <img id="LpRegionIN" style="width: 100%;" src="" alt="Ảnh đã cắt">
             <p id="LpNumberIN">Biển số xe</p>
-            <button type="submit" onclick="submitIN()" >Gửi ảnh IN</button>
+            <!-- <button type="submit" onclick="submitIN()" >Gửi ảnh IN</button> -->
         </div>
     </div>
 
@@ -47,7 +47,7 @@
         <div id="result" style="height: 200px;">
             <img id="LpRegionOUT" style="width: 100%;" src="" alt="Ảnh đã cắt">
             <p id="LpNumberOUT">Biển số xe</p>
-            <button type="submit" onclick="submitOUT()" >Gửi ảnh OUT</button>
+            <!-- <button type="submit" onclick="submitOUT()" >Gửi ảnh OUT</button> -->
         </div>
     </div>
 </body>
@@ -172,7 +172,11 @@
   var msg = "đây là nội dung nhận được từ server"
   // sự kiện nhận được tin nhắn từ sv
   ws.onmessage = function (evt) { 
-    if(evt.data == "CallIN"){
+    const strReceive = evt.data
+    const port = evt.data[0]
+    const UID = evt.data.slice(3)
+
+    if(port == "I"){
         var videoElement = document.getElementById('CameraIN');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
@@ -188,6 +192,8 @@
           // Tạo một đối tượng FormData để gửi dữ liệu lên server
           var formData = new FormData();
           formData.append('image', blob, 'image.jpg');
+          formData.append('port', port);
+          formData.append('UID', UID);
 
           // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
           fetch('camera/upload', {
@@ -207,7 +213,7 @@
                 .catch(error => console.error('Lỗi:', error));
       }, 'image/jpeg');
     }
-    else if (evt.data == "CallOUT"){
+    else if (port == "O"){
         var videoElement = document.getElementById('CameraOUT');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
@@ -223,6 +229,8 @@
           // Tạo một đối tượng FormData để gửi dữ liệu lên server
           var formData = new FormData();
           formData.append('image', blob, 'image.jpg');
+          formData.append('port', port);
+          formData.append('UID', UID);
 
           // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
           fetch('camera/upload', {

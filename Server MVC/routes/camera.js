@@ -1,6 +1,7 @@
 var db = require('../models/database');
 var express = require('express');
 // var router = express.Router();
+const moment = require('moment-timezone');
 
 const path = require('path')
 const urlToAPI = "http://127.0.0.1:8000/process_image"
@@ -13,6 +14,8 @@ const multer  = require('multer');
 const sharp = require('sharp');
 
 const app = express()
+
+let command = ""
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -41,6 +44,10 @@ app.get('/', authMiddleware.isStaff, function (req, res, next) {
 });
 
 app.post('/upload', upload.single('image'), async (req, res) => {
+  const {port, UID} = req.body
+  const time = moment().tz('Asia/Ho_Chi_Minh')
+  console.log("port: %s \nUID: %s \ntime: %s", port, UID, time)
+
   const img = `${pathToUploads}/${req.file.originalname}`;
   console.log("Đã lưu ảnh tại: " + img) 
 
@@ -65,6 +72,16 @@ app.post('/upload', upload.single('image'), async (req, res) => {
       LpRegion = fs.readFileSync(`${pathToUploads}/output.jpg`)
       if(result.data[1] != -1){
           LpNumber = result.data[1]
+          command = "Open IN"
+          // module.exports.command = command;
+          const data = {
+            port: port,
+            UID: UID,
+            LpNumber: LpNumber,
+            time: time,
+            command: command
+          }
+          console.log(data)
       }else{
           LpNumber = "Không nhận diện đủ 8 chữ số"
           console.log("Không nhận diện đủ 8 chữ số")
@@ -79,11 +96,17 @@ app.post('/upload', upload.single('image'), async (req, res) => {
       LpNumber: LpNumber 
   };
   res.json(dataToSend);
-  console.log("xong xuoi")
   fs.unlink(`${pathToUploads}/output.jpg`, (err) => {});
   fs.unlink(`${pathToUploads}/image.jpg`, (err) => {});
+  
 })
 
-
-
+const WebSocket = require('ws');
+const ws = new WebSocket('ws://localhost:3000');
+ws.on('open', function open() {
+  console.log('heo open');
+});
+ws.on('message', function incoming(data) {
+  console.log('heo receive:', data);
+});
 module.exports = app;

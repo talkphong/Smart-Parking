@@ -20,6 +20,8 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+// const { startWebSocketServer } = require('../bin/wsModule');
+// startWebSocketServer(server);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -93,7 +95,7 @@ function onListening() {
 }
 
 
-//-----------------SOCKET---------------//
+// //-----------------SOCKET---------------//
 const WebSocket = require('ws');
 const ws = new WebSocket.Server({ server });
 var clients = [] // khởi tạo danh sách các cl
@@ -110,14 +112,14 @@ function broadcast(socket, message) {
 ws.on('connection', function connection(socket) {
   console.log('A client connected'); //Thông báo đã có 1 client kết nối đến server
   clients.push(socket); //khi có 1 cl kết nối đến sv, thêm cl đó vào danh sách
-
   //sự kiện có tin nhắn từ cl gửi đến sv
   socket.on('message', function incoming(message) {
     console.log('Received: %s', message);
-    const str = String.fromCharCode(...message);
 
-    console.log("port: " + str[0])
-    console.log("UID: " + str.slice(3))
+    // const str = String.fromCharCode(...message);
+    // console.log("port: " + str[0])
+    // console.log("UID: " + str.slice(3))
+    
     // Xử lý tin nhắn nhận được ở đây (nếu cần)
     broadcast(socket, message);// Phản hồi lại client
   });
@@ -130,5 +132,6 @@ ws.on('connection', function connection(socket) {
     clients.splice(index, 1); // khi 1 cl ngắt kết nối, loại bỏ cl đó ra khỏi danh sách
   });
 });
+
 
 
