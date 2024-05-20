@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa thông tin khách hàng</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Sửa thông tin phương tiện</h5>
+          </div>
+          <div class="card-body">
+            <form id="form-phuongtien_update">
+              <div class="form-group">
+                <label>ID phương tiện:</label>
+                <input type="text" class="form-control" id="id_phuongtien" value="<%=phuongtien.id_phuongtien%>" readonly>
+              </div>
+              <div class="form-group">
+                <label>ID khách hàng:</label>
+                <input type="text" class="form-control" id="id_khachhang" value="<%=phuongtien.id_khachhang%>" required>
+              </div>
+              <div class="form-group">
+                <label>Biển số:</label>
+                <input type="text"  class="form-control" id="bienso" value="<%=phuongtien.bienso%>"required>
+              </div>
+              <div class="form-group">
+                <label>Loại phương tiện:</label>
+                <input type="text"  class="form-control" id="loaiphuongtien" value="<%=phuongtien.loaiphuongtien%>"required>
+              </div>
+              <div class="form-group">
+                <label>Ảnh phương tiện:</label>
+                <input type="text"  class="form-control" id="anhphuongtien" value="<%=phuongtien.path_anhphuongtien%>"required>
+              </div>
+              <div class="form-group">
+                <label>Ảnh biển số:</label>
+                <input type="text"  class="form-control" id="anhbienso" value="<%=phuongtien.path_anhbienso%>"required>
+              </div>
+              <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Xử lý sự kiện submit form sửa thông tin khách hàng
+    document.getElementById('form-phuongtien_update').addEventListener('submit', function(event) {
+      event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+
+      // Lấy giá trị từ các ô nhập liệu
+      var id_phuongtien = document.getElementById('id_phuongtien').value;
+      var id_khachhang = document.getElementById('id_khachhang').value;
+      var bienso = document.getElementById('bienso').value;
+      var loaiphuongtien = document.getElementById('loaiphuongtien').value;
+      var anhphuongtien = document.getElementById('anhphuongtien').value;
+      var anhbienso = document.getElementById('anhbienso').value;    
+
+      // Tạo object chứa dữ liệu cần gửi lên server
+      var params = new URLSearchParams();
+      params.append('id_phuongtien', id_phuongtien)
+      params.append('id_khachhang', id_khachhang)
+      params.append('bienso', bienso);
+      params.append('loaiphuongtien', loaiphuongtien);
+      params.append('anhphuongtien', anhphuongtien)
+      params.append('anhbienso', anhbienso);
+
+      // Gửi request POST đến server để cập nhật thông tin khách hàng
+      fetch(`/phuongtien/update_phuongtien/`, {
+        method: 'POST',
+        body: params
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Cập nhật thông tin phương tiện thất bại');
+        }
+        return response;
+      })
+      .then(data => {
+        // Hiển thị thông báo thành công khi cập nhật thành công
+        Swal.fire({
+          icon: 'success',
+          title: 'Cập nhật thành công',
+          showConfirmButton: false,
+          timer: 1500
+        }).then(()=>{
+            // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
+            window.location.href = '/phuongtien';
+          });
+      })
+      .catch(error => {
+        // Hiển thị thông báo lỗi khi cập nhật thất bại
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.message
+        });
+      });
+    });
+  </script>
+  
+
+<!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

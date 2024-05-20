@@ -79,8 +79,8 @@
                 <a class="nav-link" href="#">Lịch sử</a>
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+            <form class="d-flex" id="search-phuongtien"action="/phuongtien/search" method="GET">
+              <input class="form-control me-2" type="search" id="phuongtien-input" placeholder="Tìm kiếm" aria-label="Search">
               <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
             </form>
           </div>
@@ -100,7 +100,7 @@
                         <th>Ảnh biển số</th>
                         <th colspan="2">
                           <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                              <a href="#">
+                              <a href="/phuongtien/form-them-phuongtien">
                                   <button type="button" class="btn btn-secondary">
                                       <i class="fas fa-plus"></i>
                                   </button>
@@ -120,8 +120,8 @@
                             </td>
                             <td title="<%= c.path_anhbienso %>"> <%= c.path_anhbienso %> </td>
                             <td>
-                              <a href="/the/chinhsua/<%= c.id_the %>"><i class="fas fa-edit text-primary mr-2"></i></a>
-                              <a href="/the/xoa/<%= c.id_the %>"><i class="fas fa-trash-alt text-danger"></i></a>
+                              <a href="/phuongtien/phuongtien_update/<%= c.id_phuongtien %>"><i class="fas fa-edit text-primary mr-2"></i></a>
+                              <a href="/phuongtien/phuongtien_delete/<%= c.id_phuongtien %>"><i class="fas fa-trash-alt text-danger"></i></a>
                             </td>
                         </tr>
                     <% } %>        
@@ -138,6 +138,74 @@
         </div>
       </footer>
     </section>
+
+    <script>
+      document.getElementById('search-phuongtien').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn form submit mặc định
+        var keyword = document.getElementById('phuongtien-input').value;
+        search(keyword);
+      });
+
+      function search(keyword) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', `/phuongtien/search?keyword=${keyword}`, true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            var data = JSON.parse(xhr.responseText);
+            // Hiển thị kết quả tìm kiếm lên bảng
+            displaySearchResult(data);
+          }
+        };
+        xhr.send();
+      }
+
+      function displaySearchResult(data) {
+        var table = document.querySelector('.table');
+        table.innerHTML = ''; // Xóa hết nội dung trong bảng trước khi thêm kết quả mới
+
+        var tableHead = document.createElement('thead'); // Tạo thead mới
+        var tableHeadRow = document.createElement('tr'); // Tạo dòng của thead
+        tableHeadRow.innerHTML = `
+          <th>ID phương tiện</th>
+          <th>Tên chủ phương tiện</th>
+          <th>Biển số</th>
+          <th>Loại phương tiện</th>
+          <th>Ảnh phương tiện</th>
+          <th>Ảnh biển số</th>
+          <th colspan="2">
+            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                <a href="/phuongtien/form-them-phuongtien">
+                    <button type="button" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </a>               
+            </div>
+          </th> 
+        `;
+        tableHead.appendChild(tableHeadRow); // Thêm dòng vào thead
+        table.appendChild(tableHead); // Thêm thead vào bảng
+
+        var tableBody = document.createElement('tbody'); // Tạo tbody mới
+        data.forEach(function(item) {
+          var row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.id_phuongtien}</td>
+            <td>${item.hoten}</td>
+            <td>${item.bienso}</td>
+            <td>${item.loaiphuongtien}</td>
+            <td>${item.path_anhphuongtien}</td>
+            <td>${item.path_anhbienso}</td>
+            <td>
+              <a href="/phuongtien/phuongtien_update/${item.id_phuongtien}"><i class="fas fa-edit text-primary mr-2"></i></a>
+              <a href="/phuongtien/phuongtien_delete/${item.id_phuongtien}"><i class="fas fa-trash-alt text-danger"></i></a>
+            </td>
+          `;
+          tableBody.appendChild(row); // Thêm dòng vào tbody
+        });
+        table.appendChild(tableBody); // Thêm tbody vào bảng
+      }
+
+    </script>
 
     <!-- Thêm các thư viện JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thêm phương tiện</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Thêm phương tiện</h5>
+          </div>
+          <div class="card-body">
+            <form action="/phuongtien/themphuongtien" method="post" id="form-themphuongtien">
+              <div class="form-group">
+                <label>ID khách hàng:</label>
+                <input type="text" class="form-control" id="id_khachhang" name="id_khachhang" required>
+              </div>
+              <div class="form-group">
+                <label>Biển số:</label>
+                <input type="text" class="form-control" id="bienso" name="bienso" required>
+              </div>
+              <div class="form-group">
+                <label>Loại phương tiện:</label>
+                <input type="text" class="form-control" id="loaiphuongtien" name="loaiphuongtien" required>
+              </div>
+              <div class="form-group">
+                <label>Ảnh phương tiện:</label>
+                <input type="text" class="form-control" id="anhphuongtien" name="anhphuongtien" required>
+              </div>
+              <div class="form-group">
+                <label>Ảnh biển số:</label>
+                <input type="text" class="form-control" id="anhbienso" name="anhbienso" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Thêm phương tiện</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('form-themphuongtien').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của form
+  
+        // Lấy giá trị từ các ô nhập liệu
+        var id_khachhang = document.getElementById('id_khachhang').value;
+        var bienso = document.getElementById('bienso').value;
+        var loaiphuongtien = document.getElementById('loaiphuongtien').value;
+        var anhphuongtien = document.getElementById('anhphuongtien').value;
+        var anhbienso = document.getElementById('anhbienso').value;        
+  
+        // Gửi form nếu dữ liệu hợp lệ
+        this.submit();
+      });
+    });
+  </script>
+  
+
+<!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
