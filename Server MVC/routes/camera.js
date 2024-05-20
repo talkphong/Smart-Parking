@@ -84,16 +84,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   fs.unlink(`${pathToUploads}/image.jpg`, (err) => {});
 })
 
-//   Socket (tạm thời để yên)
-// io.on('connection', (socket) => {
-//     console.log('A client connected');
-//     socket.on('CardIN', () => {
-//         socket.emit('callIN');
-//     })
 
-//     socket.on('CardOUT', () => {
-//         socket.emit('callOUT');
-//     })  
-// });
 
 module.exports = app;

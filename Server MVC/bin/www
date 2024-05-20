@@ -92,6 +92,7 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
+
 //-----------------SOCKET---------------//
 const WebSocket = require('ws');
 const ws = new WebSocket.Server({ server });
@@ -105,7 +106,6 @@ function broadcast(socket, message) {
       }
   }
 }
-
 //sự kiện kết nối
 ws.on('connection', function connection(socket) {
   console.log('A client connected'); //Thông báo đã có 1 client kết nối đến server
@@ -114,6 +114,10 @@ ws.on('connection', function connection(socket) {
   //sự kiện có tin nhắn từ cl gửi đến sv
   socket.on('message', function incoming(message) {
     console.log('Received: %s', message);
+    const str = String.fromCharCode(...message);
+
+    console.log("port: " + str[0])
+    console.log("UID: " + str.slice(3))
     // Xử lý tin nhắn nhận được ở đây (nếu cần)
     broadcast(socket, message);// Phản hồi lại client
   });
