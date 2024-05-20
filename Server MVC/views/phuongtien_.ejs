@@ -36,7 +36,26 @@
                 <p>Welcome to VMU</p>
             </div>
             <div class="col-12 text-right mb-4">
-              <a href="/dangnhap"><button type="button" class="btn btn-secondary mt-4">Đăng xuất</button></a>
+              <button id="logoutBtn" class="btn btn-secondary mt-4">Đăng xuất</button>
+              <script>
+                  document.getElementById('logoutBtn').addEventListener('click', function() {
+                      // Gửi yêu cầu đăng xuất đến máy chủ
+                      fetch('/dangxuat', {
+                          method: 'POST',
+                          credentials: 'same-origin' // Đảm bảo gửi cùng các cookie với trang
+                      }).then(function(response) {
+                          // Kiểm tra phản hồi từ máy chủ
+                          if (response.ok) {
+                              // Chuyển hướng hoặc thực hiện các hành động phù hợp sau khi đăng xuất thành công
+                              window.location.href = '/';
+                          } else {
+                              console.error('Đã xảy ra lỗi khi đăng xuất');
+                          }
+                      }).catch(function(error) {
+                          console.error('Lỗi kết nối: ', error);
+                      });
+                  });
+              </script>
             </div>
         </div>
       </div>
@@ -45,7 +64,7 @@
     <section class="mymainmenu">
       <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">Trang chủ</a>
+          <a class="navbar-brand" href="/index">Trang chủ</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>

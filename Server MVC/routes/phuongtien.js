@@ -1,8 +1,9 @@
 var db = require('../models/database');
 var express = require('express');
 var router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', function (req, res, next) {
+router.get('/', authMiddleware.isAdmin, function (req, res, next) {
     let sql = `SELECT phuongtien.id_phuongtien, khachhang.hoten, 
                 phuongtien.bienso, phuongtien.loaiphuongtien, 
                 phuongtien.path_anhphuongtien, 

@@ -1,8 +1,9 @@
 var db = require('../models/database');
 var express = require('express');
 var router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', function (req, res, next) {
+router.get('/', authMiddleware.isAdmin, function (req, res, next) {
     let sql = `SELECT id_nhanvien, hoten, ngayvaolam 
                 FROM nhanvien GROUP BY id_nhanvien`;
     db.query(sql, function (err, data, fields) {

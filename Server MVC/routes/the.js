@@ -1,8 +1,9 @@
 var db = require('../models/database');
 var express = require('express');
 var router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', function (req, res, next) {
+router.get('/', authMiddleware.isAdmin, function (req, res, next) {
   let sql = `SELECT the.id_the, khachhang.hoten, the.sothe, the.loaithe, the.ngaytaothe, the.giatien 
               FROM the LEFT JOIN khachhang 
               ON the.id_khachhang = khachhang.id_khachhang 

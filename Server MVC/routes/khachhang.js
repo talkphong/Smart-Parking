@@ -1,9 +1,11 @@
+const { isAdmin } = require('../middleware/authMiddleware');
 var db = require('../models/database');
+const authMiddleware = require('../middleware/authMiddleware');
 
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
+router.get('/', authMiddleware.isAdmin, function(req, res, next) {
     // res.send('Danh sách khách hàng');  
     let sql = `SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(phuongtien.id_phuongtien) AS so_luong_phuongtien FROM khachhang LEFT JOIN phuongtien ON phuongtien.id_khachhang = khachhang.id_khachhang LEFT JOIN the ON the.id_khachhang = khachhang.id_khachhang GROUP BY khachhang.id_khachhang`;
     db.query(sql, function(err, data, fields) {      
