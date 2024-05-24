@@ -2,6 +2,7 @@ var db = require('../models/database');
 var express = require('express');
 var router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
+const moment = require('moment');
 
 router.get('/', authMiddleware.isAdmin, function (req, res, next) {
     let sql = `SELECT id_nhanvien, hoten, ngayvaolam 
@@ -41,15 +42,21 @@ router.get('/nhanvien_update/:id', function(req, res) {
       res.status(404).send('Không tìm thấy nhân viên');
       return;
     }
+
+    // Chuyển đổi ngày vào làm về định dạng 'DD-MM-YYYY' và múi giờ của bạn
+    let nhanvien = result[0];
+    nhanvien.ngayvaolam= moment(nhanvien.ngayvaolam).format('DD-MM-YYYY');
+
     // Render trang chỉnh sửa với dữ liệu khách hàng
-    res.render('nhanvien_update', { nhanvien: result[0] });
+    res.render('nhanvien_update', { nhanvien: nhanvien, moment: moment });
   });
 })
 
 router.post('/update_nhanvien', function(req, res) {
     // Lấy thông tin mới từ form
-  const {id_nhanvien, hoten, ngayvaolam} = req.body
-  const newData = {id_nhanvien: id_nhanvien, hoten: hoten, ngayvaolam: ngayvaolam}
+  const {id_nhanvien, hoten, ngayVaoLamNewFormat} = req.body;
+  const ngayvaolamISO = moment(ngayvaolam, 'DD/MM/YYYY').toISOString();
+  const newData = {id_nhanvien: id_nhanvien, hoten: hoten, ngayvaolam: ngayvaolamISO};
 
     // Cập nhật thông tin nhân viên trong database
   db.query(`UPDATE nhanvien 

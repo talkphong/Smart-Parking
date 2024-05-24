@@ -2,6 +2,7 @@ var db = require('../models/database');
 var express = require('express');
 var router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
+const moment = require('moment');
 
 router.get('/', authMiddleware.isAdmin, function (req, res, next) {
   let sql = `SELECT the.id_the, khachhang.hoten, the.sothe, the.loaithe, the.ngaytaothe, the.giatien 
@@ -46,15 +47,20 @@ router.get('/the_update/:id', function(req, res) {
       res.status(404).send('Không tìm thấy nhân viên');
       return;
     }
+    let the = result[0];
+    // Chuyển đổi ngày tạo thẻ về định dạng 'DD/MM/YYYY' cho hiển thị
+    the.ngaytaothe = moment(the.ngaytaothe).format('DD/MM/YYYY');
     // Render trang chỉnh sửa với dữ liệu khách hàng
-    res.render('the_update', { the: result[0] });
+    res.render('the_update', { the: the, moment: moment });
   });
 })
 
 router.post('/update_the', function(req, res) {
     // Lấy thông tin mới từ form
   const {id_the, id_khachhang, sothe, loaithe, ngaytaothe, giatien} = req.body
-  const newData = {id_the: id_the, id_khachhang: id_khachhang, sothe: sothe, loaithe: loaithe, ngaytaothe: ngaytaothe, giatien: giatien}
+  // Chuyển đổi 'ngaytaothe' từ định dạng 'DD/MM/YYYY' về định dạng ISO
+  const ngaytaotheISO = moment(ngaytaothe, 'DD/MM/YYYY').toISOString();
+  const newData = {id_the: id_the, id_khachhang: id_khachhang, sothe: sothe, loaithe: loaithe, ngaytaothe: ngaytaotheISO, giatien: giatien}
 
     // Cập nhật thông tin thẻ trong database
   db.query(`UPDATE the 

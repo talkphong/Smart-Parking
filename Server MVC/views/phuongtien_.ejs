@@ -135,9 +135,11 @@
                             <td> <%= c.bienso %> </td>
                             <td> <%= c.loaiphuongtien %> </td>
                             <td title="<%= c.path_anhphuongtien %>">
-                              <img src="<%= c.path_anhphuongtien %>" alt="Ảnh phương tiện">
+                              <img src="<%= c.path_anhphuongtien %>" alt="Ảnh phương tiện" style="max-width: 100px; max-height: 100px;">
                             </td>
-                            <td title="<%= c.path_anhbienso %>"> <%= c.path_anhbienso %> </td>
+                            <td title="<%= c.path_anhbienso %>">
+                              <img src="<%= c.path_anhbienso %>" alt="Ảnh biển số" style="max-width: 100px; max-height: 100px;">
+                            </td>
                             <td>
                               <a href="/phuongtien/phuongtien_update/<%= c.id_phuongtien %>"><i class="fas fa-edit text-primary mr-2"></i></a>
                               <a href="/phuongtien/phuongtien_delete/<%= c.id_phuongtien %>"><i class="fas fa-trash-alt text-danger"></i></a>

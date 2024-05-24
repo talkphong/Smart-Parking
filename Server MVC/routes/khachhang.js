@@ -71,7 +71,7 @@ router.get('/xoa/:id', function(req, res) {
   // res.send('Xóa khách hàng' + id);
   let id_khachhang = req.params.id;
   console.log(id_khachhang)
-  let sql= "DELETE FROM `khachhang` WHERE id_khachhang = ?;";
+  let sql= `DELETE FROM khachhang WHERE id_khachhang = ?`;;
   db.query(sql, [id_khachhang], function(err, data) {    
     if (data.affectedRows==0) {
         console.log(`Không có khách hàng ${id} để xóa`); 

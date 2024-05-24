@@ -60,6 +60,9 @@ app.use('/card', cardRouter);
 app.use('/history', historyRouter);
 app.use('/logout', logoutRouter);
 
+// Cấu hình để phục vụ tệp tĩnh từ thư mục "public"
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

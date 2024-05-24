@@ -12,6 +12,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-session": "^1.18.0",
+    "fs-extra": "^11.2.0",
     "http-errors": "~1.6.3",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45",
