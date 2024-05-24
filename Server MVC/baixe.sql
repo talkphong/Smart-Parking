@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 18, 2024 at 03:52 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th5 25, 2024 lúc 01:08 AM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,286 +18,331 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `baixe`
+-- Cơ sở dữ liệu: `testbaixe`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `camera`
+-- Cấu trúc bảng cho bảng `camera`
 --
 
 CREATE TABLE `camera` (
   `id_camera` int(11) NOT NULL,
-  `tencamera` varchar(50) NOT NULL,
-  `trangthai` varchar(50) NOT NULL
+  `id_cong` int(11) NOT NULL,
+  `tencamera` varchar(20) NOT NULL,
+  `trangthai` varchar(20) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `camera`
+-- Đang đổ dữ liệu cho bảng `camera`
 --
 
-INSERT INTO `camera` (`id_camera`, `tencamera`, `trangthai`) VALUES
-(1, 'CAMIN', 'Hoạt động'),
-(2, 'CAMOUT', 'Hoạt động');
+INSERT INTO `camera` (`id_camera`, `id_cong`, `tencamera`, `trangthai`, `active`) VALUES
+(1, 1, 'Camera vào A', 'Hoạt động]', 1),
+(2, 2, 'Camera ra A', 'Hoạt động]', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cong`
+-- Cấu trúc bảng cho bảng `cong`
 --
 
 CREATE TABLE `cong` (
   `id_cong` int(11) NOT NULL,
-  `tencong` varchar(255) NOT NULL,
-  `trangthai` varchar(255) DEFAULT NULL,
-  `thoigianmo` datetime DEFAULT current_timestamp(),
-  `thoigiandong` datetime DEFAULT current_timestamp()
+  `tencong` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `cong`
+-- Đang đổ dữ liệu cho bảng `cong`
 --
 
-INSERT INTO `cong` (`id_cong`, `tencong`, `trangthai`, `thoigianmo`, `thoigiandong`) VALUES
-(1, 'Cổng vào A', '', '2024-05-18 16:15:45', '2024-05-18 16:15:45'),
-(2, 'Cổng ra A', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `cong` (`id_cong`, `tencong`) VALUES
+(1, 'Cổng vào A'),
+(2, 'Cổng ra A');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `khachhang`
+-- Cấu trúc bảng cho bảng `khachhang`
 --
 
 CREATE TABLE `khachhang` (
   `id_khachhang` int(11) NOT NULL,
-  `hoten` varchar(255) NOT NULL,
-  `socanho` varchar(20) NOT NULL
+  `hoten` varchar(20) NOT NULL,
+  `socanho` varchar(20) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `khachhang`
+-- Đang đổ dữ liệu cho bảng `khachhang`
 --
 
-INSERT INTO `khachhang` (`id_khachhang`, `hoten`, `socanho`) VALUES
-(1, 'Trần Tuấn Phong', 'LOTUS10-22'),
-(2, 'Nguyễn Trịnh Tấn Phát', 'LOTUS10-23'),
-(3, 'Lee Minh Hieu', 'PARIS 12-03'),
-(4, 'Nguyễn Thanh Bình', 'VENICE 01-02'),
-(5, 'Hoàng Thị Thùy Linh', 'MONACO 01-01'),
-(6, 'Nguyễn Thái Minh', 'VENICE 01-01'),
-(7, 'Phạm Minh Thái', 'TNH430');
+INSERT INTO `khachhang` (`id_khachhang`, `hoten`, `socanho`, `active`) VALUES
+(1, 'Trần Tuấn Phong', 'LOTUS 10-23', 1),
+(2, 'Nguyễn Trịnh Tấn Phá', 'VENICE 01-01', 1),
+(3, 'Đinh Thị Mây', 'PARIS 12-03', 1),
+(4, 'Lê Minh Hiếu', 'MONACO 01-01', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lichsu`
+-- Cấu trúc bảng cho bảng `lichsu`
 --
 
 CREATE TABLE `lichsu` (
   `id_lichsu` int(11) NOT NULL,
-  `id_nhanvien` int(11) NOT NULL,
   `id_cong` int(11) NOT NULL,
-  `id_mayquetthe` int(11) NOT NULL,
-  `id_camera` int(11) NOT NULL,
-  `id_khachhang` int(11) NOT NULL,
-  `id_the` int(11) NOT NULL,
-  `id_phuongtien` int(11) NOT NULL,
-  `thoigianra` datetime DEFAULT current_timestamp(),
-  `thoigianvao` datetime DEFAULT current_timestamp()
+  `sothe` varchar(20) NOT NULL,
+  `bienso` varchar(20) NOT NULL,
+  `id_nhanvien` int(11) NOT NULL,
+  `thoigianmo` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `lichsu`
+-- Đang đổ dữ liệu cho bảng `lichsu`
 --
 
-INSERT INTO `lichsu` (`id_lichsu`, `id_nhanvien`, `id_cong`, `id_mayquetthe`, `id_camera`, `id_khachhang`, `id_the`, `id_phuongtien`, `thoigianra`, `thoigianvao`) VALUES
-(1, 3, 1, 1, 1, 1, 1, 1, NULL, '2024-05-17 16:33:44'),
-(2, 3, 2, 2, 2, 1, 1, 1, '2024-05-18 16:17:39', NULL);
+INSERT INTO `lichsu` (`id_lichsu`, `id_cong`, `sothe`, `bienso`, `id_nhanvien`, `thoigianmo`) VALUES
+(40, 1, 'A1 68 22', '15B311111', 1, '2024-05-24 19:09:16'),
+(41, 1, 'A1 68 22', '15B322222', 1, '2024-05-24 19:09:26'),
+(42, 2, 'A1 68 22', '15B322222', 1, '2024-05-24 19:09:36');
+
+--
+-- Bẫy `lichsu`
+--
+DELIMITER $$
+CREATE TRIGGER `after_insert_lichsu` AFTER INSERT ON `lichsu` FOR EACH ROW BEGIN
+	DECLARE loaithe VARCHAR(20);
+    DECLARE tencong VARCHAR(20);
+    SELECT the.loaithe
+        INTO loaithe
+    	FROM the
+        WHERE sothe = NEW.sothe;
+    SELECT cong.tencong
+    	INTO tencong
+    	FROM cong
+    	WHERE id_cong = NEW.id_cong; 
+	IF (tencong LIKE '%vào%') THEN 
+    	IF(loaithe = 'Thẻ cư dân') THEN
+    		UPDATE xecudan SET inside = 1
+    			WHERE xecudan.bienso = NEW.bienso;
+		ELSEIF (loaithe = 'Thẻ vãng lai') THEN
+        	UPDATE xevanglai SET inside = 1
+    			WHERE xevanglai.bienso = NEW.bienso;
+    	END IF;
+	ELSEIF (tencong LIKE '%ra%') THEN
+    	IF(loaithe = 'Thẻ cư dân') THEN
+    		UPDATE xecudan SET inside = 0
+    			WHERE xecudan.bienso = NEW.bienso;
+		ELSEIF(loaithe = 'Thẻ vãng lai') THEN
+    		UPDATE xevanglai SET inside = 0
+    			WHERE xevanglai.bienso = NEW.bienso;
+    	END IF;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mayquetthe`
+-- Cấu trúc bảng cho bảng `mayquetthe`
 --
 
 CREATE TABLE `mayquetthe` (
   `id_mayquetthe` int(11) NOT NULL,
   `id_cong` int(11) NOT NULL,
-  `id_camera` int(11) NOT NULL,
-  `id_the` int(11) DEFAULT NULL,
-  `tenmay` varchar(255) NOT NULL
+  `tenmay` varchar(20) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `mayquetthe`
+-- Đang đổ dữ liệu cho bảng `mayquetthe`
 --
 
-INSERT INTO `mayquetthe` (`id_mayquetthe`, `id_cong`, `id_camera`, `id_the`, `tenmay`) VALUES
-(1, 1, 1, 6, 'Máy vào'),
-(2, 2, 2, 6, 'Máy ra');
+INSERT INTO `mayquetthe` (`id_mayquetthe`, `id_cong`, `tenmay`, `active`) VALUES
+(1, 1, 'Máy vào A', 1),
+(2, 2, 'Máy ra A', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nhanvien`
+-- Cấu trúc bảng cho bảng `nhanvien`
 --
 
 CREATE TABLE `nhanvien` (
   `id_nhanvien` int(11) NOT NULL,
-  `id_cong` int(11) DEFAULT NULL,
-  `hoten` varchar(255) NOT NULL,
-  `ngayvaolam` date NOT NULL
+  `hoten` varchar(20) NOT NULL,
+  `ngayvaolam` date NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `nhanvien`
+-- Đang đổ dữ liệu cho bảng `nhanvien`
 --
 
-INSERT INTO `nhanvien` (`id_nhanvien`, `id_cong`, `hoten`, `ngayvaolam`) VALUES
-(1, 1, 'Phong Trần', '2024-04-05'),
-(2, 1, 'Phát Nguyễn', '2024-04-05'),
-(3, 2, 'Hiếu Lê', '2024-04-05'),
-(4, NULL, 'Lee Minh Hieu', '2024-05-14');
+INSERT INTO `nhanvien` (`id_nhanvien`, `hoten`, `ngayvaolam`, `active`) VALUES
+(1, 'Phát Nguyễn', '2024-02-15', 1),
+(2, 'Phong Trần', '2024-03-16', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `phuongtien`
---
-
-CREATE TABLE `phuongtien` (
-  `id_phuongtien` int(11) NOT NULL,
-  `id_khachhang` int(11) NOT NULL,
-  `bienso` varchar(50) NOT NULL,
-  `loaiphuongtien` varchar(50) NOT NULL,
-  `path_anhphuongtien` varchar(255) NOT NULL,
-  `path_anhbienso` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `phuongtien`
---
-
-INSERT INTO `phuongtien` (`id_phuongtien`, `id_khachhang`, `bienso`, `loaiphuongtien`, `path_anhphuongtien`, `path_anhbienso`) VALUES
-(1, 1, '15B397428', 'Xe máy', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
-(2, 1, '15B413594', 'Ô tô', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `taikhoan`
+-- Cấu trúc bảng cho bảng `taikhoan`
 --
 
 CREATE TABLE `taikhoan` (
   `id_taikhoan` int(11) NOT NULL,
   `id_khachhang` int(11) DEFAULT NULL,
   `id_nhanvien` int(11) DEFAULT NULL,
-  `tendangnhap` varchar(255) NOT NULL,
-  `matkhau` varchar(255) NOT NULL,
-  `phanquyen` varchar(255) NOT NULL
+  `tendangnhap` varchar(20) NOT NULL,
+  `matkhau` varchar(20) NOT NULL,
+  `phanquyen` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `taikhoan`
+-- Đang đổ dữ liệu cho bảng `taikhoan`
 --
 
 INSERT INTO `taikhoan` (`id_taikhoan`, `id_khachhang`, `id_nhanvien`, `tendangnhap`, `matkhau`, `phanquyen`) VALUES
-(1, NULL, 1, 'phongtran', '89940', 'admin'),
-(2, NULL, 2, 'phatnguyen', '86940', 'admin'),
-(3, NULL, 3, 'hieule', '123456', 'nhanvien'),
-(4, 1, NULL, 'phong', '89940', 'khachhang'),
-(5, 6, NULL, 'minhcaca', 'thaiminh', 'khachhang'),
-(6, NULL, 4, 'leehieu', 'hieulee', 'nhanvien'),
-(7, 7, NULL, 'mocmeo', '050302', 'khachhang');
+(1, 1, NULL, 'phong', '1', 'khachhang'),
+(2, 2, NULL, 'phat', '1', 'khachhang'),
+(3, 3, NULL, 'may', '1', 'khachhang'),
+(4, 4, NULL, 'hieu', '1', 'khachhang'),
+(5, NULL, 1, 'nvphat', '1', 'nhanvien'),
+(6, NULL, 2, 'nvphong', '1', 'nhanvien'),
+(7, NULL, NULL, 'admin', '1', 'admin');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `the`
+-- Cấu trúc bảng cho bảng `the`
 --
 
 CREATE TABLE `the` (
-  `id_the` int(11) NOT NULL,
+  `sothe` varchar(20) NOT NULL,
   `id_khachhang` int(11) DEFAULT NULL,
-  `sothe` varchar(50) NOT NULL,
-  `loaithe` varchar(50) NOT NULL,
-  `ngaytaothe` date NOT NULL,
-  `giatien` varchar(50) DEFAULT NULL
+  `loaithe` varchar(20) NOT NULL,
+  `ngaytaothe` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `the`
+-- Đang đổ dữ liệu cho bảng `the`
 --
 
-INSERT INTO `the` (`id_the`, `id_khachhang`, `sothe`, `loaithe`, `ngaytaothe`, `giatien`) VALUES
-(1, 1, '89940', 'Thẻ VIP', '2024-04-04', '0đ'),
-(2, 2, '86940', 'Thẻ VIP', '2024-04-04', '0đ'),
-(3, 3, '12345', 'Thẻ VIP', '2024-05-02', '0đ'),
-(4, 5, '88888', 'Thẻ VIP', '2024-05-02', '0đ'),
-(5, 4, '112233', 'Thẻ VIP', '2024-05-14', '0đ'),
-(6, 6, '332244', 'Thẻ VIP', '2024-05-14', '0đ');
+INSERT INTO `the` (`sothe`, `id_khachhang`, `loaithe`, `ngaytaothe`) VALUES
+('A1 68 11', 1, 'Thẻ cư dân', '2024-05-24'),
+('A1 68 22', 2, 'Thẻ cư dân', '2024-05-24'),
+('A1 68 33', 3, 'Thẻ cư dân', '2024-05-24'),
+('A1 68 44', 4, 'Thẻ cư dân', '2024-05-24'),
+('B1 68 11', NULL, 'Thẻ vãng lai', '2024-05-24'),
+('B1 68 22', NULL, 'Thẻ vãng lai', '2024-05-24'),
+('B1 68 33', NULL, 'Thẻ vãng lai', '2024-05-24'),
+('B1 68 44', NULL, 'Thẻ vãng lai', '2024-05-24');
+
+-- --------------------------------------------------------
 
 --
--- Indexes for dumped tables
+-- Cấu trúc bảng cho bảng `xecudan`
+--
+
+CREATE TABLE `xecudan` (
+  `id_phuongtien` int(11) NOT NULL,
+  `sothe` varchar(20) NOT NULL,
+  `loaiphuongtien` varchar(20) NOT NULL,
+  `bienso` varchar(20) NOT NULL,
+  `inside` tinyint(1) NOT NULL DEFAULT 0,
+  `path_anhphuongtien` varchar(255) NOT NULL,
+  `path_anhbienso` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `xecudan`
+--
+
+INSERT INTO `xecudan` (`id_phuongtien`, `sothe`, `loaiphuongtien`, `bienso`, `inside`, `path_anhphuongtien`, `path_anhbienso`, `active`) VALUES
+(18, 'A1 68 11', 'xe máy', '15B311111', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
+(19, 'A1 68 11', 'xe máy', '15B322222', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
+(20, 'A1 68 22', 'xe máy', '15B333333', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
+(21, 'A1 68 33', 'xe máy', '15B344444', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
+(22, 'A1 68 44', 'xe máy', '15B355555', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `xevanglai`
+--
+
+CREATE TABLE `xevanglai` (
+  `id_phuongtien` int(11) NOT NULL,
+  `sothe` varchar(20) NOT NULL,
+  `bienso` varchar(20) NOT NULL,
+  `inside` tinyint(1) NOT NULL DEFAULT 1,
+  `path_anhphuongtien` varchar(255) NOT NULL,
+  `path_anhbienso` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `xevanglai`
+--
+
+INSERT INTO `xevanglai` (`id_phuongtien`, `sothe`, `bienso`, `inside`, `path_anhphuongtien`, `path_anhbienso`, `active`) VALUES
+(1, 'B1 68 22', '15B377777', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
+(2, 'B1 68 11', '15B366666', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
+(3, 'B1 68 33', '15B388888', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
+(4, 'B1 68 44', '15B399999', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1);
+
+--
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `camera`
+-- Chỉ mục cho bảng `camera`
 --
 ALTER TABLE `camera`
-  ADD PRIMARY KEY (`id_camera`);
+  ADD PRIMARY KEY (`id_camera`),
+  ADD KEY `id_cong` (`id_cong`);
 
 --
--- Indexes for table `cong`
+-- Chỉ mục cho bảng `cong`
 --
 ALTER TABLE `cong`
   ADD PRIMARY KEY (`id_cong`);
 
 --
--- Indexes for table `khachhang`
+-- Chỉ mục cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
   ADD PRIMARY KEY (`id_khachhang`);
 
 --
--- Indexes for table `lichsu`
+-- Chỉ mục cho bảng `lichsu`
 --
 ALTER TABLE `lichsu`
   ADD PRIMARY KEY (`id_lichsu`),
-  ADD KEY `id_nhanvien` (`id_nhanvien`),
   ADD KEY `id_cong` (`id_cong`),
-  ADD KEY `id_mayquetthe` (`id_mayquetthe`),
-  ADD KEY `id_camera` (`id_camera`),
-  ADD KEY `id_khachhang` (`id_khachhang`),
-  ADD KEY `id_the` (`id_the`),
-  ADD KEY `id_phuongtien` (`id_phuongtien`);
+  ADD KEY `id_nhanvien` (`id_nhanvien`),
+  ADD KEY `sothe` (`sothe`);
 
 --
--- Indexes for table `mayquetthe`
+-- Chỉ mục cho bảng `mayquetthe`
 --
 ALTER TABLE `mayquetthe`
   ADD PRIMARY KEY (`id_mayquetthe`),
-  ADD KEY `id_camera` (`id_camera`),
-  ADD KEY `id_cong` (`id_cong`),
-  ADD KEY `id_the` (`id_the`);
-
---
--- Indexes for table `nhanvien`
---
-ALTER TABLE `nhanvien`
-  ADD PRIMARY KEY (`id_nhanvien`),
   ADD KEY `id_cong` (`id_cong`);
 
 --
--- Indexes for table `phuongtien`
+-- Chỉ mục cho bảng `nhanvien`
 --
-ALTER TABLE `phuongtien`
-  ADD PRIMARY KEY (`id_phuongtien`),
-  ADD KEY `id_khachhang` (`id_khachhang`);
+ALTER TABLE `nhanvien`
+  ADD PRIMARY KEY (`id_nhanvien`);
 
 --
--- Indexes for table `taikhoan`
+-- Chỉ mục cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
   ADD PRIMARY KEY (`id_taikhoan`),
@@ -305,118 +350,125 @@ ALTER TABLE `taikhoan`
   ADD KEY `id_nhanvien` (`id_nhanvien`);
 
 --
--- Indexes for table `the`
+-- Chỉ mục cho bảng `the`
 --
 ALTER TABLE `the`
-  ADD PRIMARY KEY (`id_the`),
-  ADD KEY `id_khachhang` (`id_khachhang`);
+  ADD PRIMARY KEY (`sothe`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Chỉ mục cho bảng `xecudan`
+--
+ALTER TABLE `xecudan`
+  ADD PRIMARY KEY (`id_phuongtien`),
+  ADD KEY `sothe` (`sothe`);
+
+--
+-- Chỉ mục cho bảng `xevanglai`
+--
+ALTER TABLE `xevanglai`
+  ADD PRIMARY KEY (`id_phuongtien`),
+  ADD KEY `sothe` (`sothe`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `camera`
+-- AUTO_INCREMENT cho bảng `camera`
 --
 ALTER TABLE `camera`
   MODIFY `id_camera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `cong`
+-- AUTO_INCREMENT cho bảng `cong`
 --
 ALTER TABLE `cong`
   MODIFY `id_cong` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `khachhang`
+-- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `lichsu`
+-- AUTO_INCREMENT cho bảng `lichsu`
 --
 ALTER TABLE `lichsu`
-  MODIFY `id_lichsu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_lichsu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT for table `mayquetthe`
+-- AUTO_INCREMENT cho bảng `mayquetthe`
 --
 ALTER TABLE `mayquetthe`
   MODIFY `id_mayquetthe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `nhanvien`
+-- AUTO_INCREMENT cho bảng `nhanvien`
 --
 ALTER TABLE `nhanvien`
-  MODIFY `id_nhanvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_nhanvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `phuongtien`
---
-ALTER TABLE `phuongtien`
-  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `taikhoan`
+-- AUTO_INCREMENT cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
   MODIFY `id_taikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `the`
+-- AUTO_INCREMENT cho bảng `xecudan`
 --
-ALTER TABLE `the`
-  MODIFY `id_the` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `xecudan`
+  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT cho bảng `xevanglai`
+--
+ALTER TABLE `xevanglai`
+  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `lichsu`
+-- Các ràng buộc cho bảng `camera`
+--
+ALTER TABLE `camera`
+  ADD CONSTRAINT `camera_ibfk_1` FOREIGN KEY (`id_cong`) REFERENCES `cong` (`id_cong`);
+
+--
+-- Các ràng buộc cho bảng `lichsu`
 --
 ALTER TABLE `lichsu`
-  ADD CONSTRAINT `lichsu_ibfk_1` FOREIGN KEY (`id_nhanvien`) REFERENCES `nhanvien` (`id_nhanvien`),
-  ADD CONSTRAINT `lichsu_ibfk_2` FOREIGN KEY (`id_cong`) REFERENCES `cong` (`id_cong`),
-  ADD CONSTRAINT `lichsu_ibfk_3` FOREIGN KEY (`id_mayquetthe`) REFERENCES `mayquetthe` (`id_mayquetthe`),
-  ADD CONSTRAINT `lichsu_ibfk_4` FOREIGN KEY (`id_camera`) REFERENCES `camera` (`id_camera`),
-  ADD CONSTRAINT `lichsu_ibfk_5` FOREIGN KEY (`id_khachhang`) REFERENCES `khachhang` (`id_khachhang`),
-  ADD CONSTRAINT `lichsu_ibfk_6` FOREIGN KEY (`id_the`) REFERENCES `the` (`id_the`),
-  ADD CONSTRAINT `lichsu_ibfk_7` FOREIGN KEY (`id_phuongtien`) REFERENCES `phuongtien` (`id_phuongtien`);
+  ADD CONSTRAINT `lichsu_ibfk_1` FOREIGN KEY (`id_cong`) REFERENCES `cong` (`id_cong`),
+  ADD CONSTRAINT `lichsu_ibfk_2` FOREIGN KEY (`id_nhanvien`) REFERENCES `nhanvien` (`id_nhanvien`),
+  ADD CONSTRAINT `lichsu_ibfk_3` FOREIGN KEY (`sothe`) REFERENCES `the` (`sothe`);
 
 --
--- Constraints for table `mayquetthe`
+-- Các ràng buộc cho bảng `mayquetthe`
 --
 ALTER TABLE `mayquetthe`
-  ADD CONSTRAINT `mayquetthe_ibfk_1` FOREIGN KEY (`id_camera`) REFERENCES `camera` (`id_camera`),
-  ADD CONSTRAINT `mayquetthe_ibfk_2` FOREIGN KEY (`id_cong`) REFERENCES `cong` (`id_cong`),
-  ADD CONSTRAINT `mayquetthe_ibfk_3` FOREIGN KEY (`id_the`) REFERENCES `the` (`id_the`);
+  ADD CONSTRAINT `mayquetthe_ibfk_1` FOREIGN KEY (`id_cong`) REFERENCES `cong` (`id_cong`);
 
 --
--- Constraints for table `nhanvien`
---
-ALTER TABLE `nhanvien`
-  ADD CONSTRAINT `nhanvien_ibfk_1` FOREIGN KEY (`id_cong`) REFERENCES `cong` (`id_cong`);
-
---
--- Constraints for table `phuongtien`
---
-ALTER TABLE `phuongtien`
-  ADD CONSTRAINT `phuongtien_ibfk_1` FOREIGN KEY (`id_khachhang`) REFERENCES `khachhang` (`id_khachhang`);
-
---
--- Constraints for table `taikhoan`
+-- Các ràng buộc cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
   ADD CONSTRAINT `taikhoan_ibfk_1` FOREIGN KEY (`id_khachhang`) REFERENCES `khachhang` (`id_khachhang`),
   ADD CONSTRAINT `taikhoan_ibfk_2` FOREIGN KEY (`id_nhanvien`) REFERENCES `nhanvien` (`id_nhanvien`);
 
 --
--- Constraints for table `the`
+-- Các ràng buộc cho bảng `xecudan`
 --
-ALTER TABLE `the`
-  ADD CONSTRAINT `the_ibfk_1` FOREIGN KEY (`id_khachhang`) REFERENCES `khachhang` (`id_khachhang`);
+ALTER TABLE `xecudan`
+  ADD CONSTRAINT `xecudan_ibfk_1` FOREIGN KEY (`sothe`) REFERENCES `the` (`sothe`);
+
+--
+-- Các ràng buộc cho bảng `xevanglai`
+--
+ALTER TABLE `xevanglai`
+  ADD CONSTRAINT `xevanglai_ibfk_1` FOREIGN KEY (`sothe`) REFERENCES `the` (`sothe`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
