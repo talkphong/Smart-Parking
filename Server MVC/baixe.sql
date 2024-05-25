@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 25, 2024 lúc 01:08 AM
+-- Thời gian đã tạo: Th5 25, 2024 lúc 02:48 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `testbaixe`
+-- Cơ sở dữ liệu: `baixe`
 --
 
 -- --------------------------------------------------------
@@ -70,7 +70,7 @@ INSERT INTO `cong` (`id_cong`, `tencong`) VALUES
 
 CREATE TABLE `khachhang` (
   `id_khachhang` int(11) NOT NULL,
-  `hoten` varchar(20) NOT NULL,
+  `hoten` varchar(50) NOT NULL,
   `socanho` varchar(20) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -81,7 +81,7 @@ CREATE TABLE `khachhang` (
 
 INSERT INTO `khachhang` (`id_khachhang`, `hoten`, `socanho`, `active`) VALUES
 (1, 'Trần Tuấn Phong', 'LOTUS 10-23', 1),
-(2, 'Nguyễn Trịnh Tấn Phá', 'VENICE 01-01', 1),
+(2, 'Nguyễn Trịnh Tấn Phát', 'VENICE 01-01', 1),
 (3, 'Đinh Thị Mây', 'PARIS 12-03', 1),
 (4, 'Lê Minh Hiếu', 'MONACO 01-01', 1);
 
@@ -96,18 +96,23 @@ CREATE TABLE `lichsu` (
   `id_cong` int(11) NOT NULL,
   `sothe` varchar(20) NOT NULL,
   `bienso` varchar(20) NOT NULL,
+  `id_khachhang` int(11) DEFAULT NULL,
   `id_nhanvien` int(11) NOT NULL,
-  `thoigianmo` datetime NOT NULL DEFAULT current_timestamp()
+  `thoigianmo` datetime NOT NULL DEFAULT current_timestamp(),
+  `path_anhphuongtien` varchar(255) NOT NULL,
+  `path_anhbienso` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `lichsu`
 --
 
-INSERT INTO `lichsu` (`id_lichsu`, `id_cong`, `sothe`, `bienso`, `id_nhanvien`, `thoigianmo`) VALUES
-(40, 1, 'A1 68 22', '15B311111', 1, '2024-05-24 19:09:16'),
-(41, 1, 'A1 68 22', '15B322222', 1, '2024-05-24 19:09:26'),
-(42, 2, 'A1 68 22', '15B322222', 1, '2024-05-24 19:09:36');
+INSERT INTO `lichsu` (`id_lichsu`, `id_cong`, `sothe`, `bienso`, `id_khachhang`, `id_nhanvien`, `thoigianmo`, `path_anhphuongtien`, `path_anhbienso`) VALUES
+(40, 1, 'A1 68 22', '15B311111', NULL, 1, '2024-05-24 19:09:16', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
+(41, 1, 'A1 68 22', '15B322222', NULL, 1, '2024-05-24 19:09:26', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
+(42, 2, 'A1 68 22', '15B322222', NULL, 1, '2024-05-24 19:09:36', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
+(43, 1, 'A1 68 11', '15B311111', 1, 1, '2024-05-25 09:57:04', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
+(44, 2, 'A1 68 11', '15B311111', 1, 1, '2024-05-25 12:52:46', '', '');
 
 --
 -- Bẫy `lichsu`
@@ -184,7 +189,7 @@ CREATE TABLE `nhanvien` (
 --
 
 INSERT INTO `nhanvien` (`id_nhanvien`, `hoten`, `ngayvaolam`, `active`) VALUES
-(1, 'Phát Nguyễn', '2024-02-15', 1),
+(1, 'Phát Nguyễn', '0000-00-00', 1),
 (2, 'Phong Trần', '2024-03-16', 1);
 
 -- --------------------------------------------------------
@@ -213,7 +218,7 @@ INSERT INTO `taikhoan` (`id_taikhoan`, `id_khachhang`, `id_nhanvien`, `tendangnh
 (4, 4, NULL, 'hieu', '1', 'khachhang'),
 (5, NULL, 1, 'nvphat', '1', 'nhanvien'),
 (6, NULL, 2, 'nvphong', '1', 'nhanvien'),
-(7, NULL, NULL, 'admin', '1', 'admin');
+(8, 1, 1, 'admin', '1', 'admin');
 
 -- --------------------------------------------------------
 
@@ -225,22 +230,23 @@ CREATE TABLE `the` (
   `sothe` varchar(20) NOT NULL,
   `id_khachhang` int(11) DEFAULT NULL,
   `loaithe` varchar(20) NOT NULL,
-  `ngaytaothe` date NOT NULL DEFAULT current_timestamp()
+  `ngaytaothe` date NOT NULL DEFAULT current_timestamp(),
+  `active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `the`
 --
 
-INSERT INTO `the` (`sothe`, `id_khachhang`, `loaithe`, `ngaytaothe`) VALUES
-('A1 68 11', 1, 'Thẻ cư dân', '2024-05-24'),
-('A1 68 22', 2, 'Thẻ cư dân', '2024-05-24'),
-('A1 68 33', 3, 'Thẻ cư dân', '2024-05-24'),
-('A1 68 44', 4, 'Thẻ cư dân', '2024-05-24'),
-('B1 68 11', NULL, 'Thẻ vãng lai', '2024-05-24'),
-('B1 68 22', NULL, 'Thẻ vãng lai', '2024-05-24'),
-('B1 68 33', NULL, 'Thẻ vãng lai', '2024-05-24'),
-('B1 68 44', NULL, 'Thẻ vãng lai', '2024-05-24');
+INSERT INTO `the` (`sothe`, `id_khachhang`, `loaithe`, `ngaytaothe`, `active`) VALUES
+('A1 68 11', 1, 'Thẻ cư dân', '2024-05-24', 1),
+('A1 68 22', 2, 'Thẻ cư dân', '2024-05-24', 1),
+('A1 68 33', 3, 'Thẻ cư dân', '2024-05-24', 1),
+('A1 68 44', 4, 'Thẻ cư dân', '2024-05-24', 1),
+('B1 68 11', 1, 'Thẻ cư dân', '0000-00-00', 1),
+('B1 68 22', NULL, 'Thẻ vãng lai', '2024-05-24', 1),
+('B1 68 33', NULL, 'Thẻ vãng lai', '2024-05-24', 1),
+('B1 68 44', NULL, 'Thẻ vãng lai', '2024-05-24', 1);
 
 -- --------------------------------------------------------
 
@@ -264,7 +270,7 @@ CREATE TABLE `xecudan` (
 --
 
 INSERT INTO `xecudan` (`id_phuongtien`, `sothe`, `loaiphuongtien`, `bienso`, `inside`, `path_anhphuongtien`, `path_anhbienso`, `active`) VALUES
-(18, 'A1 68 11', 'xe máy', '15B311111', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
+(18, 'A1 68 11', 'xe máy', '15B311111', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
 (19, 'A1 68 11', 'xe máy', '15B322222', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
 (20, 'A1 68 22', 'xe máy', '15B333333', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
 (21, 'A1 68 33', 'xe máy', '15B344444', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
@@ -326,7 +332,8 @@ ALTER TABLE `lichsu`
   ADD PRIMARY KEY (`id_lichsu`),
   ADD KEY `id_cong` (`id_cong`),
   ADD KEY `id_nhanvien` (`id_nhanvien`),
-  ADD KEY `sothe` (`sothe`);
+  ADD KEY `sothe` (`sothe`),
+  ADD KEY `id_khachhang` (`id_khachhang`);
 
 --
 -- Chỉ mục cho bảng `mayquetthe`
@@ -389,13 +396,13 @@ ALTER TABLE `cong`
 -- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `lichsu`
 --
 ALTER TABLE `lichsu`
-  MODIFY `id_lichsu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id_lichsu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT cho bảng `mayquetthe`
@@ -407,19 +414,19 @@ ALTER TABLE `mayquetthe`
 -- AUTO_INCREMENT cho bảng `nhanvien`
 --
 ALTER TABLE `nhanvien`
-  MODIFY `id_nhanvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_nhanvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `id_taikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_taikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT cho bảng `xecudan`
 --
 ALTER TABLE `xecudan`
-  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT cho bảng `xevanglai`
@@ -443,7 +450,8 @@ ALTER TABLE `camera`
 ALTER TABLE `lichsu`
   ADD CONSTRAINT `lichsu_ibfk_1` FOREIGN KEY (`id_cong`) REFERENCES `cong` (`id_cong`),
   ADD CONSTRAINT `lichsu_ibfk_2` FOREIGN KEY (`id_nhanvien`) REFERENCES `nhanvien` (`id_nhanvien`),
-  ADD CONSTRAINT `lichsu_ibfk_3` FOREIGN KEY (`sothe`) REFERENCES `the` (`sothe`);
+  ADD CONSTRAINT `lichsu_ibfk_3` FOREIGN KEY (`sothe`) REFERENCES `the` (`sothe`),
+  ADD CONSTRAINT `lichsu_ibfk_4` FOREIGN KEY (`id_khachhang`) REFERENCES `khachhang` (`id_khachhang`);
 
 --
 -- Các ràng buộc cho bảng `mayquetthe`
