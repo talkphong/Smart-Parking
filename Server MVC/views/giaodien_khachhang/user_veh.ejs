@@ -124,6 +124,12 @@
                     </div>
                   </div>
                   <div class="form-group row">
+                    <label for="trangthai" class="col-sm-3 col-form-label">Trạng thái</label>
+                    <div class="col-sm-9">
+                      <input type="text" readonly class="form-control" id="trangthai" value="<%= vehicle.inside === 1? 'Trong bãi' : 'Ngoài bãi' %>">
+                    </div>
+                  </div>
+                  <div class="form-group row">
                     <label for="loaiPhuongTien" class="col-sm-3 col-form-label">Loại phương tiện</label>
                     <div class="col-sm-9">
                       <input type="text" readonly class="form-control" id="loaiPhuongTien" value="<%= vehicle.loaiphuongtien %>">

@@ -5,10 +5,10 @@ const authMiddleware = require('../middleware/authMiddleware');
 const moment = require('moment');
 
 router.get('/', authMiddleware.isAdmin, function (req, res, next) {
-  let sql = `SELECT the.id_the, khachhang.hoten, the.sothe, the.loaithe, the.ngaytaothe, the.giatien 
+  let sql = `SELECT the.sothe, the.loaithe, khachhang.hoten, the.ngaytaothe
               FROM the LEFT JOIN khachhang 
               ON the.id_khachhang = khachhang.id_khachhang 
-              GROUP BY the.id_the`;
+              WHERE the.active = 1`;
   db.query(sql, function (err, data, fields) {
     res.render("the_", { list: data });
     console.log(data);
@@ -20,12 +20,8 @@ router.get('/form-them-the', function (req, res, next) {
 });
 
 router.post('/themthe', function (req, res, next) {
-  let id_khachhang = req.body.id_khachhang;
-  let sothe = req.body.sothe;
-  let loaithe = req.body.loaithe;
-  let ngaytaothe = req.body.ngaytaothe;
-  let giatien = req.body.giatien;
-  let the = {id_khachhang:id_khachhang, sothe:sothe, loaithe:loaithe, ngaytaothe:ngaytaothe, giatien:giatien}
+  const {sothe, loaithe, ngaytaothe} = req.body
+  let the = {sothe:sothe, loaithe:loaithe, ngaytaothe:ngaytaothe}
   db.query('INSERT INTO the SET ?', the, function(err, data){
     if (err) throw err;
     res.redirect("/the");
@@ -34,9 +30,10 @@ router.post('/themthe', function (req, res, next) {
 
 router.get('/the_update/:id', function(req, res) {
   //Lay id the tu url
-  const id = req.params.id;
+  let id = req.params.id;
+  console.log(id)
   //Truy van
-  db.query('SELECT * FROM the WHERE id_the = ?', id, function(err, result) {
+  db.query('SELECT * FROM the WHERE sothe = ?', id, function(err, result) {
     if (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
@@ -57,15 +54,15 @@ router.get('/the_update/:id', function(req, res) {
 
 router.post('/update_the', function(req, res) {
     // Lấy thông tin mới từ form
-  const {id_the, id_khachhang, sothe, loaithe, ngaytaothe, giatien} = req.body
+  const {sothe, loaithe, ngaytaothe} = req.body
   // Chuyển đổi 'ngaytaothe' từ định dạng 'DD/MM/YYYY' về định dạng ISO
   const ngaytaotheISO = moment(ngaytaothe, 'DD/MM/YYYY').toISOString();
-  const newData = {id_the: id_the, id_khachhang: id_khachhang, sothe: sothe, loaithe: loaithe, ngaytaothe: ngaytaotheISO, giatien: giatien}
+  const newData = {sothe: sothe, loaithe: loaithe, ngaytaothe: ngaytaotheISO}
 
     // Cập nhật thông tin thẻ trong database
   db.query(`UPDATE the 
-            SET id_khachhang = ?, sothe = ?, loaithe = ?, ngaytaothe = ?, giatien = ?
-            WHERE id_the = ?`, [newData.id_khachhang, newData.sothe, newData.loaithe, newData.ngaytaothe, newData.giatien, newData.id_the], function(err, result) {
+            SET loaithe = ?, ngaytaothe = ?
+            WHERE sothe = ?`, [newData.loaithe, newData.ngaytaothe, newData.sothe], function(err, result) {
     if (err) throw err;
     // Redirect về trang danh sách nhân viên sau khi cập nhật thành công
     res.send("Cập nhật thẻ thành công");
@@ -73,12 +70,12 @@ router.post('/update_the', function(req, res) {
 })
 
 router.get('/the_delete/:id', function(req, res) {
-    let id_nhanvien = req.params.id;
-    console.log(id_nhanvien)
-    let sql= "DELETE FROM `the` WHERE id_the = ?;";
-    db.query(sql, [id_nhanvien], function(err, data) {    
+    let sothe = req.params.id;
+    console.log(sothe)
+    let sql= "UPDATE the SET the.active = 0 WHERE sothe = ?;";
+    db.query(sql, [sothe], function(err, data) {    
       if (data.affectedRows==0) {
-          console.log(`Không có thẻ ${id} để xóa`); 
+          console.log(`Không có thẻ ${sothe} để xóa`); 
       }
       res.redirect('/the');
     })
@@ -87,11 +84,11 @@ router.get('/the_delete/:id', function(req, res) {
   
 router.get('/search/', function(req, res, next) {
   const keyword = req.query.keyword;
-  const query = `SELECT the.id_the, khachhang.hoten, the.sothe, the.loaithe, the.ngaytaothe, the.giatien 
+  const query = `SELECT the.sothe, the.loaithe, khachhang.hoten, the.ngaytaothe
                 FROM the LEFT JOIN khachhang 
                 ON the.id_khachhang = khachhang.id_khachhang 
-                GROUP BY the.id_the
-                HAVING id_the LIKE ? OR hoten LIKE ? OR loaithe LIKE ? OR giatien LIKE ?`;
+                WHERE the.active = 1
+                HAVING sothe LIKE ? OR hoten LIKE ? OR loaithe LIKE ? OR ngaytaothe LIKE?`;
   const searchTerm = `%${keyword}%`; // Thêm dấu % cho tìm kiếm mở rộng
   db.query(query, [searchTerm, searchTerm, searchTerm, searchTerm], function(err, result) {
     if (err) {

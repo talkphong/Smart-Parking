@@ -25,16 +25,9 @@
           <div class="card-body">
             <form id="form-the_update">
               <div class="form-group">
-                <label>ID thẻ:</label>
-                <input type="text" class="form-control" id="id_the" value="<%=the.id_the%>" readonly>
-              </div>
-              <div class="form-group">
-                <label>ID khách hàng:</label>
-                <input type="text" class="form-control" id="id_khachhang" value="<%=the.id_khachhang%>" required>
-              </div>
               <div class="form-group">
                 <label>Số thẻ:</label>
-                <input type="text" class="form-control" id="sothe" value="<%=the.sothe%>" required>
+                <input type="text" class="form-control" id="sothe" value="<%=the.sothe%>" readonly>
               </div>
               <div class="form-group">
                 <label>Loại thẻ:</label>
@@ -43,10 +36,6 @@
               <div class="form-group">
                 <label>Ngày tạo thẻ:</label>
                 <input type="date"  class="form-control" id="ngaytaothe" value="<%= moment(the.ngaytaothe, 'DD-MM-YYYY').format('YYYY-MM-DD') %>"required>
-              </div>
-              <div class="form-group">
-                <label>Giá tiền:</label>
-                <input type="text" class="form-control" id="giatien" value="<%=the.giatien%>" required>
               </div>
               <button type="submit" class="btn btn-primary">Cập nhật</button>
             </form>
@@ -62,21 +51,15 @@
       event.preventDefault(); // Ngăn chặn hành vi mặc định của form
 
       // Lấy giá trị từ các ô nhập liệu
-      var id_the = document.getElementById('id_the').value;
-      var id_khachhang = document.getElementById('id_khachhang').value;
       var sothe = document.getElementById('sothe').value;
       var loaithe = document.getElementById('loaithe').value;
       var ngaytaothe= document.getElementById('ngaytaothe').value;
-      var giatien = document.getElementById('giatien').value;
 
       // Tạo object chứa dữ liệu cần gửi lên server
       var params = new URLSearchParams();
-      params.append('id_the', id_the)
-      params.append('id_khachhang', id_khachhang);
       params.append('sothe', sothe);
       params.append('loaithe', loaithe)
       params.append('ngaytaothe', ngaytaothe);
-      params.append('giatien', giatien);
 
       // Gửi request POST đến server để cập nhật thông tin thẻ
       fetch(`/the/update_the/`, {

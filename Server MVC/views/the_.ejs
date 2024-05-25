@@ -66,7 +66,7 @@
                 <a class="nav-link" href="/khachhang">Khách hàng</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/the">Nhân viên</a>
+                <a class="nav-link" href="/nhanvien">Nhân viên</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active text-muted" aria-current="page" href="/the">Thẻ</a>
@@ -103,12 +103,10 @@
             <div class="col-11">
                 <table class="table table-hover w-75 m-auto text-center">
                     <tr>
-                        <th>ID thẻ</th>
-                        <th>Tên khách hàng</th>
                         <th>Số thẻ</th>
                         <th>Loại thẻ</th>
+                        <th>Tên khách hàng</th>
                         <th>Ngày tạo thẻ</th>
-                        <th>Giá tiền</th>
                         <th colspan="2">
                           <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
                               <a href="/the/form-them-the">
@@ -122,10 +120,9 @@
                     
                     <% for (let c of list ) { %>
                         <tr>
-                            <td> <%= c.id_the %> </td>
-                            <td> <%= c.hoten %> </td>
-                            <td> <%= c.sothe %> </td>
-                            <td> <%= c.loaithe %> </td>
+                          <td> <%= c.sothe %> </td>
+                          <td> <%= c.loaithe %> </td>
+                          <td> <%= c.hoten %> </td>
                             <td> 
                               <%
                                 var ngayTaoThe = new Date(c.ngaytaothe);
@@ -138,10 +135,9 @@
                               %>
                               <%= ngayTaoTheNewFormat %> 
                             </td>
-                            <td> <%= c.giatien %> </td>
                             <td>
-                              <a href="/the/the_update/<%= c.id_the %>"><i class="fas fa-edit text-primary mr-2"></i></a>
-                              <a href="/the/the_delete/<%= c.id_the %>"><i class="fas fa-trash-alt text-danger"></i></a>
+                              <a href="/the/the_update/<%= c.sothe %>"><i class="fas fa-edit text-primary mr-2"></i></a>
+                              <a href="/the/the_delete/<%= c.sothe %>"><i class="fas fa-trash-alt text-danger"></i></a>
                             </td>
                         </tr>
                     <% } %>        
@@ -186,12 +182,10 @@
         var tableHead = document.createElement('thead'); // Tạo thead mới
         var tableHeadRow = document.createElement('tr'); // Tạo dòng của thead
         tableHeadRow.innerHTML = `
-          <th>ID thẻ</th>
-          <th>Tên khách hàng</th>
           <th>Số thẻ</th>
           <th>Loại thẻ</th>
+          <th>Tên khách hàng</th>
           <th>Ngày tạo thẻ</th>
-          <th>Giá tiền</th>
           <th colspan="2">
             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
                 <a href="/the/form-them-the">
@@ -215,17 +209,15 @@
 
           var row = document.createElement('tr');
           row.innerHTML = `
-                            <td>${item.id_the}</td>
-                            <td>${item.hoten}</td>
                             <td>${item.sothe}</td>
                             <td>${item.loaithe}</td>
+                            <td>${item.hoten}</td>
                             <td> 
                               ${ngayTaoTheNewFormat}
                             </td>
-                            <td>${item.giatien}</td>
             <td>
-              <a href="/the/the_update/${item.id_the}"><i class="fas fa-edit text-primary mr-2"></i></a>
-              <a href="/the/the_delete/${item.id_the}"><i class="fas fa-trash-alt text-danger"></i></a>
+              <a href="/the/the_update/${item.sothe}"><i class="fas fa-edit text-primary mr-2"></i></a>
+              <a href="/the/the_delete/${item.sothe}"><i class="fas fa-trash-alt text-danger"></i></a>
             </td>
           `;
           tableBody.appendChild(row); // Thêm dòng vào tbody

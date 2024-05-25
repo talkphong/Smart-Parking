@@ -21,6 +21,7 @@ var vehicleRouter = require('./routes/vehicle');
 var cardRouter = require('./routes/card');
 var historyRouter = require('./routes/history');
 var logoutRouter = require('./routes/logout');
+var lichsuRouter = require('./routes/lichsu');
 
 var app = express();
 
@@ -59,6 +60,7 @@ app.use('/vehicle', vehicleRouter);
 app.use('/card', cardRouter);
 app.use('/history', historyRouter);
 app.use('/logout', logoutRouter);
+app.use('/lichsu', lichsuRouter);
 
 // Cấu hình để phục vụ tệp tĩnh từ thư mục "public"
 app.use('/public', express.static(path.join(__dirname, 'public')));

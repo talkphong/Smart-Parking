@@ -26,10 +26,6 @@
           <div class="card-body">
             <form action="/the/themthe" method="post" id="form-themthe">
               <div class="form-group">
-                <label>ID khách hàng:</label>
-                <input type="text" class="form-control" id="id_khachhang" name="id_khachhang" required>
-              </div>
-              <div class="form-group">
                 <label>Số thẻ:</label>
                 <input type="text" class="form-control" id="sothe" name="sothe" required>
               </div>
@@ -40,10 +36,6 @@
               <div class="form-group">
                 <label>Ngày tạo thẻ:</label>
                 <input type="date" class="form-control" id="ngaytaothe" name="ngaytaothe" required>
-              </div>
-              <div class="form-group">
-                <label>Giá tiền:</label>
-                <input type="text" class="form-control" id="giatien" name="giatien" required>
               </div>
               <button type="submit" class="btn btn-primary">Thêm thẻ</button>
             </form>
@@ -59,14 +51,12 @@
         event.preventDefault(); // Ngăn chặn hành vi mặc định của form
   
         // Lấy giá trị từ các ô nhập liệu
-        var id_khachhang = document.getElementById('id_khachhang').value;
         var sothe = document.getElementById('sothe').value;
         var loaithe = document.getElementById('loaithe').value;
         var ngaytaothe = document.getElementById('ngaytaothe').value;
-        var giatien = document.getElementById('giatien').value;
   
         // Kiểm tra xem có ô nào trống không
-        if (!id_khachhang || !sothe || !loaithe || !ngaytaothe || !giatien) {
+        if (!sothe || !loaithe || !ngaytaothe) {
           alert('Vui lòng nhập đầy đủ thông tin');
           return;
         }

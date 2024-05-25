@@ -5,9 +5,13 @@ const authMiddleware = require('../middleware/authMiddleware');
 var express = require('express');
 var router = express.Router();
 
-router.get('/', authMiddleware.isAdmin, function(req, res, next) {
+  router.get('/', authMiddleware.isAdmin, function(req, res, next) {
     // res.send('Danh sách khách hàng');  
-    let sql = `SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(phuongtien.id_phuongtien) AS so_luong_phuongtien FROM khachhang LEFT JOIN phuongtien ON phuongtien.id_khachhang = khachhang.id_khachhang LEFT JOIN the ON the.id_khachhang = khachhang.id_khachhang GROUP BY khachhang.id_khachhang`;
+    let sql = `SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(CASE WHEN xecudan.active = 1 THEN xecudan.id_phuongtien END) AS so_luong_phuongtien
+                FROM khachhang LEFT JOIN the ON the.id_khachhang = khachhang.id_khachhang
+                LEFT JOIN xecudan ON xecudan.sothe = the.sothe 
+                WHERE khachhang.active = 1
+                GROUP BY khachhang.id_khachhang;`;
     db.query(sql, function(err, data, fields) {      
         res.render("khachhang_",{list:data});
         // console.log(data);
@@ -32,7 +36,12 @@ router.get('/sua-khachhang/:id', function(req, res, next) {
   const id = req.params.id;
 
   //Truy van
-  db.query('SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(phuongtien.id_phuongtien) AS so_luong_phuongtien FROM khachhang LEFT JOIN phuongtien ON phuongtien.id_khachhang = khachhang.id_khachhang LEFT JOIN the ON the.id_khachhang = khachhang.id_khachhang WHERE khachhang.id_khachhang = ? GROUP BY khachhang.id_khachhang', id, function(err, result) {
+  db.query(`SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(CASE WHEN xecudan.active = 1 THEN xecudan.id_phuongtien END) AS so_luong_phuongtien
+              FROM khachhang LEFT JOIN the ON the.id_khachhang = khachhang.id_khachhang 
+              LEFT JOIN xecudan ON xecudan.sothe = the.sothe 
+              WHERE khachhang.id_khachhang = ?
+              GROUP BY khachhang.id_khachhang`, 
+              id, function(err, result) {
     if (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
@@ -54,15 +63,17 @@ router.post('/capnhat-khachhang/', function(req, res, next) {
   // Lấy thông tin mới từ form
   const {id, sothe, hoten, socanho} = req.body
   const newData = {id: id, sothe: sothe, hoten: hoten, socanho: socanho}
-
+console.log(hoten)
   // Cập nhật thông tin khách hàng trong database
-  db.query(`UPDATE khachhang AS k
-            INNER JOIN the AS t ON k.id_khachhang = t.id_khachhang
-            SET t.sothe = ?, k.hoten = ?, k.socanho = ?
-            WHERE k.id_khachhang = ?`, [newData.sothe, newData.hoten, newData.socanho, newData.id], function(err, result) {
+  db.query(`UPDATE khachhang SET khachhang.hoten = ?, khachhang.socanho = ? WHERE khachhang.id_khachhang = ?;`, 
+            [newData.hoten, newData.socanho, newData.id], function(err, result) {
     if (err) throw err;
-    // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
-    res.send("Cập nhật khách hàng thành công");
+    db.query(`UPDATE the set the.id_khachhang = ? WHERE the.sothe = ? ;`, 
+              [newData.id, newData.sothe], function(err, result) {
+      if (err) throw err;
+      // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
+      res.send("Cập nhật khách hàng thành công");
+    });
   });
 });
 
@@ -71,7 +82,7 @@ router.get('/xoa/:id', function(req, res) {
   // res.send('Xóa khách hàng' + id);
   let id_khachhang = req.params.id;
   console.log(id_khachhang)
-  let sql= `DELETE FROM khachhang WHERE id_khachhang = ?`;;
+  let sql= `UPDATE khachhang SET khachhang.active = 0 WHERE id_khachhang = ?`;
   db.query(sql, [id_khachhang], function(err, data) {    
     if (data.affectedRows==0) {
         console.log(`Không có khách hàng ${id} để xóa`); 

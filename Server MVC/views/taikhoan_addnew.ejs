@@ -90,17 +90,6 @@
         them_id_nhanvien.disabled = this.checked;
         them_phanquyen.value = "admin";
       });
-      
-      document.getElementById('form-themtaikhoan').addEventListener('submit', function(event) {
-        const khachhangChecked = radioKhachhang.checked;
-        const nhanvienChecked = radioNhanvien.checked;
-
-        const khachhangValue = them_id_khachhang.value;
-        const nhanvienValue = them_id_nhanvien.value;
-        const tendangnhap = document.getElementById('them_tendangnhap').value;
-        const matkhau = document.getElementById('them_matkhau').value;
-        const phanquyen = document.getElementById('them_phanquyen').value;     
-      });
     });
   </script>
   

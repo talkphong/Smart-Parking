@@ -103,9 +103,9 @@
                 <table class="table table-hover w-75 m-auto text-center">
                     <tr>
                         <th>ID Khách hàng</th>
-                        <th>Số thẻ</th>
                         <th>Họ tên</th>
                         <th>Số căn hộ</th>
+                        <th>Số thẻ</th>
                         <th>Số lượng phương tiện</th>
                         <th colspan="2">
                           <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
@@ -121,9 +121,9 @@
                     <% for (let c of list ) {  %>
                         <tr>
                             <td> <%= c.id_khachhang %> </td>
-                            <td> <%= c.sothe %> </td>
                             <td> <%= c.hoten %> </td>
                             <td> <%= c.socanho %> </td>
+                            <td> <%= c.sothe %> </td>
                             <td> <%= c.so_luong_phuongtien %> </td>
                             <td>
                               <a href="/khachhang/sua-khachhang/<%= c.id_khachhang %>"><i class="fas fa-edit text-primary mr-2"></i></a>
@@ -173,9 +173,9 @@
         var tableHeadRow = document.createElement('tr'); // Tạo dòng của thead
         tableHeadRow.innerHTML = `
           <th>ID Khách hàng</th>
-          <th>Số thẻ</th>
           <th>Họ tên</th>
           <th>Số căn hộ</th>
+          <th>Số thẻ</th>
           <th>Số lượng phương tiện</th>
           <th colspan="2">
             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
@@ -195,9 +195,9 @@
           var row = document.createElement('tr');
           row.innerHTML = `
             <td>${item.id_khachhang}</td>
-            <td>${item.sothe}</td>
             <td>${item.hoten}</td>
             <td>${item.socanho}</td>
+            <td>${item.sothe}</td>
             <td>${item.so_luong_phuongtien}</td>
             <td>
               <a href="/khachhang/sua-khachhang/${item.id_khachhang}"><i class="fas fa-edit text-primary mr-2"></i></a>

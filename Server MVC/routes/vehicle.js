@@ -10,12 +10,11 @@ router.get('/', authMiddleware.isClient, (req, res) => {
     // Kiểm tra giá trị của id_khachhang
     console.log('id_khachhang from session:', idKhachHang);
 
-    const sql = `
-        SELECT khachhang.hoten, phuongtien.id_phuongtien, phuongtien.bienso, phuongtien.loaiphuongtien, phuongtien.path_anhphuongtien, phuongtien.path_anhbienso
-        FROM phuongtien LEFT JOIN khachhang
-        ON phuongtien.id_khachhang = khachhang.id_khachhang
-        WHERE khachhang.id_khachhang = ?
-    `;
+    const sql = `SELECT khachhang.hoten, xecudan.id_phuongtien, xecudan.bienso, xecudan.loaiphuongtien, xecudan.path_anhphuongtien, xecudan.path_anhbienso, xecudan.inside
+                    FROM xecudan LEFT JOIN the
+                    ON xecudan.sothe = the.sothe
+                    JOIN khachhang on the.id_khachhang = khachhang.id_khachhang
+                    WHERE khachhang.id_khachhang = ?`;
 
     db.query(sql, [idKhachHang], (err, results) => {
         if (err) {

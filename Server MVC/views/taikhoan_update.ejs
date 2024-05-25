@@ -29,12 +29,26 @@
                 <input type="text" class="form-control" id="id_taikhoan" value="<%=taikhoan.id_taikhoan%>" readonly>
               </div>
               <div class="form-group">
-                <label">ID khách hàng:</label>
-                <input type="text" class="form-control" id="id_khachhang" value="<%=taikhoan.id_khachhang%>" readonly>
+                <label>Tài khoản khách hàng:</label>
+                <input type="radio" id="radioKhachhang" name="option" checked="true">
+                <select id="id_khachhang" name="id_khachhang">
+                  <% listkhachhang.forEach(khachhang => { %>
+                    <option value="<%= khachhang.id_khachhang %>"><%= khachhang.id_khachhang %></option>
+                  <% }); %>
+                </select>
               </div>
               <div class="form-group">
-                <label">ID nhân viên:</label>
-                <input type="text"  class="form-control" id="id_nhanvien" value="<%=taikhoan.id_nhanvien%>" readonly>
+                <label>Tài khoản nhân viên:</label>
+                <input type="radio" id="radioNhanvien" name="option">
+                <select id="id_nhanvien" name="id_nhanvien" disabled>
+                  <% listnhanvien.forEach(nhanvien => { %>
+                    <option value="<%= nhanvien.id_nhanvien %>"><%= nhanvien.id_nhanvien %></option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Tài khoản admin:</label>
+                <input type="radio" id="radioAdmin" name="option">
               </div>
               <div class="form-group">
                 <label">Tên đăng nhập:</label>
@@ -46,7 +60,7 @@
               </div>
               <div class="form-group">
                 <label">Phân quyền:</label>
-                <input type="text" class="form-control" id="phanquyen" value="<%=taikhoan.phanquyen%>" required readonly>
+                <input type="text" class="form-control" id="phanquyen" value="khachhang" required readonly>
               </div>
               <button type="submit" class="btn btn-primary">Cập nhật</button>
             </form>
@@ -57,14 +71,36 @@
   </div>
 
   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const id_khachhang = document.getElementById('id_khachhang');
+      const id_nhanvien = document.getElementById('id_nhanvien');
+      const phanquyen = document.getElementById('phanquyen');
+
+      radioKhachhang.addEventListener('change', function() {
+        id_nhanvien.disabled = this.checked;
+        id_khachhang.disabled = !this.checked;
+        phanquyen.value = "khachhang";
+      });
+
+      radioNhanvien.addEventListener('change', function() {
+        id_khachhang.disabled = this.checked;
+        id_nhanvien.disabled = !this.checked;
+        phanquyen.value = "nhanvien";
+      });
+
+      radioAdmin.addEventListener('change', function() {
+        id_khachhang.disabled = this.checked;
+        id_nhanvien.disabled = this.checked;
+        phanquyen.value = "admin";
+      });
     // Xử lý sự kiện submit form sửa thông tin khách hàng
     document.getElementById('form-taikhoan_update').addEventListener('submit', function(event) {
       event.preventDefault(); // Ngăn chặn hành vi mặc định của form
-
+      
       // Lấy giá trị từ các ô nhập liệu
       var id_taikhoan = document.getElementById('id_taikhoan').value;
-      var id_khachhang = document.getElementById('id_khachhang').value;
-      var id_nhanvien= document.getElementById('id_nhanvien').value;
+      var id_khachhang = document.getElementById('id_khachhang').disabled?  "" : document.getElementById('id_khachhang').value ;
+      var id_nhanvien = document.getElementById('id_nhanvien').disabled? "" : document.getElementById('id_nhanvien').value;
       var tendangnhap = document.getElementById('tendangnhap').value;
       var matkhau = document.getElementById('matkhau').value;
       var phanquyen = document.getElementById('phanquyen').value;
@@ -110,6 +146,7 @@
         });
       });
     });
+  });
   </script>
   
 

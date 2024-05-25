@@ -6,7 +6,9 @@ const moment = require('moment');
 
 router.get('/', authMiddleware.isAdmin, function (req, res, next) {
     let sql = `SELECT id_nhanvien, hoten, ngayvaolam 
-                FROM nhanvien GROUP BY id_nhanvien`;
+                FROM nhanvien 
+                WHERE nhanvien.active = 1
+                GROUP BY id_nhanvien`;
     db.query(sql, function (err, data, fields) {
         res.render("nhanvien_", { list: data });
         console.log(data);
@@ -55,7 +57,7 @@ router.get('/nhanvien_update/:id', function(req, res) {
 router.post('/update_nhanvien', function(req, res) {
     // Lấy thông tin mới từ form
   const {id_nhanvien, hoten, ngayVaoLamNewFormat} = req.body;
-  const ngayvaolamISO = moment(ngayvaolam, 'DD/MM/YYYY').toISOString();
+  const ngayvaolamISO = moment(ngayVaoLamNewFormat, 'DD/MM/YYYY').toISOString();
   const newData = {id_nhanvien: id_nhanvien, hoten: hoten, ngayvaolam: ngayvaolamISO};
 
     // Cập nhật thông tin nhân viên trong database
@@ -71,7 +73,7 @@ router.post('/update_nhanvien', function(req, res) {
 router.get('/nhanvien_delete/:id', function(req, res) {
     let id_nhanvien = req.params.id;
     console.log(id_nhanvien)
-    let sql= "DELETE FROM `nhanvien` WHERE id_nhanvien = ?;";
+    let sql= "UPDATE nhanvien SET nhanvien.active = 0 WHERE nhanvien.id_nhanvien = ?;";
     db.query(sql, [id_nhanvien], function(err, data) {    
       if (data.affectedRows==0) {
           console.log(`Không có nhân viên ${id} để xóa`); 
