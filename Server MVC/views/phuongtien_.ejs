@@ -86,16 +86,10 @@
                 <a class="nav-link" href="/taikhoan">Tài khoản</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Cổng</a>
+                <a class="nav-link" href="/cong">Cổng</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Máy quẹt thẻ</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Camera</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Lịch sử</a>
+                <a class="nav-link" href="/lichsu">Lịch sử</a>
               </li>
             </ul>
             <form class="d-flex" id="search-phuongtien"action="/phuongtien/search" method="GET">
@@ -188,9 +182,9 @@
         var tableHeadRow = document.createElement('tr'); // Tạo dòng của thead
         tableHeadRow.innerHTML = `
           <th>ID phương tiện</th>
+          <th>Loại phương tiện</th>
           <th>Biển số</th>
           <th>Tên chủ phương tiện</th>
-          <th>Loại phương tiện</th>
           <th>Ảnh phương tiện</th>
           <th>Ảnh biển số</th>
           <th colspan="2">

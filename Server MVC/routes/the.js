@@ -53,11 +53,11 @@ router.get('/the_update/:id', function(req, res) {
 })
 
 router.post('/update_the', function(req, res) {
-    // Lấy thông tin mới từ form
+  // Lấy thông tin mới từ form
   const {sothe, loaithe, ngaytaothe} = req.body
-  // Chuyển đổi 'ngaytaothe' từ định dạng 'DD/MM/YYYY' về định dạng ISO
-  const ngaytaotheISO = moment(ngaytaothe, 'DD/MM/YYYY').toISOString();
-  const newData = {sothe: sothe, loaithe: loaithe, ngaytaothe: ngaytaotheISO}
+  // Chuyển đổi 'ngaytaothe' từ định dạng 'DD/MM/YYYY' về định dạng 'YYYY-MM-DD'
+  const ngaytaotheFormatted = moment(ngaytaothe, 'DD/MM/YYYY').format('YYYY-MM-DD');
+  const newData = {sothe: sothe, loaithe: loaithe, ngaytaothe: ngaytaotheFormatted}
 
     // Cập nhật thông tin thẻ trong database
   db.query(`UPDATE the 

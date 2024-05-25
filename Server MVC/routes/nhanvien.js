@@ -56,9 +56,9 @@ router.get('/nhanvien_update/:id', function(req, res) {
 
 router.post('/update_nhanvien', function(req, res) {
     // Lấy thông tin mới từ form
-  const {id_nhanvien, hoten, ngayVaoLamNewFormat} = req.body;
-  const ngayvaolamISO = moment(ngayVaoLamNewFormat, 'DD/MM/YYYY').toISOString();
-  const newData = {id_nhanvien: id_nhanvien, hoten: hoten, ngayvaolam: ngayvaolamISO};
+  const {id_nhanvien, hoten, ngayvaolam} = req.body;
+  const ngayvaolamFormatted = moment(ngayvaolam, 'DD/MM/YYYY').format('YYYY-MM-DD');
+  const newData = {id_nhanvien: id_nhanvien, hoten: hoten, ngayvaolam: ngayvaolamFormatted};
 
     // Cập nhật thông tin nhân viên trong database
   db.query(`UPDATE nhanvien 

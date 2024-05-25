@@ -93,9 +93,11 @@ router.get('/xoa/:id', function(req, res) {
 
 router.get('/search', function(req, res, next) {
   const keyword = req.query.keyword;
-  const query = `SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(phuongtien.id_phuongtien) AS so_luong_phuongtien 
-                FROM khachhang JOIN the ON khachhang.id_khachhang = the.id_khachhang
-                LEFT JOIN phuongtien ON phuongtien.id_khachhang = khachhang.id_khachhang
+  const query = `SELECT khachhang.id_khachhang, the.sothe, khachhang.hoten, khachhang.socanho, COUNT(xecudan.id_phuongtien) AS so_luong_phuongtien 
+                FROM khachhang LEFT JOIN the 
+                ON khachhang.id_khachhang = the.id_khachhang
+                LEFT JOIN xecudan 
+                ON xecudan.sothe = the.sothe
                 WHERE khachhang.id_khachhang LIKE ? OR the.sothe LIKE ? OR khachhang.hoten LIKE ? OR khachhang.socanho LIKE ?
                 GROUP BY khachhang.id_khachhang`;
   const searchTerm = `%${keyword}%`; // Thêm dấu % cho tìm kiếm mở rộng

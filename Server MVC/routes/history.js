@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const db = require('../models/database');
 const moment = require('moment');
 
-router.get('/', authMiddleware.isClient, (req, res) => {
+router.get('/', authMiddleware.isAdmin, (req, res) => {
     const idKhachHang = req.session.user.id_khachhang;
 
     console.log('id_khachhang from session:', idKhachHang);

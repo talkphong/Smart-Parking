@@ -84,12 +84,14 @@ const keyword = req.query.keyword;
 console.log(keyword)
 const query = `SELECT xecudan.id_phuongtien, khachhang.hoten, 
                 xecudan.bienso, xecudan.loaiphuongtien, 
-                xecudan.path_anhphuongtien, 
-                xecudan.path_anhbienso
+                xecudan.path_anhphuongtien, xecudan.path_anhbienso
                 FROM xecudan LEFT JOIN the 
-                ON xecudan.sothe = the.sothe JOIN khachhang on the.id_khachhang = khachhang.id_khachhang
-                WHERE xecudan.active = 1 
-                HAVING id_phuongtien LIKE ? OR hoten LIKE ? OR bienso LIKE ? OR loaiphuongtien LIKE ?`;
+                ON xecudan.sothe = the.sothe 
+                LEFT JOIN khachhang 
+                ON the.id_khachhang = khachhang.id_khachhang
+                WHERE xecudan.id_phuongtien LIKE ? OR khachhang.hoten LIKE ? OR xecudan.bienso LIKE ? OR xecudan.loaiphuongtien LIKE ?
+                AND xecudan.active = 1
+                GROUP BY xecudan.id_phuongtien`;
 const searchTerm = `%${keyword}%`; // Thêm dấu % cho tìm kiếm mở rộng
 db.query(query, [searchTerm, searchTerm, searchTerm, searchTerm], function(err, result) {
     if (err) {

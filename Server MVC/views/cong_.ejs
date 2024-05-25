@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Quản lý nhân viên</title>
+    <title>Quản lý cổng</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
@@ -14,7 +14,6 @@
       .table-hover thead th:hover {
         background-color: initial; /* Hoặc một giá trị màu nền mặc định khác */
       }
-
     </style>
 
   </head>
@@ -66,7 +65,7 @@
                 <a class="nav-link" href="/khachhang">Khách hàng</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active text-muted" aria-current="page" href="/nhanvien">Nhân viên</a>
+                <a class="nav-link"  href="/nhanvien">Nhân viên</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/the">Thẻ</a>
@@ -78,14 +77,14 @@
                 <a class="nav-link" href="/taikhoan">Tài khoản</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/cong">Cổng</a>
+                <a class="nav-link active text-muted" aria-current="page" href="/cong">Cổng</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/lichsu">Lịch sử</a>
               </li>
             </ul>
-            <form class="d-flex" id="search-nhanvien"action="/nhanvien/search" method="GET">
-              <input class="form-control me-2" type="search" id="nhanvien-input" placeholder="Tìm kiếm" aria-label="Search">
+            <form class="d-flex" id="search-cong"action="/cong/search" method="GET">
+              <input class="form-control me-2" type="search" id="cong-input" placeholder="Tìm kiếm" aria-label="Search">
               <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
             </form>
           </div>
@@ -97,12 +96,11 @@
             <div class="col-11">
                 <table class="table table-hover w-75 m-auto text-center">
                     <tr>
-                        <th>ID nhân viên</th>
-                        <th>Tên nhân viên</th>
-                        <th>Ngày vào làm</th>
+                        <th>ID Cổng</th>
+                        <th>Tên cổng</th>
                         <th colspan="2">
                           <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                              <a href="/nhanvien/form-them-nhanvien">
+                              <a href="/cong/form-them-cong">
                                   <button type="button" class="btn btn-secondary">
                                       <i class="fas fa-plus"></i>
                                   </button>
@@ -110,32 +108,21 @@
                           </div>
                         </th>
                     </tr>
-                    
-                    <% for (let c of list ) { %>
+                
+                    <% for (let c of list ) {  %>
                         <tr>
-                            <td> <%= c.id_nhanvien %> </td>
-                            <td> <%= c.hoten %> </td>
-                            <td> 
-                              <%
-                                var ngayVaoLam = new Date(c.ngayvaolam);
-                                
-                                var ngay = ngayVaoLam.getDate();
-                                var thang = ngayVaoLam.getMonth() + 1;
-                                var nam = ngayVaoLam.getFullYear();
-
-                                var ngayVaoLamNewFormat = ngay.toString().padStart(2, '0') + "/" + thang.toString().padStart(2, '0') + "/" + nam;
-                              %>
-                              <%= ngayVaoLamNewFormat %> 
-                            </td>
+                            <td> <%= c.id_cong %> </td>
+                            <td> <%= c.tencong %> </td>
                             <td>
-                              <a href="/nhanvien/nhanvien_update/<%= c.id_nhanvien %>"><i class="fas fa-edit text-primary mr-2"></i></a>
-                              <a href="/nhanvien/nhanvien_delete/<%= c.id_nhanvien %>"><i class="fas fa-trash-alt text-danger"></i></a>
+                              <a href="/cong/sua-cong/<%= c.id_cong %>"><i class="fas fa-edit text-primary mr-2"></i></a>
+                              <a href="/cong/xoa/<%= c.cong %>"><i class="fas fa-trash-alt text-danger"></i></a>
                             </td>
                         </tr>
                     <% } %>        
                 </table>
             </div>
-        </div>     
+        </div>
+        
     </section>
 
     <section class="myfooter">
@@ -147,15 +134,15 @@
     </section>
 
     <script>
-      document.getElementById('search-nhanvien').addEventListener('submit', function(event) {
+      document.getElementById('search-cong').addEventListener('submit', function(event) {
         event.preventDefault(); // Ngăn chặn form submit mặc định
-        var keyword = document.getElementById('nhanvien-input').value;
+        var keyword = document.getElementById('cong-input').value;
         search(keyword);
       });
 
       function search(keyword) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', `/nhanvien/search?keyword=${keyword}`, true);
+        xhr.open('GET', `/cong/search?keyword=${keyword}`, true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200) {
             var data = JSON.parse(xhr.responseText);
@@ -166,14 +153,6 @@
         xhr.send();
       }
 
-      function formatDate(dateString) {
-        var date = new Date(dateString);
-        var day = date.getDate().toString().padStart(2, '0');
-        var month = (date.getMonth() + 1).toString().padStart(2, '0');
-        var year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-      }
-
       function displaySearchResult(data) {
         var table = document.querySelector('.table');
         table.innerHTML = ''; // Xóa hết nội dung trong bảng trước khi thêm kết quả mới
@@ -181,12 +160,11 @@
         var tableHead = document.createElement('thead'); // Tạo thead mới
         var tableHeadRow = document.createElement('tr'); // Tạo dòng của thead
         tableHeadRow.innerHTML = `
-          <th>ID nhân viên</th>
-          <th>Tên nhân viên</th>
-          <th>Ngày vào làm</th>
+          <th>ID Cổng</th>
+          <th>Tên cổng</th>
           <th colspan="2">
             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                <a href="/nhanvien/form-them-nhanvien">
+                <a href="/cong/form-them-cong">
                     <button type="button" class="btn btn-secondary">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -201,12 +179,11 @@
         data.forEach(function(item) {
           var row = document.createElement('tr');
           row.innerHTML = `
-            <td>${item.id_nhanvien}</td>
-            <td>${item.hoten}</td>
-            <td>${formatDate(item.ngayvaolam)}</td>
+            <td>${item.id_cong}</td>
+            <td>${item.tencong}</td>
             <td>
-              <a href="/nhanvien/nhanvien_update/${item.id_nhanvien}"><i class="fas fa-edit text-primary mr-2"></i></a>
-              <a href="/nhanvien/nhanvien_delete/${item.id_nhanvien}"><i class="fas fa-trash-alt text-danger"></i></a>
+              <a href="/cong/sua-cong/${item.id_cong}"><i class="fas fa-edit text-primary mr-2"></i></a>
+              <a href="/cong/xoa/${item.id_cong}"><i class="fas fa-trash-alt text-danger"></i></a>
             </td>
           `;
           tableBody.appendChild(row); // Thêm dòng vào tbody

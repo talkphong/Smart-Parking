@@ -6,7 +6,7 @@ const db = mysql.createConnection({
     user: "root",
     host: "localhost",
     password: "",
-    database: "baixe",
+    database: "baixe2",
     //database: "smart_parking",
 
 }); 

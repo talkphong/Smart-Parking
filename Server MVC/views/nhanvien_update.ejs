@@ -34,7 +34,7 @@
               </div>
               <div class="form-group">
                 <label>Ngày vào làm:</label>
-                <input type="date"  class="form-control" id="ngayvaolam" value="<%= moment(nhanvien.ngayvaolam, 'DD-MM-YYYY').format('YYYY-MM-DD') %>"required>
+                <input type="text"  class="form-control" id="ngayvaolam" value="<%= moment(nhanvien.ngayvaolam, 'DD-MM-YYYY').format('DD-MM-YYYY') %>"required>
               </div>
               <button type="submit" class="btn btn-primary">Cập nhật</button>
             </form>
@@ -52,13 +52,13 @@
       // Lấy giá trị từ các ô nhập liệu
       var id_nhanvien = document.getElementById('id_nhanvien').value;
       var hoten = document.getElementById('hoten').value;
-      var ngayVaoLamNewFormat= document.getElementById('ngayvaolam').value;
+      var ngayvaolam= document.getElementById('ngayvaolam').value;
 
       // Tạo object chứa dữ liệu cần gửi lên server
       var params = new URLSearchParams();
       params.append('id_nhanvien', id_nhanvien)
       params.append('hoten', hoten);
-      params.append('ngayVaoLamNewFormat', ngayVaoLamNewFormat);
+      params.append('ngayvaolam', ngayvaolam);
 
       // Gửi request POST đến server để cập nhật thông tin khách hàng
       fetch(`/nhanvien/update_nhanvien/`, {
