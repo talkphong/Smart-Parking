@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,36 +11,29 @@
       font-family: 'Roboto', sans-serif;
       background-color: #f8f9fa;
     }
-
     .navbar {
       background-color: #343a40;
     }
-
     .navbar-brand, .nav-link {
       color: #fff !important;
     }
-
     .container {
       margin-top: 50px;
     }
-
     .table th,
     .table td {
       vertical-align: middle;
       text-align: center;
     }
-
     .table img {
       max-width: 100px;
     }
-
     .card {
       margin-bottom: 20px;
       border: none;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
     .card-header {
       background-color: #007bff;
       color: #fff;
@@ -50,18 +42,15 @@
       border-top-right-radius: 8px;
       padding: 1rem;
     }
-
     .card-body {
       padding: 1.5rem;
     }
-
     .btn-primary {
       background-color: #007bff;
       border: none;
     }
   </style>
 </head>
-
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
@@ -101,58 +90,155 @@
 
   <!-- Main content -->
   <div class="container">
+    <div class="search">
+      <form class="d-flex" id="search-history"action="/history" method="GET">
+        <input class="form-control me-2" type="search" id="history-input" placeholder="Loại phương tiện/ biển số xe/ thời gian" aria-label="Search">
+        <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+      </form>
+    </div>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
         <div class="card">
-          <div class="card-header">
-            Lịch sử ra vào
-          </div>
+          <div class="card-header d-flex justify-content-center">Cổng vào</div>
           <div class="card-body">
-            <form action="/cus_history/search" method="get" class="form-inline mb-3">
-              <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Tìm kiếm" aria-label="Search">
-              <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-            </form>
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Số thẻ</th>
-                  <th>Cổng</th>
-                  <th>Biển số</th>
-                  <th>Loại phương tiện</th>
-                  <th>Ảnh biển số</th>
-                  <th>Ảnh phương tiện</th>
-                  <th>Thời gian</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% if (history.length > 0) { %>
-                  <% history.forEach(his => { %>
-                    <tr>
-                      <td><%= his.sothe %></td>
-                      <td><%= his.cong %></td>
-                      <td><%= his.bienso %></td>
-                      <td><%= his.loaiphuongtien %></td>
-                      <td><img src="<%= his.path_anhbienso %>" alt="Biển số xe"></td>
-                      <td><img src="<%= his.path_anhphuongtien %>" alt="Toàn xe"></td>
-                      <td><%= his.thoigianmo %></td>
-                    </tr>
-                  <% }); %>
-                <% } else { %>
+            <div class="form-group row">
+              <table class="tableIN table-hover w-75 m-auto text-center">
+                <thead>
                   <tr>
-                    <td colspan="7">Quý khách chưa có lịch sử ra vào nào</td>
+                    <th>Loại xe</th>
+                    <th>Biển số</th>
+                    <th>Thời gian vào</th>
                   </tr>
-                <% } %>
-              </tbody>
-            </table>
-            <div class="text-right">
-              <a href="/customer" class="btn btn-primary">Quay lại</a>
+                </thead>
+                <tbody>
+                  <% if (historyIN.length > 0) { %>
+                    <% historyIN.forEach(his => { %>
+                      <tr>
+                        <td><%= his.loaiphuongtien %></td>
+                        <td><%= his.bienso %></td>
+                        <td><%= his.thoigianmo %></td>
+                      </tr>
+                    <% }); %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="7">Quý khách chưa có lịch sử ra vào nào</td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header d-flex justify-content-center">Cổng ra</div>
+          <div class="card-body">
+            <div class="form-group row">
+              <table class="tableOUT table-hover w-75 m-auto text-center">
+                <thead>
+                  <tr>
+                    <th>Loại xe</th>
+                    <th>Biển số</th>
+                    <th>Thời gian vào</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (historyOUT.length > 0) { %>
+                    <% historyOUT.forEach(his => { %>
+                      <tr>
+                        <td><%= his.loaiphuongtien %></td>
+                        <td><%= his.bienso %></td>
+                        <td><%= his.thoigianmo %></td>
+                      </tr>
+                    <% }); %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="7">Quý khách chưa có lịch sử ra vào nào</td>
+                    </tr>
+                  <% } %>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/
+    
+    
+    <!-- Xử lý tìm kiếm -->
+    <script>
+      document.getElementById('search-history').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn chặn form submit mặc định
+        var keyword = document.getElementById('history-input').value;
+        search(keyword);
+      });
+      function search(keyword) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', `/history/search?keyword=${keyword}`, true);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            var data = JSON.parse(xhr.responseText);
+            // Hiển thị kết quả tìm kiếm lên bảng
+            displaySearchResult(data.historyIN, data.historyIN);
+          }
+        };
+        xhr.send();
+      }
+      function displaySearchResult(historyIN, historyOUT) {
+        var tableIN = document.querySelector('.tableIN');
+        tableIN.innerHTML = ''; // Xóa hết nội dung trong bảng trước khi thêm kết quả mới
+        var tableHeadIN = document.createElement('thead'); // Tạo thead mới
+        var tableHeadRowIN = document.createElement('tr'); // Tạo dòng của thead
+        tableHeadRowIN.innerHTML = `
+          <th>Loại xe</th>
+          <th>Biển số</th>
+          <th>Thời gian vào</th>
+        `;
+        tableHeadIN.appendChild(tableHeadRowIN); // Thêm dòng vào thead
+        tableIN.appendChild(tableHeadIN); // Thêm thead vào bảng
+        var tableBodyIN = document.createElement('tbody'); // Tạo tbody mới
+        historyIN.forEach(function(item) {
+          var row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.loaiphuongtien}</td>
+            <td>${item.bienso}</td>
+            <td>${item.thoigianmo}</td>
+          `;
+          tableBodyIN.appendChild(row); // Thêm dòng vào tbody
+        });
+        tableIN.appendChild(tableBodyIN); // Thêm tbody vào bảng
+    
+        
+        var tableOUT = document.querySelector('.tableOUT');
+        tableOUT.innerHTML = ''; // Xóa hết nội dung trong bảng trước khi thêm kết quả mới
+        var tableHeadOUT = document.createElement('thead'); // Tạo thead mới
+        var tableHeadRowOUT = document.createElement('tr'); // Tạo dòng của thead
+        tableHeadRowOUT.innerHTML = `
+          <th>Loại xe</th>
+          <th>Biển số</th>
+          <th>Thời gian vào</th>
+        `;
+        tableHeadOUT.appendChild(tableHeadRowOUT); // Thêm dòng vào thead
+        tableOUT.appendChild(tableHeadOUT); // Thêm thead vào bảng
+        var tableBodyOUT = document.createElement('tbody'); // Tạo tbody mới
+        historyOUT.forEach(function(item) {
+          var row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.loaiphuongtien}</td>
+            <td>${item.bienso}</td>
+            <td>${item.thoigianmo}</td>
+          `;
+          tableBodyOUT.appendChild(row); // Thêm dòng vào tbody
+        });
+        tableOUT.appendChild(tableBodyOUT); // Thêm tbody vào bảng
+      }
+    </script>
+      <!-- Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </body>
+    
+    </html>
