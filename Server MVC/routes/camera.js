@@ -57,14 +57,14 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   const id_nhanvien = req.session.user.id_nhanvien;
 
   let now = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm:ss');
-  img_crop_path = path_anhlichsu + '\\' + moment(now).format('YYYY-MM-DD HH mm ss') + '_crop' +'.jpg'
+  img_crop_path = 'public\\images\\anhlichsu\\' + moment(now).format('YYYY-MM-DD HH mm ss') + '_crop' +'.jpg'
 
   // // lấy port và sothe (cùng ảnh full) từ web camera
   const {port, sothe} = req.body
   console.log("port: %s \nUID: %s ", port, sothe)
 
   // Đường dẫn tới ảnh full
-  const img_full_path = req.file.path;
+  const img_full_path = 'public\\images\\anhlichsu\\' + req.file.filename;
   console.log("Đã lưu ảnh tại: " + img_full_path) 
 
   // Chuyển đổi kiểu dữ liệu của ảnh để nhận diện = AI
