@@ -24,7 +24,7 @@
             <h5 class="mb-0">Thêm phương tiện</h5>
           </div>
           <div class="card-body">
-            <form action="/phuongtien/themphuongtien" method="post" id="form-themphuongtien">
+            <form id="form-themphuongtien" >
               <div class="form-group">
                 <label>Số thẻ:</label>
                 <input type="text" class="form-control" id="sothe" name="sothe" required>
@@ -39,11 +39,11 @@
               </div>
               <div class="form-group">
                 <label>Ảnh phương tiện:</label>
-                <input type="text" class="form-control" id="anhphuongtien" name="anhphuongtien" required>
+                <input type="file" class="form-control" id="anhphuongtien" name="anhphuongtien" accept="image/*" required>
               </div>
               <div class="form-group">
                 <label>Ảnh biển số:</label>
-                <input type="text" class="form-control" id="anhbienso" name="anhbienso" required>
+                <input type="file" class="form-control" id="anhbienso" name="anhbienso" accept="image/*" required>
               </div>
               <button type="submit" class="btn btn-primary">Thêm phương tiện</button>
             </form>
@@ -58,15 +58,44 @@
       document.getElementById('form-themphuongtien').addEventListener('submit', function(event) {
         event.preventDefault(); // Ngăn chặn hành vi mặc định của form
   
-        // Lấy giá trị từ các ô nhập liệu
-        var sothe = document.getElementById('sothe').value;
-        var bienso = document.getElementById('bienso').value;
-        var loaiphuongtien = document.getElementById('loaiphuongtien').value;
-        var anhphuongtien = document.getElementById('anhphuongtien').value;
-        var anhbienso = document.getElementById('anhbienso').value;        
-  
-        // Gửi form nếu dữ liệu hợp lệ
-        this.submit();
+        var formData = new FormData();
+        formData.append('sothe', document.getElementById('sothe').value);
+        formData.append('bienso', document.getElementById('bienso').value);
+        formData.append('loaiphuongtien', document.getElementById('loaiphuongtien').value);
+        formData.append('anhphuongtien', document.getElementById('anhphuongtien').files[0]);
+        formData.append('anhbienso', document.getElementById('anhbienso').files[0]);
+
+        // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
+        fetch('/phuongtien/themphuongtien', {
+            method: 'POST',
+            body: formData
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Thêm phương tiện thất bại');
+            }
+            return response;
+          })
+          .then(data => {
+            // Hiển thị thông báo thành công khi cập nhật thành công
+            Swal.fire({
+              icon: 'success',
+              title: 'Cập nhật thành công',
+              showConfirmButton: false,
+              timer: 1500
+            }).then(()=>{
+                // Redirect về trang danh sách khách hàng sau khi cập nhật thành công
+                window.location.href = '/phuongtien';
+              });
+          })
+          .catch(error => {
+            // Hiển thị thông báo lỗi khi cập nhật thất bại
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: error.message
+            });
+      });
       });
     });
   </script>

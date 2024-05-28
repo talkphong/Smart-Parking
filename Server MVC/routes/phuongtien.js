@@ -3,7 +3,8 @@ var express = require('express');
 var router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', authMiddleware.isAdmin, function (req, res, next) {
+router.get('/', function (req, res, next) {
+  // router.get('/', authMiddleware.isAdmin, function (req, res, next) {
   let sql = `SELECT xecudan.id_phuongtien, khachhang.hoten, 
               xecudan.bienso, xecudan.loaiphuongtien, 
               xecudan.path_anhphuongtien, 
@@ -13,7 +14,7 @@ router.get('/', authMiddleware.isAdmin, function (req, res, next) {
               WHERE xecudan.active = 1`;
   db.query(sql, function (err, data, fields) {
       res.render("phuongtien_", { list: data });
-      console.log(data);
+      // console.log(data);
   });
 });
 
@@ -21,14 +22,36 @@ router.get('/form-them-phuongtien', function (req, res, next) {
     res.render('phuongtien_addnew');
 });
 
-router.post('/themphuongtien', function (req, res, next) {
-    const {sothe, bienso, loaiphuongtien, anhphuongtien, anhbienso} = req.body;
-    const phuongtien = {sothe: sothe, bienso: bienso, loaiphuongtien: loaiphuongtien, path_anhphuongtien: anhphuongtien, path_anhbienso: anhbienso}
+const path = require('path')
+const multer  = require('multer');
+const path_anhcudan = path.join(__dirname, "..\\public\\images\\anhxecudan")
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path_anhcudan)
+  },
+  filename: function (req, file, cb) {
+    // cb(null, moment().tz('Asia/Ho_Chi_Minh').format('YYYY-DD-MM HH mm ss') + '_full' + '.jpg')
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({ storage: storage })
+const uploadFields = upload.fields([
+  { name: 'anhphuongtien', maxCount: 1 },
+  { name: 'anhbienso', maxCount: 1 }
+]);
+
+router.post('/themphuongtien',  uploadFields, function (req, res, next) {
+    const {sothe, bienso, loaiphuongtien} = req.body;
+    const anhphuongtien = req.files['anhphuongtien'][0].originalname;
+    const anhbienso = req.files['anhbienso'][0].originalname;
+    // const path_anhphuongtien = req.files['anhphuongtien'][0].path;
+    // const path_anhbienso = req.files['anhbienso'][0].path;
+    const phuongtien = {sothe: sothe, bienso: bienso, loaiphuongtien: loaiphuongtien, path_anhphuongtien: 'public\\images\\anhxecudan\\' + anhphuongtien, path_anhbienso: 'public\\images\\anhxecudan\\' + anhbienso}
     console.log(phuongtien)
     db.query(`INSERT INTO xecudan SET ?`, phuongtien, function (err, data) {
         if (err) throw err;
-        res.redirect("/phuongtien");
-    });
+        res.send("Thêm phương tiện thành công");
+      });
 });
 
 router.get('/phuongtien_update/:id', function(req, res) {
@@ -62,7 +85,7 @@ router.get('/phuongtien_update/:id', function(req, res) {
               WHERE id_phuongtien = ?`, [newData.sothe, newData.bienso, newData.loaiphuongtien, newData.path_anhphuongtien, newData.path_anhbienso, newData.id_phuongtien], function(err, result) {
       if (err) throw err;
       // Redirect về trang danh sách phương tiện sau khi cập nhật thành công
-      res.send("Cập nhật khách hàng thành công");
+      res.send("Cập nhật phương tiện thành công");
     });
   })
   
