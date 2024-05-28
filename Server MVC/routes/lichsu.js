@@ -12,7 +12,7 @@ router.get('/',  function (req, res, next) {
                 JOIN nhanvien on lichsu.id_nhanvien = nhanvien.id_nhanvien`;
     db.query(sql, function (err, data, fields) {
         res.render("lichsu", { list: data });
-        console.log(data);
+        // console.log(data);
     });
 });
 

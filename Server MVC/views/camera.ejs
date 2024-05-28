@@ -35,7 +35,7 @@
         <div id="result" style="height: 200px;">
             <img id="LpRegionIN" style="width: 100%;" src="" alt="Ảnh đã cắt">
             <p id="LpNumberIN">Biển số xe</p>
-            <!-- <button type="submit" onclick="submitIN()" >Gửi ảnh IN</button> -->
+            <button type="submit" onclick="submitIN()" >Gửi ảnh IN</button>
         </div>
     </div>
 
@@ -47,7 +47,7 @@
         <div id="result" style="height: 200px;">
             <img id="LpRegionOUT" style="width: 100%;" src="" alt="Ảnh đã cắt">
             <p id="LpNumberOUT">Biển số xe</p>
-            <!-- <button type="submit" onclick="submitOUT()" >Gửi ảnh OUT</button> -->
+            <button type="submit" onclick="submitOUT()" >Gửi ảnh OUT</button>
         </div>
     </div>
 </body>
@@ -116,7 +116,7 @@
                 .then(data => {
                     // Lấy phần tử hình ảnh và thiết lập src cho nó
                     const imageElement = document.getElementById('LpRegionIN');
-                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
+                    imageElement.src = 'data:image/jpeg;base64,' + data.img_crop;
 
                     // Lấy phần tử container và thiết lập nội dung của nó
                     const textContainer = document.getElementById('LpNumberIN');
@@ -163,6 +163,7 @@
     }
 </script>
 
+
 <!-- WebSocket -->
 <script>
   var url = window.location.host;
@@ -176,7 +177,8 @@
     const port = evt.data[0]
     const UID = evt.data.slice(3)
 
-    if(port == "I"){
+    if(port == "I" && (strReceive != "save" && strReceive != "clear" && strReceive != "OpenIn" && strReceive != "OpenOut")
+                            && (UID != "save" && UID != "clear" && UID != "OpenIn" && UID != "OpenOut")){
         var videoElement = document.getElementById('CameraIN');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
@@ -193,7 +195,7 @@
           var formData = new FormData();
           formData.append('image', blob, 'image.jpg');
           formData.append('port', port);
-          formData.append('UID', UID);
+          formData.append('sothe', UID);
 
           // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
           fetch('camera/upload', {
@@ -204,7 +206,7 @@
                 .then(data => {
                     // Lấy phần tử hình ảnh và thiết lập src cho nó
                     const imageElement = document.getElementById('LpRegionIN');
-                    imageElement.src = data.croppedImg;
+                    imageElement.src = 'data:image/jpeg;base64,' + data.img_crop;
 
                     // Lấy phần tử container và thiết lập nội dung của nó
                     const textContainer = document.getElementById('LpNumberIN');
@@ -213,7 +215,8 @@
                 .catch(error => console.error('Lỗi:', error));
       }, 'image/jpeg');
     }
-    else if (port == "O"){
+    else if (port == "O" && (strReceive != "save" && strReceive != "clear" && strReceive != "OpenIn" && strReceive != "OpenOut")
+                            && (UID != "save" && UID != "clear" && UID != "OpenIn" && UID != "OpenOut")){
         var videoElement = document.getElementById('CameraOUT');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
@@ -230,7 +233,7 @@
           var formData = new FormData();
           formData.append('image', blob, 'image.jpg');
           formData.append('port', port);
-          formData.append('UID', UID);
+          formData.append('sothe', UID);
 
           // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
           fetch('camera/upload', {
@@ -241,7 +244,7 @@
                 .then(data => {
                     // Lấy phần tử hình ảnh và thiết lập src cho nó
                     const imageElement = document.getElementById('LpRegionOUT');
-                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
+                    imageElement.src = 'data:image/jpeg;base64,' + data.img_crop;
 
                     // Lấy phần tử container và thiết lập nội dung của nó
                     const textContainer = document.getElementById('LpNumberOUT');

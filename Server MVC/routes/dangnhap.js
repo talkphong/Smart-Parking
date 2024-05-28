@@ -14,7 +14,10 @@ router.get('/', function(req, res, next) {
 
 router.post('/xulydangnhap', function(req, res, next) {
   const { tendangnhap, matkhau } = req.body;
-  let sql = `SELECT taikhoan.tendangnhap, taikhoan.matkhau, taikhoan.phanquyen, khachhang.id_khachhang, khachhang.hoten FROM taikhoan LEFT JOIN khachhang ON taikhoan.id_khachhang = khachhang.id_khachhang WHERE tendangnhap = ? AND matkhau = ?`;
+  let sql = `SELECT taikhoan.tendangnhap, taikhoan.matkhau, taikhoan.phanquyen, khachhang.id_khachhang, khachhang.hoten, taikhoan.id_nhanvien 
+              FROM taikhoan LEFT JOIN khachhang ON taikhoan.id_khachhang = khachhang.id_khachhang
+              WHERE
+              tendangnhap = ? AND matkhau = ?`;
   db.query(sql, [tendangnhap, matkhau], function(err, results, fields) {
     if (err) {
       res.status(500).send("Loi truy van co so du lieu");
@@ -26,7 +29,8 @@ router.post('/xulydangnhap', function(req, res, next) {
         tendangnhap: results[0].tendangnhap,
         phanquyen: results[0].phanquyen,
         id_khachhang: results[0].id_khachhang, // Lưu id_khachhang vào session
-        hoten: results[0].hoten // Lưu hoten vào session
+        hoten: results[0].hoten, // Lưu hoten vào session
+        id_nhanvien: results[0].id_nhanvien, // Lưu id_khachhang vào session
       };
       switch (results[0].phanquyen){
         case "admin":
