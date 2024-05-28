@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý khách hàng</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .table-hover tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        .table-hover thead th:hover {
+            background-color: initial;
+        }
+        .chart-container {
+            margin: 20px auto;
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+<section class="myheader">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-center bg-light">
+                <h1>VMU</h1>
+                <p>Welcome to VMU</p>
+            </div>
+            <div class="col-12 text-right mb-4">
+                <button id="logoutBtn" class="btn btn-secondary mt-4">Đăng xuất</button>
+                <script>
+                    document.getElementById('logoutBtn').addEventListener('click', function() {
+                        fetch('/dangxuat', {
+                            method: 'POST',
+                            credentials: 'same-origin'
+                        }).then(function(response) {
+                            if (response.ok) {
+                                window.location.href = '/';
+                            } else {
+                                console.error('Đã xảy ra lỗi khi đăng xuất');
+                            }
+                        }).catch(function(error) {
+                            console.error('Lỗi kết nối: ', error);
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mymainmenu">
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index">Trang chủ</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/khachhang">Khách hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/nhanvien">Nhân viên</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/the">Thẻ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/phuongtien">Phương tiện</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/taikhoan">Tài khoản</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cong">Cổng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/lichsu">Lịch sử</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-muted" aria-current="page" href="/thongke">Thống kê</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>    
+</section>
+
+<section class="mymaincontent">
+    <h1 class="text-center mt-4">Báo cáo thống kê năm <%= year %></h1>
+    <div class="card">
+        <div class="card-body">
+          <h3>Số lượt phương tiện vào bãi xe theo từng tháng</h3>
+          <canvas id="vaoChart"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+          <h3>Số lượt phương tiện ra khỏi bãi xe theo từng tháng</h3>
+          <canvas id="raChart"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+          <h3>Số thẻ được tạo từng tháng</h3>
+          <canvas id="taotheChart"></canvas>
+        </div>
+    </div>
+</section>
+
+<section class="myfooter">
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">© 2024 Quản Lý Phương Tiện Bãi Xe Chung Cư</span>
+        </div>
+    </footer>
+</section>
+
+<!-- Thêm các thư viện JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+    const labels = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+
+    const vaoData = <%- JSON.stringify(vaoResults) %>;
+    const raData = <%- JSON.stringify(raResults) %>;
+    const taotheData = <%- JSON.stringify(taotheResults) %>;
+
+    const ctx1 = document.getElementById('vaoChart').getContext('2d');
+    const vaoChart = new Chart(ctx1, {
+        type: 'line', // You can use 'line' or 'bar'
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Số lượt phương tiện vào bãi xe',
+                data: vaoData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const ctx2 = document.getElementById('raChart').getContext('2d');
+    const raChart = new Chart(ctx2, {
+        type: 'line', // You can use 'line' or 'bar'
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Số lượt phương tiện ra bãi xe',
+                data: raData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const ctx3 = document.getElementById('taotheChart').getContext('2d');
+    const taotheChart = new Chart(ctx3, {
+        type: 'line', // You can use 'line' or 'bar'
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Số thẻ được tạo',
+                data: taotheData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+</script>
+
+<!-- Thêm các thư viện JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
