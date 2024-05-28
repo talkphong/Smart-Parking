@@ -3,8 +3,7 @@ var express = require('express');
 var router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', function (req, res, next) {
-  // router.get('/', authMiddleware.isAdmin, function (req, res, next) {
+  router.get('/', authMiddleware.isAdmin, function (req, res, next) {
   let sql = `SELECT xecudan.id_phuongtien, khachhang.hoten, 
               xecudan.bienso, xecudan.loaiphuongtien, 
               xecudan.path_anhphuongtien, 
