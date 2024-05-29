@@ -37,6 +37,8 @@
 MFRC522 mfrc522(RFID_SS_PIN, RFID_RST_PIN); // RFID
 
 Servo myservo; // Servor
+
+const int button = 7;  // chân kết nối nút nhấn
 /*______________________________*/
 
 
@@ -52,6 +54,10 @@ bool sensor_State;      // Trạng thái của cảm biến: (0)-có vật thể
 int servo_Open = 90;    // Góc để servo quay khi mở
 int servo_Close = 180;  // Góc để servo quay khi đóng
 
+int buttonState = 0;       // biến lưu trạng thái hiện tại của nút nhấn
+int lastButtonState = 0;   // biến lưu trạng thái trước đó của nút nhấn
+bool isServoOpen = servo_Close;  // biến lưu trạng thái mở/đóng của servo
+
 String message = "";    // Tin nhắn nhận được từ ESP
 /*______________________________*/
 
@@ -63,8 +69,8 @@ void setup() {
 
   SPI.begin();
   mfrc522.PCD_Init();
-  Serial.println(" RFID Init DONE!");
-  Serial.println(" Day la cong vao- INPUT!");
+  Serial.println("RFID Init DONE!");
+  Serial.println("Day la cong vao- INPUT!");
 
   pinMode(light_R, OUTPUT);
   pinMode(light_Y, OUTPUT);
@@ -72,8 +78,13 @@ void setup() {
 
   pinMode(sensor_PIN, INPUT);
 
+  pinMode(button, INPUT);
+
   myservo.attach(servo_PIN); 
-  myservo.write( 0);
+  myservo.write( servo_Close);
+
+  isServoOpen = false; // Cập nhật trạng thái ban đầu của servo
+  lastButtonState = digitalRead(button); // Khởi tạo trạng thái nút nhấn
 
   Wire.begin(SLAVE_ADDRESS);    // Khởi tạo thiết bị này có địa chỉ 8
   Wire.onReceive(receiveEvent); // Đăng ký hàm nhận dữ liệu
@@ -82,9 +93,9 @@ void setup() {
 
 
 void loop() {
-  //controlServo();
-  servoControl();
-  lightControl();
+  controlServo();
+  sensorControl();
+  //lightControl();
   readCard();
 }
 /*____________________________________________________________________________________________*/
@@ -121,7 +132,13 @@ void readCard(){
 
 /*********************************** GIAO TIẾP ESP ***********************************/
 // Gửi dữ liệu đến ESP
+String msg = "";
 void sendDataToESP() {
+  if (msg != ""){
+    Wire.write(msg.c_str());  // chuyển đổi chuỗi kí tự thành một mảng byte
+    Wire.write("\n");
+    msg= "";
+  }
     String a = card_UID; 
     Wire.write(a.c_str());  // chuyển đổi chuỗi kí tự thành một mảng byte
     Wire.write("\n");
@@ -140,6 +157,7 @@ void receiveEvent() {
 
     if( message == "OpenIn") {
       myservo.write(servo_Open);
+      isServoOpen = !isServoOpen;
       flag= 1;
     }
     else if( message == "CloseIn") {
@@ -161,29 +179,63 @@ void lightControl(){
   }
 }
 
-void servoControl(){  
+void sensorControl(){  
   sensor_State = digitalRead(sensor_PIN);
   if(sensor_State == 0) {
-    Serial.println("Phat hien co phuong tien- Dong servo");
-    myservo.write(servo_Close);
-    flag= 0;
+    if (isServoOpen) {
+      Serial.println("Phuong tien da di qua - Dong servo");
+      myservo.write(servo_Close);
+      msg = "save";
+      flag= 0;
+      isServoOpen = false; // cập nhật trạng thái servo
+    }
   }
 }
 
 void controlServo() {
   //đọc tín hiệu button
-  int button1 = digitalRead(8);
-  int button2 = digitalRead(7);
+  buttonState = digitalRead( button);
 
-  if( button1== LOW) {
-    myservo.write(servo_Open);
-    flag= 1;
-    Serial.println( "Mo cong vao thu cong");
+  // kiểm tra nếu nút được nhấn
+  if (buttonState != lastButtonState) {
+    // nếu trạng thái nút đã thay đổi và nút đang được nhấn
+    if (buttonState == HIGH) {
+      // thay đổi22222222 trạng thái của servo
+      if (isServoOpen) {
+        myservo.write(servo_Close);
+        Serial.println("Dong servo");
+        flag= 0;
+        msg = "clear";
+      } else {
+        myservo.write(servo_Open);
+        Serial.println("Mo servo");
+        flag= 1;
+      }
+      // đảo ngược trạng thái servo
+      isServoOpen = !isServoOpen;
+    }
+    // delay nhỏ để chống dội nút
+    delay(10);
   }
-  if( button2== LOW) {
-    myservo.write(servo_Close);
-    flag= 0;
-    Serial.println( "Dong cong vao thu cong");
-  }
+
+  // lưu trạng thái nút nhấn để kiểm tra lần lặp sau
+  lastButtonState = buttonState;
 }
+
+// void controlServo() {
+//   //đọc tín hiệu button
+//   int button1 = digitalRead(8);
+//   int button2 = digitalRead(7);
+
+//   if( button1== LOW) {
+//     myservo.write(servo_Open);
+//     flag= 1;
+//     Serial.println( "Mo cong vao thu cong");
+//   }
+//   if( button2== LOW) {
+//     myservo.write(servo_Close);
+//     flag= 0;
+//     Serial.println( "Dong cong vao thu cong");
+//   }
+// }
 /*____________________________________________________________________________________________*/

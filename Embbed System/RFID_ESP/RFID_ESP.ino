@@ -9,9 +9,9 @@
 #define SDA_PIN 5           // Định nghĩa chân SDA là chân D1
 #define SCL_PIN 4           // Định nghĩa chân SCL là chân D2
 
-const char* ssid = "Galaxy A235A0C"; //tên wifi
-const char* password = "012345678"; //mật khẩu wifi
-const char* serverAddress = "192.168.55.109"; // Địa chỉ IP của máy chủ Node.js
+const char* ssid = ""; //tên wifi
+const char* password = ""; //mật khẩu wifi
+const char* serverAddress = ""; // Địa chỉ IP của máy chủ Node.js
 const int serverPort = 3000; 
 
 // khai báo các đối tượng
