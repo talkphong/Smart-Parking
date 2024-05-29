@@ -9,6 +9,21 @@ var db = require('../models/database');
 router.use(bodyParser.urlencoded({extended: true}));
 
 router.get('/', function(req, res, next) {
+  if (req.session.user){
+    switch (results[0].phanquyen){
+      case "admin":
+        res.redirect('../index');
+        break;
+      case "nhanvien":
+        res.redirect('../camera');
+        break;
+      case "khachhang":
+        res.redirect('../customer');
+        break;
+      default:
+        res.status(401).send("Phân quyền không hợp lệ");
+    }
+  }
   res.render('dangnhap');
 });
 
@@ -42,8 +57,8 @@ router.post('/xulydangnhap', function(req, res, next) {
         case "khachhang":
           res.redirect('../customer');
           break;
-          default:
-            res.status(401).send("Phân quyền không hợp lệ");
+        default:
+          res.status(401).send("Phân quyền không hợp lệ");
       }
       // res.send(`Đăng nhập thành công, quyền người dùng là: ${results[0].phanquyen}`)
     } else {
