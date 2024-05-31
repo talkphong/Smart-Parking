@@ -121,7 +121,7 @@
             </div>
         </div>
     </div>
-
+<button onclick="submitIN()">submit in</button>
     <script>
         document.getElementById('logoutBtn').addEventListener('click', function() {
             fetch('/dangxuat', {
@@ -167,28 +167,30 @@
 
         function submitIN() {
             var videoElement = document.getElementById('CameraIN');
-            var canvas = document.createElement('canvas');
-            var context = canvas.getContext('2d');
-            canvas.width = videoElement.videoWidth;
-            canvas.height = videoElement.videoHeight;
-            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                canvas.width = videoElement.videoWidth;
+                canvas.height = videoElement.videoHeight;
+                context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
-            canvas.toBlob(function(blob) {
-                var formData = new FormData();
-                formData.append('image', blob, 'image.jpg');
-                fetch('camera/upload', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const imageElement = document.getElementById('LpRegionIN');
-                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
-                    const textContainer = document.getElementById('LpNumberIN');
-                    textContainer.innerText = data.LpNumber;
-                })
-                .catch(error => console.error('Lỗi:', error));
-            }, 'image/jpeg');
+                canvas.toBlob(function(blob) {
+                    var formData = new FormData();
+                    formData.append('image', blob, 'image.jpg');
+                    formData.append('port', 'I');
+                    formData.append('UID', '123455');
+                    fetch('camera/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const imageElement = document.getElementById('LpRegionIN');
+                        imageElement.src = data.croppedImg;
+                        const textContainer = document.getElementById('LpNumberIN');
+                        textContainer.innerText = data.LpNumber;
+                    })
+                    .catch(error => console.error('Lỗi:', error));
+                }, 'image/jpeg');
         }
 
         function submitOUT() {

@@ -94,7 +94,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         LpNumber = result.data[1]
         if (port == "I") {check_lichsuIN(sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path)}
         else if (port == "O") {check_lichsuOUT(sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path)}
-
       }else{
           LpNumber = "Không nhận diện đủ 8 chữ số"
           console.log("Không nhận diện đủ 8 chữ số")
