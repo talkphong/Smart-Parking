@@ -66,7 +66,7 @@
                 <a class="nav-link" href="/khachhang">Khách hàng</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/nhanvien">Nhân viên</a>
+                <a class="nav-link active text-muted" aria-current="page" href="/nhanvien">Nhân viên</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/the">Thẻ</a>
@@ -78,17 +78,14 @@
                 <a class="nav-link" href="/taikhoan">Tài khoản</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/cong">Cổng</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active text-muted" aria-current="page" href="/lichsu">Lịch sử</a>
+                <a class="nav-link" href="/lichsu">Lịch sử</a>
               </li>
               <li class="nav-item">
                   <a class="nav-link" href="/thongke">Thống kê</a>
               </li>
             </ul>
-            <form class="d-flex" id="search-lichsu"action="/lichsu/search" method="GET">
-              <input class="form-control me-2" type="search" id="lichsu-input" placeholder="Tìm kiếm" aria-label="Search">
+            <form class="d-flex" id="search-nhanvien"action="/nhanvien/search" method="GET">
+              <input class="form-control me-2" type="search" id="nhanvien-input" placeholder="Tìm kiếm" aria-label="Search">
               <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
             </form>
           </div>
@@ -100,46 +97,42 @@
             <div class="col-11">
                 <table class="table table-hover w-75 m-auto text-center">
                     <tr>
-                        <th>Thời gian</th>
-                        <th>Tên cổng</th>
-                        <th>Số thẻ</th>
-                        <th>Biển số</th>
-                        <th>Chủ thẻ</th>
-                        <th>Nhân viên</th>
-                        <th>Ảnh phương tiện</th>
-                        <th>Ảnh biển số</th>
+                        <th>ID nhân viên</th>
+                        <th>Tên nhân viên</th>
+                        <th>Ngày vào làm</th>
+                        <th colspan="2">
+                          <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                              <a href="/nhanvien/form-them-nhanvien">
+                                  <button type="button" class="btn btn-secondary">
+                                      <i class="fas fa-plus"></i>
+                                  </button>
+                              </a>               
+                          </div>
+                        </th>
                     </tr>
                     
                     <% for (let c of list ) { %>
                         <tr>
+                            <td> <%= c.id_nhanvien %> </td>
+                            <td> <%= c.hoten %> </td>
                             <td> 
-                                <%
-                                  var date = new Date(c.thoigianmo.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
-                                  
-                                  let hours = String(date.getHours()).padStart(2, '0');
-                                  let minutes = String(date.getMinutes()).padStart(2, '0');
-                                  let day = String(date.getDate()).padStart(2, '0');
-                                  let month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng trong JavaScript bắt đầu từ 0
-                                  let year = date.getFullYear();
-  
-                                  var ngay = day + "-" + month + "-" + year;
-                                  var gio = hours + ":" + minutes;
-                                %>
-                                <%= ngay + ", " + gio %> 
-                            </td>
-                            <td> <%= c.tencong %> </td>
-                            <td> <%= c.sothe %> </td>
-                            <td> <%= c.bienso %> </td>
-                            <td> <%= c.tenKH %> </td>
-                            <td> <%= c.tenNV %> </td>
-                            <td>
-                                <img src="<%= c.path_anhphuongtien %>" alt="Ảnh phương tiện" style="max-width: 100px; max-height: 100px;">
+                              <%
+                                var ngayVaoLam = new Date(c.ngayvaolam);
+                                
+                                var ngay = ngayVaoLam.getDate();
+                                var thang = ngayVaoLam.getMonth() + 1;
+                                var nam = ngayVaoLam.getFullYear();
+
+                                var ngayVaoLamNewFormat = ngay.toString().padStart(2, '0') + "/" + thang.toString().padStart(2, '0') + "/" + nam;
+                              %>
+                              <%= ngayVaoLamNewFormat %> 
                             </td>
                             <td>
-                                <img src="<%= c.path_anhbienso %>" alt="Ảnh biển số" style="max-width: 100px; max-height: 100px;">
+                              <a href="/nhanvien/nhanvien_update/<%= c.id_nhanvien %>"><i class="fas fa-edit text-primary mr-2"></i></a>
+                              <a href="/nhanvien/nhanvien_delete/<%= c.id_nhanvien %>"><i class="fas fa-trash-alt text-danger"></i></a>
                             </td>
                         </tr>
-                        <% } %>        
+                    <% } %>        
                 </table>
             </div>
         </div>     
@@ -154,15 +147,15 @@
     </section>
 
     <script>
-      document.getElementById('search-lichsu').addEventListener('submit', function(event) {
+      document.getElementById('search-nhanvien').addEventListener('submit', function(event) {
         event.preventDefault(); // Ngăn chặn form submit mặc định
-        var keyword = document.getElementById('lichsu-input').value;
+        var keyword = document.getElementById('nhanvien-input').value;
         search(keyword);
       });
 
       function search(keyword) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', `/lichsu/search?keyword=${keyword}`, true);
+        xhr.open('GET', `/nhanvien/search?keyword=${keyword}`, true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200) {
             var data = JSON.parse(xhr.responseText);
@@ -173,6 +166,14 @@
         xhr.send();
       }
 
+      function formatDate(dateString) {
+        var date = new Date(dateString);
+        var day = date.getDate().toString().padStart(2, '0');
+        var month = (date.getMonth() + 1).toString().padStart(2, '0');
+        var year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+
       function displaySearchResult(data) {
         var table = document.querySelector('.table');
         table.innerHTML = ''; // Xóa hết nội dung trong bảng trước khi thêm kết quả mới
@@ -180,44 +181,34 @@
         var tableHead = document.createElement('thead'); // Tạo thead mới
         var tableHeadRow = document.createElement('tr'); // Tạo dòng của thead
         tableHeadRow.innerHTML = `
-            <th>thời gian</th>
-            <th>Tên cổng</th>
-            <th>Số thẻ</th>
-            <th>Biển số</th>
-            <th>Chủ thẻ</th>
-            <th>Nhân viên</th>
-            <th>Ảnh phương tiện</th>
-            <th>Ảnh biển số</th>`;
+          <th>ID nhân viên</th>
+          <th>Tên nhân viên</th>
+          <th>Ngày vào làm</th>
+          <th colspan="2">
+            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                <a href="/nhanvien/form-them-nhanvien">
+                    <button type="button" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </a>               
+            </div>
+          </th> 
+        `;
         tableHead.appendChild(tableHeadRow); // Thêm dòng vào thead
         table.appendChild(tableHead); // Thêm thead vào bảng
 
         var tableBody = document.createElement('tbody'); // Tạo tbody mới
         data.forEach(function(item) {
           var row = document.createElement('tr');
-
-          var date = new Date(item.thoigianmo.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
-          let hours = String(date.getHours()).padStart(2, '0');
-          let minutes = String(date.getMinutes()).padStart(2, '0');
-          let day = String(date.getDate()).padStart(2, '0');
-          let month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng trong JavaScript bắt đầu từ 0
-          let year = date.getFullYear();
-          var ngay = day + "-" + month + "-" + year;
-          var gio = hours + ":" + minutes;
-
           row.innerHTML = `
-            <td>${ngay}, ${gio}</td>
-            <td>${item.tencong}</td>
-            <td>${item.sothe}</td>
-            <td>${item.bienso}</td>
-            <td>${item.tenKH}</td>
-            <td>${item.tenNV}</td>
+            <td>${item.id_nhanvien}</td>
+            <td>${item.hoten}</td>
+            <td>${formatDate(item.ngayvaolam)}</td>
             <td>
-              <img src="${item.path_anhphuongtien}" alt="Ảnh phương tiện" style="max-width: 100px; max-height: 100px;">
+              <a href="/nhanvien/nhanvien_update/${item.id_nhanvien}"><i class="fas fa-edit text-primary mr-2"></i></a>
+              <a href="/nhanvien/nhanvien_delete/${item.id_nhanvien}"><i class="fas fa-trash-alt text-danger"></i></a>
             </td>
-            <td>
-              <img src="${item.path_anhbienso}" alt="Ảnh biển số" style="max-width: 100px; max-height: 100px;">
-            </td>
-            <td>`;
+          `;
           tableBody.appendChild(row); // Thêm dòng vào tbody
         });
         table.appendChild(tableBody); // Thêm tbody vào bảng

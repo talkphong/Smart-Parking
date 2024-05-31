@@ -23,7 +23,7 @@ var historyRouter = require('./routes/history');
 var logoutRouter = require('./routes/logout');
 var lichsuRouter = require('./routes/lichsu');
 var cus_historyRouter = require('./routes/cus_history');
-var congRouter = require('./routes/cong');
+//var congRouter = require('./routes/cong');
 var thongkeRouter = require('./routes/thongke');
 
 var app = express();
@@ -65,7 +65,7 @@ app.use('/history', historyRouter);
 app.use('/logout', logoutRouter);
 app.use('/lichsu', lichsuRouter);
 app.use('/cus_history',cus_historyRouter);
-app.use('/cong',congRouter);
+//app.use('/cong',congRouter);
 app.use('/thongke',thongkeRouter);
 
 // Cấu hình để phục vụ tệp tĩnh từ thư mục "public"

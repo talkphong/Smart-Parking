@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giám sát an ninh</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 10px 0;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin-left: 20px;
+        }
+
+        header button {
+            margin-right: 20px;
+            padding: 10px 20px;
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        header button:hover {
+            background-color: #c9302c;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .port {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            flex: 1;
+            margin: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .port video {
+            width: 100%;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .result {
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .result img {
+            width: 100%;
+            max-height: 150px;
+            object-fit: contain;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #e0e0e0; /* Add background color to indicate placeholder */
+        }
+
+        .result p {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #e0e0e0; /* Add background color to indicate placeholder */
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hệ thống giám sát an ninh</h1>
+        <button id="logoutBtn">Đăng xuất</button>
+    </header>
+
+    <div class="container">
+        <div id="PortIN" class="port">
+            <div class="camera">
+                <h2>Camera IN</h2>
+                <video id="CameraIN" autoplay></video>
+            </div>
+            <div id="resultIN" class="result">
+                <img id="LpRegionIN" src="" alt="Ảnh đã cắt">
+                <p id="LpNumberIN">Biển số xe</p>
+            </div>
+        </div>
+
+        <div id="PortOUT" class="port">
+            <div class="camera">
+                <h2>Camera OUT</h2>
+                <video id="CameraOUT" autoplay></video>
+            </div>
+            <div id="resultOUT" class="result">
+                <img id="LpRegionOUT" src="" alt="Ảnh đã cắt">
+                <p id="LpNumberOUT">Biển số xe</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            fetch('/dangxuat', {
+                method: 'POST',
+                credentials: 'same-origin'
+            }).then(function(response) {
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    console.error('Đã xảy ra lỗi khi đăng xuất');
+                }
+            }).catch(function(error) {
+                console.error('Lỗi kết nối: ', error);
+            });
+        });
+
+        navigator.mediaDevices.enumerateDevices()
+            .then(function(devices) {
+                const devideID1 = devices[1].deviceId;
+                const devideID2 = devices[2].deviceId;
+                streamVideo(devideID1, devideID2);
+            });
+
+        function streamVideo(devideID1, devideID2) {
+            navigator.mediaDevices.getUserMedia({ video: { deviceId: devideID1 } })
+                .then(function(stream1) {
+                    var videoElement = document.getElementById('CameraIN');
+                    videoElement.srcObject = stream1;
+                })
+                .catch(function(err) {
+                    console.log("Lỗi khi stream video1: " + err);
+                });
+
+            navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: devideID2 } } })
+                .then(function(stream2) {
+                    var videoElement = document.getElementById('CameraOUT');
+                    videoElement.srcObject = stream2;
+                })
+                .catch(function(err) {
+                    console.log("Lỗi khi stream video2: " + err);
+                });
+        }
+
+        function submitIN() {
+            var videoElement = document.getElementById('CameraIN');
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(function(blob) {
+                var formData = new FormData();
+                formData.append('image', blob, 'image.jpg');
+                fetch('camera/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const imageElement = document.getElementById('LpRegionIN');
+                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
+                    const textContainer = document.getElementById('LpNumberIN');
+                    textContainer.innerText = data.LpNumber;
+                })
+                .catch(error => console.error('Lỗi:', error));
+            }, 'image/jpeg');
+        }
+
+        function submitOUT() {
+            var videoElement = document.getElementById('CameraOUT');
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(function(blob) {
+                var formData = new FormData();
+                formData.append('image', blob, 'image.jpg');
+                fetch('camera/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const imageElement = document.getElementById('LpRegionOUT');
+                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
+                    const textContainer = document.getElementById('LpNumberOUT');
+                    textContainer.innerText = data.LpNumber;
+                })
+                .catch(error => console.error('Lỗi:', error));
+            }, 'image/jpeg');
+        }
+
+        var url = window.location.host;
+        var ws = new WebSocket('ws://' + url + '/ws');
+        ws.onopen = function() {};
+
+        ws.onmessage = function(evt) {
+            const strReceive = evt.data;
+            const port = evt.data[0];
+            const UID = evt.data.slice(3);
+
+            if (port == "I") {
+                var videoElement = document.getElementById('CameraIN');
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                canvas.width = videoElement.videoWidth;
+                canvas.height = videoElement.videoHeight;
+                context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob(function(blob) {
+                    var formData = new FormData();
+                    formData.append('image', blob, 'image.jpg');
+                    formData.append('port', port);
+                    formData.append('UID', UID);
+                    fetch('camera/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const imageElement = document.getElementById('LpRegionIN');
+                        imageElement.src = data.croppedImg;
+                        const textContainer = document.getElementById('LpNumberIN');
+                        textContainer.innerText = data.LpNumber;
+                    })
+                    .catch(error => console.error('Lỗi:', error));
+                }, 'image/jpeg');
+            } else if (port == "O") {
+                var videoElement = document.getElementById('CameraOUT');
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                canvas.width = videoElement.videoWidth;
+                canvas.height = videoElement.videoHeight;
+                context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob(function(blob) {
+                    var formData = new FormData();
+                    formData.append('image', blob, 'image.jpg');
+                    formData.append('port', port);
+                    formData.append('UID', UID);
+                    fetch('camera/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const imageElement = document.getElementById('LpRegionOUT');
+                        imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
+                        const textContainer = document.getElementById('LpNumberOUT');
+                        textContainer.innerText = data.LpNumber;
+                    })
+                    .catch(error => console.error('Lỗi:', error));
+                }, 'image/jpeg');
+            }
+        };
+    </script>
+</body>
+</html>

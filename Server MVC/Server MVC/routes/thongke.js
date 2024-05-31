@@ -31,9 +31,19 @@ router.get('/', authMiddleware.isAdmin, async (req, res) => {
             ORDER BY nam, thang
         `;
 
+        const doanhthuvanglaiQuery = `
+            SELECT YEAR(thoigianmo) AS nam, MONTH(thoigianmo) AS thang, COUNT(*) AS so_luot_vao_vang_lai
+            FROM lichsu LEFT JOIN the
+            ON lichsu.sothe = the.sothe
+            WHERE YEAR(thoigianmo) = ? AND id_cong = 1 AND the.loaithe LIKE 'Thẻ vãng lai'
+            GROUP BY nam, thang
+            ORDER BY nam, thang
+        `;
+
         const vaoResults = Array(12).fill(0);
         const raResults = Array(12).fill(0);
         const taotheResults = Array(12).fill(0);
+        const doanhthuvanglaiResults = Array(12).fill(0);
 
         db.query(vaoQuery, [year], (vaoErr, vaoData) => {
             if (vaoErr) {
@@ -68,11 +78,24 @@ router.get('/', authMiddleware.isAdmin, async (req, res) => {
                         taotheResults[result.thang - 1] = result.so_luot_tao_the;
                     });
 
-                    res.render('thongke', {
-                        year: year,
-                        vaoResults: vaoResults,
-                        raResults: raResults,
-                        taotheResults: taotheResults
+                    db.query(doanhthuvanglaiQuery, [year], (doanhthuvanglaiErr, doanhthuvanglaiData) => {
+                        if (doanhthuvanglaiErr) {
+                            console.error('Database query error (doanhthuvanglai): ', doanhthuvanglaiErr);
+                            res.status(500).send('Internal Server Error');
+                            return;
+                        }
+
+                        doanhthuvanglaiData.forEach(result => {
+                            doanhthuvanglaiResults[result.thang - 1] = result.so_luot_vao_vang_lai * 5000;
+                        });
+
+                        res.render('thongke', {
+                            year: year,
+                            vaoResults: vaoResults,
+                            raResults: raResults,
+                            taotheResults: taotheResults,
+                            doanhthuvanglaiResults: doanhthuvanglaiResults
+                        });
                     });
                 });
             });

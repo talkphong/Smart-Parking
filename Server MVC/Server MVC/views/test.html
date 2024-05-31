@@ -8,14 +8,11 @@
     <button id="logoutBtn">Đăng xuất</button>
     <script>
         document.getElementById('logoutBtn').addEventListener('click', function() {
-            // Gửi yêu cầu đăng xuất đến máy chủ
             fetch('/dangxuat', {
                 method: 'POST',
-                credentials: 'same-origin' // Đảm bảo gửi cùng các cookie với trang
+                credentials: 'same-origin'
             }).then(function(response) {
-                // Kiểm tra phản hồi từ máy chủ
                 if (response.ok) {
-                    // Chuyển hướng hoặc thực hiện các hành động phù hợp sau khi đăng xuất thành công
                     window.location.href = '/';
                 } else {
                     console.error('Đã xảy ra lỗi khi đăng xuất');
@@ -35,7 +32,6 @@
         <div id="result" style="height: 200px;">
             <img id="LpRegionIN" style="width: 100%;" src="" alt="Ảnh đã cắt">
             <p id="LpNumberIN">Biển số xe</p>
-            <button type="submit" onclick="submitIN()" >Gửi ảnh IN</button>
         </div>
     </div>
 
@@ -47,21 +43,14 @@
         <div id="result" style="height: 200px;">
             <img id="LpRegionOUT" style="width: 100%;" src="" alt="Ảnh đã cắt">
             <p id="LpNumberOUT">Biển số xe</p>
-            <button type="submit" onclick="submitOUT()" >Gửi ảnh OUT</button>
         </div>
     </div>
 </body>
 </html>
 
-<!-- Hiển thị các IDCamera và mở luồng stream đến cái thiết bị đó -->
-<script >
+<script>
     navigator.mediaDevices.enumerateDevices()
         .then(function(devices) {
-            // devices.forEach(function(device) {
-            //     if (device.kind === 'videoinput') {
-            //         console.log(device.deviceId);
-            //     }
-            // });
             const devideID1 = devices[1].deviceId
             const devideID2 = devices[2].deviceId
             streamVideo(devideID1, devideID2)
@@ -86,39 +75,26 @@
                 console.log("Lỗi khi stream video2: " + err);
             });        
     }
-  </script>
 
-<!-- nút nhấn -->
-<script>
     function submitIN(){
         var videoElement = document.getElementById('CameraIN');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
-        
-        // Đặt kích thước của canvas bằng kích thước của video
         canvas.width = videoElement.videoWidth;
         canvas.height = videoElement.videoHeight;
-        
-        // Vẽ frame hiện tại của video lên canvas
         context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
    
         canvas.toBlob(function(blob) {
-          // Tạo một đối tượng FormData để gửi dữ liệu lên server
           var formData = new FormData();
           formData.append('image', blob, 'image.jpg');
-
-          // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
           fetch('camera/upload', {
               method: 'POST',
               body: formData
           })
           .then(response => response.json())
                 .then(data => {
-                    // Lấy phần tử hình ảnh và thiết lập src cho nó
                     const imageElement = document.getElementById('LpRegionIN');
-                    imageElement.src = 'data:image/jpeg;base64,' + data.img_crop;
-
-                    // Lấy phần tử container và thiết lập nội dung của nó
+                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
                     const textContainer = document.getElementById('LpNumberIN');
                     textContainer.innerText = data.LpNumber;
                 })
@@ -130,31 +106,21 @@
         var videoElement = document.getElementById('CameraOUT');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
-        
-        // Đặt kích thước của canvas bằng kích thước của video
         canvas.width = videoElement.videoWidth;
         canvas.height = videoElement.videoHeight;
-        
-        // Vẽ frame hiện tại của video lên canvas
         context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
    
         canvas.toBlob(function(blob) {
-          // Tạo một đối tượng FormData để gửi dữ liệu lên server
           var formData = new FormData();
           formData.append('image', blob, 'image.jpg');
-
-          // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
           fetch('camera/upload', {
               method: 'POST',
               body: formData
           })
           .then(response => response.json())
                 .then(data => {
-                    // Lấy phần tử hình ảnh và thiết lập src cho nó
                     const imageElement = document.getElementById('LpRegionOUT');
                     imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
-
-                    // Lấy phần tử container và thiết lập nội dung của nó
                     const textContainer = document.getElementById('LpNumberOUT');
                     textContainer.innerText = data.LpNumber;
                 })
@@ -163,90 +129,65 @@
     }
 </script>
 
-
-<!-- WebSocket -->
 <script>
   var url = window.location.host;
   var ws = new WebSocket('ws://' + url + '/ws');
   ws.onopen = function () {};
 
   var msg = "đây là nội dung nhận được từ server"
-  // sự kiện nhận được tin nhắn từ sv
   ws.onmessage = function (evt) { 
     const strReceive = evt.data
     const port = evt.data[0]
     const UID = evt.data.slice(3)
 
-    if(port == "I" && (strReceive != "save" && strReceive != "clear" && strReceive != "OpenIn" && strReceive != "OpenOut")
-                            && (UID != "save" && UID != "clear" && UID != "OpenIn" && UID != "OpenOut")){
+    if(port == "I"){
         var videoElement = document.getElementById('CameraIN');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
-        
-        // Đặt kích thước của canvas bằng kích thước của video
         canvas.width = videoElement.videoWidth;
         canvas.height = videoElement.videoHeight;
-        
-        // Vẽ frame hiện tại của video lên canvas
         context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
    
         canvas.toBlob(function(blob) {
-          // Tạo một đối tượng FormData để gửi dữ liệu lên server
           var formData = new FormData();
           formData.append('image', blob, 'image.jpg');
           formData.append('port', port);
-          formData.append('sothe', UID);
-
-          // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
+          formData.append('UID', UID);
           fetch('camera/upload', {
               method: 'POST',
               body: formData
           })
           .then(response => response.json())
                 .then(data => {
-                    // Lấy phần tử hình ảnh và thiết lập src cho nó
                     const imageElement = document.getElementById('LpRegionIN');
-                    imageElement.src = 'data:image/jpeg;base64,' + data.img_crop;
-
-                    // Lấy phần tử container và thiết lập nội dung của nó
+                    imageElement.src = data.croppedImg;
                     const textContainer = document.getElementById('LpNumberIN');
                     textContainer.innerText = data.LpNumber;
                 })
                 .catch(error => console.error('Lỗi:', error));
       }, 'image/jpeg');
     }
-    else if (port == "O" && (strReceive != "save" && strReceive != "clear" && strReceive != "OpenIn" && strReceive != "OpenOut")
-                            && (UID != "save" && UID != "clear" && UID != "OpenIn" && UID != "OpenOut")){
+    else if (port == "O"){
         var videoElement = document.getElementById('CameraOUT');
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
-        
-        // Đặt kích thước của canvas bằng kích thước của video
         canvas.width = videoElement.videoWidth;
         canvas.height = videoElement.videoHeight;
-        
-        // Vẽ frame hiện tại của video lên canvas
         context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
    
         canvas.toBlob(function(blob) {
-          // Tạo một đối tượng FormData để gửi dữ liệu lên server
           var formData = new FormData();
           formData.append('image', blob, 'image.jpg');
           formData.append('port', port);
-          formData.append('sothe', UID);
-
-          // Sử dụng Fetch API để gửi FormData lên server (ở đây là Node.js)
+          formData.append('UID', UID);
           fetch('camera/upload', {
               method: 'POST',
               body: formData
           })
           .then(response => response.json())
                 .then(data => {
-                    // Lấy phần tử hình ảnh và thiết lập src cho nó
                     const imageElement = document.getElementById('LpRegionOUT');
-                    imageElement.src = 'data:image/jpeg;base64,' + data.img_crop;
-
-                    // Lấy phần tử container và thiết lập nội dung của nó
+                    imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
                     const textContainer = document.getElementById('LpNumberOUT');
                     textContainer.innerText = data.LpNumber;
                 })

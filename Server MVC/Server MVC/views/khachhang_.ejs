@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Quản lý phương tiện</title>
+    <title>Quản lý khách hàng</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
@@ -14,15 +14,6 @@
       .table-hover thead th:hover {
         background-color: initial; /* Hoặc một giá trị màu nền mặc định khác */
       }
-
-      .table td,
-      .table th {
-          max-width: 200px; /* Đặt độ rộng tối đa cho các cột */
-          overflow: hidden; /* Ẩn phần nội dung vượt quá độ rộng */
-          text-overflow: ellipsis; /* Hiển thị dấu chấm (...) khi nội dung bị cắt */
-          white-space: nowrap; /* Ngăn chặn các dòng mới trong cột */
-      }
-
     </style>
 
   </head>
@@ -71,22 +62,19 @@
           <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" href="/khachhang">Khách hàng</a>
+                <a class="nav-link active text-muted" aria-current="page" href="/khachhang">Khách hàng</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/nhanvien">Nhân viên</a>
+                <a class="nav-link"  href="/nhanvien">Nhân viên</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="/the">Thẻ</a>
+                <a class="nav-link" href="/the">Thẻ</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-muted" aria-current="page" href="/phuongtien">Phương tiện</a>
+                <a class="nav-link" href="/phuongtien">Phương tiện</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/taikhoan">Tài khoản</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/cong">Cổng</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/lichsu">Lịch sử</a>
@@ -95,8 +83,8 @@
                   <a class="nav-link" href="/thongke">Thống kê</a>
               </li>
             </ul>
-            <form class="d-flex" id="search-phuongtien"action="/phuongtien/search" method="GET">
-              <input class="form-control me-2" type="search" id="phuongtien-input" placeholder="Tìm kiếm" aria-label="Search">
+            <form class="d-flex" id="search-khachhang"action="/khachhang/search" method="GET">
+              <input class="form-control me-2" type="search" id="khachhang-input" placeholder="Tìm kiếm" aria-label="Search">
               <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
             </form>
           </div>
@@ -108,15 +96,14 @@
             <div class="col-11">
                 <table class="table table-hover w-75 m-auto text-center">
                     <tr>
-                        <th>ID phương tiện</th>
-                        <th>Loại phương tiện</th>
-                        <th>Biển số</th>
-                        <th>Tên chủ phương tiện</th>
-                        <th>Ảnh phương tiện</th>
-                        <th>Ảnh biển số</th>
+                        <th>ID Khách hàng</th>
+                        <th>Họ tên</th>
+                        <th>Số căn hộ</th>
+                        <th>Số thẻ</th>
+                        <th>Số lượng phương tiện</th>
                         <th colspan="2">
                           <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                              <a href="/phuongtien/form-them-phuongtien">
+                              <a href="/khachhang/form-them-khachhang">
                                   <button type="button" class="btn btn-secondary">
                                       <i class="fas fa-plus"></i>
                                   </button>
@@ -124,22 +111,17 @@
                           </div>
                         </th>
                     </tr>
-                    
-                    <% for (let c of list ) { %>
+                
+                    <% for (let c of list ) {  %>
                         <tr>
-                            <td> <%= c.id_phuongtien %> </td>
-                            <td> <%= c.loaiphuongtien %> </td>
-                            <td> <%= c.bienso %> </td>
+                            <td> <%= c.id_khachhang %> </td>
                             <td> <%= c.hoten %> </td>
-                            <td title="<%= c.path_anhphuongtien %>">
-                              <img src="<%= c.path_anhphuongtien %>" alt="Ảnh phương tiện" style="max-width: 100px; max-height: 100px;">
-                            </td>
-                            <td title="<%= c.path_anhbienso %>">
-                              <img src="<%= c.path_anhbienso %>" alt="Ảnh biển số" style="max-width: 100px; max-height: 100px;">
-                            </td>
+                            <td> <%= c.socanho %> </td>
+                            <td> <%= c.sothe %> </td>
+                            <td> <%= c.so_luong_phuongtien %> </td>
                             <td>
-                              <a href="/phuongtien/phuongtien_update/<%= c.id_phuongtien %>"><i class="fas fa-edit text-primary mr-2"></i></a>
-                              <a href="/phuongtien/phuongtien_delete/<%= c.id_phuongtien %>"><i class="fas fa-trash-alt text-danger"></i></a>
+                              <a href="/khachhang/sua-khachhang/<%= c.id_khachhang %>"><i class="fas fa-edit text-primary mr-2"></i></a>
+                              <a href="/khachhang/xoa/<%= c.id_khachhang %>"><i class="fas fa-trash-alt text-danger"></i></a>
                             </td>
                         </tr>
                     <% } %>        
@@ -158,15 +140,15 @@
     </section>
 
     <script>
-      document.getElementById('search-phuongtien').addEventListener('submit', function(event) {
+      document.getElementById('search-khachhang').addEventListener('submit', function(event) {
         event.preventDefault(); // Ngăn chặn form submit mặc định
-        var keyword = document.getElementById('phuongtien-input').value;
+        var keyword = document.getElementById('khachhang-input').value;
         search(keyword);
       });
 
       function search(keyword) {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', `/phuongtien/search?keyword=${keyword}`, true);
+        xhr.open('GET', `/khachhang/search?keyword=${keyword}`, true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4 && xhr.status == 200) {
             var data = JSON.parse(xhr.responseText);
@@ -184,15 +166,14 @@
         var tableHead = document.createElement('thead'); // Tạo thead mới
         var tableHeadRow = document.createElement('tr'); // Tạo dòng của thead
         tableHeadRow.innerHTML = `
-          <th>ID phương tiện</th>
-          <th>Loại phương tiện</th>
-          <th>Biển số</th>
-          <th>Tên chủ phương tiện</th>
-          <th>Ảnh phương tiện</th>
-          <th>Ảnh biển số</th>
+          <th>ID Khách hàng</th>
+          <th>Họ tên</th>
+          <th>Số căn hộ</th>
+          <th>Số thẻ</th>
+          <th>Số lượng phương tiện</th>
           <th colspan="2">
             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                <a href="/phuongtien/form-them-phuongtien">
+                <a href="/khachhang/form-them-khachhang">
                     <button type="button" class="btn btn-secondary">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -207,19 +188,14 @@
         data.forEach(function(item) {
           var row = document.createElement('tr');
           row.innerHTML = `
-            <td>${item.id_phuongtien}</td>
-            <td>${item.loaiphuongtien}</td>
-            <td>${item.bienso}</td>
+            <td>${item.id_khachhang}</td>
             <td>${item.hoten}</td>
+            <td>${item.socanho}</td>
+            <td>${item.sothe}</td>
+            <td>${item.so_luong_phuongtien}</td>
             <td>
-              <img src="${item.path_anhphuongtien}" alt="Ảnh phương tiện" style="max-width: 100px; max-height: 100px;">
-            </td>
-            <td>
-              <img src="${item.path_anhbienso}" alt="Ảnh biển số" style="max-width: 100px; max-height: 100px;">
-            </td>
-            <td>
-              <a href="/phuongtien/phuongtien_update/${item.id_phuongtien}"><i class="fas fa-edit text-primary mr-2"></i></a>
-              <a href="/phuongtien/phuongtien_delete/${item.id_phuongtien}"><i class="fas fa-trash-alt text-danger"></i></a>
+              <a href="/khachhang/sua-khachhang/${item.id_khachhang}"><i class="fas fa-edit text-primary mr-2"></i></a>
+              <a href="/khachhang/xoa/${item.id_khachhang}"><i class="fas fa-trash-alt text-danger"></i></a>
             </td>
           `;
           tableBody.appendChild(row); // Thêm dòng vào tbody

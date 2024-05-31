@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quản lý khách hàng</title>
+    <title>Thống kê</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
@@ -74,9 +74,6 @@
                         <a class="nav-link" href="/taikhoan">Tài khoản</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/cong">Cổng</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/lichsu">Lịch sử</a>
                     </li>
                     <li class="nav-item">
@@ -108,6 +105,12 @@
           <canvas id="taotheChart"></canvas>
         </div>
     </div>
+    <div class="card">
+        <div class="card-body">
+          <h3>Doanh thu theo từng tháng</h3>
+          <canvas id="doanhthuChart"></canvas>
+        </div>
+    </div>
 </section>
 
 <section class="myfooter">
@@ -126,6 +129,7 @@
     const vaoData = <%- JSON.stringify(vaoResults) %>;
     const raData = <%- JSON.stringify(raResults) %>;
     const taotheData = <%- JSON.stringify(taotheResults) %>;
+    const doanhthuvanglaiData = <%- JSON.stringify(doanhthuvanglaiResults) %>;
 
     const ctx1 = document.getElementById('vaoChart').getContext('2d');
     const vaoChart = new Chart(ctx1, {
@@ -191,6 +195,34 @@
             scales: {
                 y: {
                     beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const ctx4 = document.getElementById('doanhthuChart').getContext('2d');
+    const doanhthuChart = new Chart(ctx4, {
+        type: 'line', // You can use 'line' or 'bar'
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Doanh thu',
+                data: doanhthuvanglaiData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                        }
+                    }
                 }
             }
         }
