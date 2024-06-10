@@ -107,6 +107,7 @@
             <div id="resultIN" class="result">
                 <img id="LpRegionIN" src="" alt="Ảnh đã cắt">
                 <p id="LpNumberIN">Biển số xe</p>
+                <p id="thongbaoIN">Thông báo</p>
             </div>
         </div>
 
@@ -118,6 +119,7 @@
             <div id="resultOUT" class="result">
                 <img id="LpRegionOUT" src="" alt="Ảnh đã cắt">
                 <p id="LpNumberOUT">Biển số xe</p>
+                <p id="thongbaoOUT">Thông báo</p>
             </div>
         </div>
     </div>
@@ -227,8 +229,9 @@
             const strReceive = evt.data;
             const port = evt.data[0];
             const UID = evt.data.slice(3);
-
-            if (port == "I") {
+            console.log("html port: " + port);
+            console.log("html UID: " + UID);
+            if (port == "I" && UID.length == 11) {
                 var videoElement = document.getElementById('CameraIN');
                 var canvas = document.createElement('canvas');
                 var context = canvas.getContext('2d');
@@ -240,7 +243,7 @@
                     var formData = new FormData();
                     formData.append('image', blob, 'image.jpg');
                     formData.append('port', port);
-                    formData.append('UID', UID);
+                    formData.append('sothe', UID);
                     fetch('camera/upload', {
                         method: 'POST',
                         body: formData
@@ -248,13 +251,15 @@
                     .then(response => response.json())
                     .then(data => {
                         const imageElement = document.getElementById('LpRegionIN');
-                        imageElement.src = data.croppedImg;
+                        imageElement.src = `data:image/jpeg;base64,${data.croppedImg}`;
                         const textContainer = document.getElementById('LpNumberIN');
                         textContainer.innerText = data.LpNumber;
+                        const thongbaoINContainer = document.getElementById('thongbaoIN');
+                        thongbaoINContainer.innerText = data.thongbaoIN;
                     })
                     .catch(error => console.error('Lỗi:', error));
                 }, 'image/jpeg');
-            } else if (port == "O") {
+            } else if (port == "O" && UID.length == 11) {
                 var videoElement = document.getElementById('CameraOUT');
                 var canvas = document.createElement('canvas');
                 var context = canvas.getContext('2d');
@@ -266,7 +271,7 @@
                     var formData = new FormData();
                     formData.append('image', blob, 'image.jpg');
                     formData.append('port', port);
-                    formData.append('UID', UID);
+                    formData.append('sothe', UID);
                     fetch('camera/upload', {
                         method: 'POST',
                         body: formData
@@ -274,9 +279,11 @@
                     .then(response => response.json())
                     .then(data => {
                         const imageElement = document.getElementById('LpRegionOUT');
-                        imageElement.src = 'data:image/jpeg;base64,' + data.LpRegion;
+                        imageElement.src = `data:image/jpeg;base64,${data.croppedImg}`;
                         const textContainer = document.getElementById('LpNumberOUT');
                         textContainer.innerText = data.LpNumber;
+                        const thongbaoOUTContainer = document.getElementById('thongbaoOUT');
+                        thongbaoOUTContainer.innerText = data.thongbaoOUT;
                     })
                     .catch(error => console.error('Lỗi:', error));
                 }, 'image/jpeg');

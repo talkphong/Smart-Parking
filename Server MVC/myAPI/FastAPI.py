@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.get("/")
 async def home():
-    return "this is home!"
+    return "Trang chủ FastAPI_Nhận diện biển số xe"
 
 @app.post("/process_image")
 async def process_image(image: UploadFile = File(...)):

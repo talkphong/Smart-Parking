@@ -72,11 +72,12 @@ router.post('/update_the', function(req, res) {
 router.get('/the_delete/:id', function(req, res) {
     let sothe = req.params.id;
     console.log(sothe)
-    let sql= "UPDATE the SET the.active = 0 WHERE sothe = ?;";
-    db.query(sql, [sothe], function(err, data) {    
+    let sql= "UPDATE the SET the.active = 0, id_khachhang = NULL WHERE sothe = ?;";
+    db.query(sql, sothe, function(err, data) {    
       if (data.affectedRows==0) {
           console.log(`Không có thẻ ${sothe} để xóa`); 
       }
+      db.query("UPDATE xecudan SET active = 0 WHERE sothe = ?;", sothe, function(err, data) {})
       res.redirect('/the');
     })
   }); 

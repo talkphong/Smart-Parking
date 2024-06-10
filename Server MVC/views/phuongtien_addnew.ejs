@@ -27,7 +27,12 @@
             <form id="form-themphuongtien" >
               <div class="form-group">
                 <label>Số thẻ:</label>
-                <input type="text" class="form-control" id="sothe" name="sothe" required>
+                <!-- <input type="text" class="form-control" id="sothe" name="sothe" required> -->
+                <select id="sothe" name="sothe" class="form-control" required>
+                  <% listsothe.forEach(sothe => { %>
+                      <option value="<%= sothe.sothe %>"><%= sothe.sothe %></option>
+                  <% }); %>
+                </select>
               </div>
               <div class="form-group">
                 <label>Biển số:</label>

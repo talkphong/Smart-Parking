@@ -42,18 +42,12 @@ const authMiddleware = require('../middleware/authMiddleware');
 // app.get('/', async function (req, res, next) {
   app.get('/', authMiddleware.isStaff, function (req, res, next) {
     res.render('camera');
-    // modelCamera.checkSothe('A1 68 11', (err, isValid, loaithe, bienso, tenKH) => {
-    //   console.log("isValid: " + isValid)
-    //   console.log("loaithe: " + loaithe)
-    //   console.log("bienso: " + bienso)
-    //   console.log("tenKH: " + tenKH)
-    //   if (bienso.includes('15B311111')){console.log('yes')} else {console.log('no')}
-    // })
-
 });
 
 const urlToAPI = "http://127.0.0.1:8000/process_image"
 app.post('/upload', upload.single('image'), async (req, res) => {
+  thongbaoIN = "Thông báo IN";
+  thongbaoOUT = "Thông báo OUT";
   const id_nhanvien = req.session.user.id_nhanvien;
 
   let now = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm:ss');
@@ -90,23 +84,25 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     await cropImage(inputPath, outputPath, xmin, xmax, ymin, ymax)
     img_crop = fs.readFileSync(img_crop_path)
     // Nếu nhận diện đủ 8 chữ số trên biển
-      if(result.data[1] != -1){
-        LpNumber = result.data[1]
-        if (port == "I") {check_lichsuIN(sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path)}
-        else if (port == "O") {check_lichsuOUT(sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path)}
-      }else{
-          LpNumber = "Không nhận diện đủ 8 chữ số"
-          console.log("Không nhận diện đủ 8 chữ số")
-      }
+    if(result.data[1] != -1){
+      LpNumber = result.data[1]
+      if (port == "I" && sothe.length ==11) {await check_lichsuIN(sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path)}
+      else if (port == "O" && sothe.length ==11) {await check_lichsuOUT(sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path)}
+    }else{
+        LpNumber = "Không nhận diện đủ 8 chữ số"
+        console.log("Không nhận diện đủ 8 chữ số")
+    }
   }else{
     LpNumber = "Không tìm thấy biển số"
     console.log("Không tìm thấy biển số")
   }
-  
+
   // gửi ảnh đã cắt và chuỗi biển số xe cho web
   const dataToSend = {
-    img_crop: img_crop.toString('base64'),  
-    LpNumber: LpNumber 
+    croppedImg: img_crop.toString('base64'),  
+    LpNumber: LpNumber,
+    thongbaoIN: thongbaoIN,
+    thongbaoOUT: thongbaoOUT,
   };
   res.json(dataToSend);
 
@@ -115,8 +111,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   // fs.unlink(`${pathToUploads}/image.jpg`, (err) => {});
   
 })
-
-function check_lichsuIN (sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path){
+var thongbaoIN;
+async function check_lichsuIN (sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path){
   lichsuIN.id_cong = '1'
   lichsuIN.sothe = sothe
   lichsuIN.bienso = LpNumber
@@ -125,7 +121,7 @@ function check_lichsuIN (sothe, LpNumber, id_nhanvien, now, img_full_path, img_c
   lichsuIN.path_anhphuongtien = img_full_path
   lichsuIN.path_anhbienso = img_crop_path
 
-  modelCamera.checkSothe(lichsuIN.sothe, (err, isValid, loaithe, bienso, id_khachhang, isInside) => {
+  thongbaoIN = modelCamera.checkSothe(lichsuIN.sothe, (err, isValid, loaithe, bienso, id_khachhang, isInside, bsvanglai) => {
     console.log('isValid:'+isValid)
     console.log('loaithe:'+loaithe)
     console.log('bienso:'+bienso)
@@ -137,30 +133,33 @@ function check_lichsuIN (sothe, LpNumber, id_nhanvien, now, img_full_path, img_c
     if (!isValid) {console.error("Thẻ xe không hợp lệ (không có trong db)"); return}
     if (loaithe == 'Thẻ vãng lai') {
       console.log('Đây là thẻ vãng lai')
+      if (bsvanglai == null){
+        modelCamera.insert_xevanglai(lichsuIN.sothe, lichsuIN.bienso, '1', lichsuIN.path_anhphuongtien, lichsuIN.path_anhbienso)
+        ws.send("OpenIn")
+        return
+      }
+      else (console.log(`Thẻ xe ${sothe} đang được sử dụng`))
       console.log(lichsuIN)
-      modelCamera.insert_xevanglai(lichsuIN.sothe, lichsuIN.bienso, '1', lichsuIN.path_anhphuongtien, lichsuIN.path_anhbienso)
-      ws.send("OpenIn")
-      return
     }
     if (loaithe == 'Thẻ cư dân') {
       if (bienso.includes(lichsuIN.bienso)) {
         if (!isInside[bienso.indexOf(lichsuIN.bienso)]) {
           console.log("Đây là thẻ cư dân, đủ điều kiện, mở cổng"); 
           lichsuIN.id_khachhang = id_khachhang; 
-          ws.send("OpenIn")
-          return
+          ws.send("OpenIn");
+          return "Đây là thẻ cư dân, đủ điều kiện, mở cổng"
         }
-        else {console.log(`Xe ${lichsuIN.bienso} đang ở trong bãi, không thể vào tiếp`)}
+        else {console.log(`Xe ${lichsuIN.bienso} đang ở trong bãi, không thể vào tiếp`);}
       }
-      else {console.error(`Biển số xe ${lichsuIN.bienso} chưa được đăng ký`)}
+      else {console.error(`Biển số xe ${lichsuIN.bienso} chưa được đăng ký`);}
     }
     // console.log(lichsuIN)
     lichsuIN.clear();
   })
 }
 
-
-function check_lichsuOUT (sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path){
+let thongbaoOUT;
+async function check_lichsuOUT (sothe, LpNumber, id_nhanvien, now, img_full_path, img_crop_path){
   lichsuOUT.id_cong = '2'
   lichsuOUT.sothe = sothe
   lichsuOUT.bienso = LpNumber
@@ -169,26 +168,29 @@ function check_lichsuOUT (sothe, LpNumber, id_nhanvien, now, img_full_path, img_
   lichsuOUT.path_anhphuongtien = img_full_path
   lichsuOUT.path_anhbienso = img_crop_path
   console.log(lichsuOUT)
-  modelCamera.checkSothe(lichsuOUT.sothe, (err, isValid, loaithe, bienso, id_khachhang, isInside) => {
+  modelCamera.checkSothe(lichsuOUT.sothe, (err, isValid, loaithe, bienso, id_khachhang, isInside, bsvanglai) => {
     console.log('isValid:'+isValid)
     console.log('loaithe:'+loaithe)
     console.log('bienso:'+bienso)
     console.log('id_khachhang:'+id_khachhang)
     console.log('isInside:'+isInside)
+    console.log('bsvanglai:'+bsvanglai)
     // console.log('indexbienso:'+bienso.indexOf(lichsuIN.bienso))
     // console.log('inside:'+isInside[bienso.indexOf(lichsuIN.bienso)])
 
-    if (!isValid) {console.error(`Thẻ xe ${lichsuOUT.sothe} không hợp lệ (không có trong db)`); return}
+    if (!isValid) {console.error(`Thẻ xe ${lichsuOUT.sothe} không hợp lệ (không có trong db)`);return}
     if (loaithe == 'Thẻ vãng lai') {
       console.log('Đây là thẻ vãng lai')
-      if (lichsuOUT.bienso == bienso){
+      if (lichsuOUT.bienso == bsvanglai){
         if (isInside) {
-          console.log("Đủ điều kiện, mở cổng"); 
+          console.log("Đủ điều kiện, mở cổng");
+          modelCamera.delete_xevanglai(bsvanglai)
           ws.send("OpenOut")
           return
         }
-        else {console.log(`Xe ${lichsuOUT.bienso} đang ở ngoài bãi, không thể ra tiếp`)}
+        else {console.log(`Xe ${lichsuOUT.bienso} đang ở ngoài bãi, không thể ra tiếp`);}
       } 
+      else (console.log("Không trùng biển số!"))
     }
     if (loaithe == 'Thẻ cư dân') {
       if (bienso.includes(lichsuOUT.bienso)) {
@@ -198,9 +200,9 @@ function check_lichsuOUT (sothe, LpNumber, id_nhanvien, now, img_full_path, img_
           ws.send("OpenOut")
           return
         }
-        else {console.log(`Xe ${lichsuOUT.bienso} đang ở ngoài bãi, không thể ra tiếp`)}
+        else {console.log(`Xe ${lichsuOUT.bienso} đang ở ngoài bãi, không thể ra tiếp`);}
       }
-      else {console.error(`Biển số xe ${lichsuOUT.bienso} chưa được đăng ký`)}
+      else {console.error(`Biển số xe ${lichsuOUT.bienso} chưa được đăng ký`);}
     }
     // console.log(lichsuIN)
     lichsuOUT.clear();
@@ -221,8 +223,8 @@ ws.on('message', function incoming(message) {
   const str = String.fromCharCode(...message);
   const port = str[0];
   const data = str.slice(3);
-  console.log("port: " + port)
-  console.log("data: " + data)
+  console.log("cam port: " + port)
+  console.log("cam data: " + data)
   
   if (port == "I"){
     if (data == "save") lichsuIN.save();

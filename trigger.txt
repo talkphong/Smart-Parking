@@ -1,0 +1,37 @@
+delimiter
+|
+CREATE TRIGGER after_insert_lichsu 
+AFTER INSERT ON lichsu 
+FOR EACH ROW
+BEGIN
+	DECLARE loaithe VARCHAR(20);
+    DECLARE tencong VARCHAR(20);
+    SELECT the.loaithe
+        INTO loaithe
+    	FROM the
+        WHERE sothe = NEW.sothe;
+    SELECT cong.tencong
+    	INTO tencong
+    	FROM cong
+    	WHERE id_cong = NEW.id_cong; 
+	IF (tencong LIKE '%vào%') THEN 
+    	IF(loaithe = 'Thẻ cư dân') THEN
+    		UPDATE xecudan SET inside = 1
+    			WHERE xecudan.bienso = NEW.bienso;
+		ELSEIF (loaithe = 'Thẻ vãng lai') THEN
+        	UPDATE xevanglai SET inside = 1
+    			WHERE xevanglai.bienso = NEW.bienso;
+    	END IF;
+	ELSEIF (tencong LIKE '%ra%') THEN
+    	IF(loaithe = 'Thẻ cư dân') THEN
+    		UPDATE xecudan SET inside = 0
+    			WHERE xecudan.bienso = NEW.bienso;
+		ELSEIF(loaithe = 'Thẻ vãng lai') THEN
+    		UPDATE xevanglai SET inside = 0
+    			WHERE xevanglai.bienso = NEW.bienso;
+    	END IF;
+    END IF;
+END; 
+|
+delimiter;
+

@@ -14,7 +14,7 @@ router.get('/', authMiddleware.isClient, (req, res) => {
                     FROM xecudan LEFT JOIN the
                     ON xecudan.sothe = the.sothe
                     JOIN khachhang on the.id_khachhang = khachhang.id_khachhang
-                    WHERE khachhang.id_khachhang = ?`;
+                    WHERE khachhang.id_khachhang = ? and xecudan.active = 1`;
 
     db.query(sql, [idKhachHang], (err, results) => {
         if (err) {

@@ -44,6 +44,7 @@ def recognize(image):
         thresh = (V > T).astype("uint8") * 255
         thresh = cv2.bitwise_not(thresh)
         thresh = imutils.resize(thresh, width=600)
+        # cv2.imshow('thresh', thresh)
 
         _, labels = cv2.connectedComponents(thresh)
         mask = np.zeros(thresh.shape, dtype="uint8")

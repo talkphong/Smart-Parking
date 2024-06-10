@@ -18,7 +18,15 @@ const authMiddleware = require('../middleware/authMiddleware');
 });
 
 router.get('/form-them-phuongtien', function (req, res, next) {
-    res.render('phuongtien_addnew');
+    db.query('SELECT sothe FROM the WHERE id_khachhang IS NOT NULL AND active = 1;', (error, listsothe) => {
+      if (error) {
+          console.error(error);
+          return res.status(500).send('Internal Server Error');
+      }
+      
+      res.render('phuongtien_addnew', { listsothe: listsothe});
+
+  });
 });
 
 const path = require('path')

@@ -30,7 +30,15 @@
               </div>
               <div class="form-group">
                 <label>Số thẻ:</label>
-                <input type="text" class="form-control" id="sua-sothe" name="sua-sothe" value="<%=khachhang.sothe%>" required>
+                <!-- <input type="text" class="form-control" id="sua-sothe" name="sua-sothe" value="<%=khachhang.sothe%>" required> -->
+                <select id="sua-sothe" name="sua-sothe" class="form-control">
+                  <% if (khachhang.sothe) { %>
+                    <option value="<%= khachhang.sothe %>" selected><%= khachhang.sothe %></option>
+                  <% } %>
+                  <% listsothe.forEach(sothe => { %>
+                      <option value="<%= sothe.sothe %>"><%= sothe.sothe %></option>
+                  <% }); %>
+                </select>
               </div>
               <div class="form-group">
                 <label>Họ tên:</label>

@@ -55,7 +55,15 @@ router.get('/sua-khachhang/:id', function(req, res, next) {
     }
 
     // Render trang chỉnh sửa với dữ liệu khách hàng
-    res.render('khachhang_update', { khachhang: result[0], the: result[0] });
+    db.query("SELECT sothe FROM the WHERE id_khachhang IS NULL AND active = 1 AND loaithe = 'Thẻ cư dân';", (error, listsothe) => {
+      if (error) {
+          console.error(error);
+          return res.status(500).send('Internal Server Error');
+      }
+      
+      res.render('khachhang_update', {khachhang: result[0], the: result[0],listsothe: listsothe});
+
+    });
   });
 });
 
