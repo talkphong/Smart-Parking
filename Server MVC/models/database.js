@@ -8,7 +8,7 @@ const db = mysql.createConnection({
     password: "",
     database: "baixe",
 }); 
-db.connect(() => console.log('Da ket noi database !'));
+db.connect(() => console.log('Đã kết nối cơ sở dữ liệu!'));
 
 
 module.exports = db; 

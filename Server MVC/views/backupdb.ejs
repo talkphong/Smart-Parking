@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sao lưu cơ sở dữ liệu</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <section class="myheader">
+        <div class="container-fluid">
+          <div class="row">
+              <div class="col-12 text-center bg-light">
+                  <h1>VMU</h1>
+                  <p>Welcome to VMU</p>
+              </div>
+              <div class="col-12 text-right mb-4">
+                <button id="logoutBtn" class="btn btn-secondary mt-4">Đăng xuất</button>
+                <script>
+                    document.getElementById('logoutBtn').addEventListener('click', function() {
+                        // Gửi yêu cầu đăng xuất đến máy chủ
+                        fetch('/dangxuat', {
+                            method: 'POST',
+                            credentials: 'same-origin' // Đảm bảo gửi cùng các cookie với trang
+                        }).then(function(response) {
+                            // Kiểm tra phản hồi từ máy chủ
+                            if (response.ok) {
+                                // Chuyển hướng hoặc thực hiện các hành động phù hợp sau khi đăng xuất thành công
+                                window.location.href = '/';
+                            } else {
+                                console.error('Đã xảy ra lỗi khi đăng xuất');
+                            }
+                        }).catch(function(error) {
+                            console.error('Lỗi kết nối: ', error);
+                        });
+                    });
+                </script>
+              </div>
+          </div>
+        </div>
+    </section>
+  
+    <section class="mymainmenu">
+        <nav class="navbar navbar-expand-lg bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/index">Trang chủ</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/khachhang">Khách hàng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  href="/nhanvien">Nhân viên</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/the">Thẻ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/phuongtien">Phương tiện</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/taikhoan">Tài khoản</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/lichsu">Lịch sử</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/thongke">Thống kê</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active text-muted" aria-current="page" href="/backupdb">Sao lưu cơ sở dữ liệu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/restoredb">Khôi phục cơ sở dữ liệu</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>    
+    </section>
+
+    <section class="mymaincontent">
+        <div class="container mt-5">
+            <h1 class="text-center">Sao lưu cơ sở dữ liệu</h1>
+            <form action="/backupdb/backup-db" method="POST" class="mt-4">
+                <div class="form-group">
+                    <label for="host">Host:</label>
+                    <input type="text" id="host" name="host" class="form-control" placeholder="Nhập host của cơ sở dữ liệu" required>
+                </div>
+                <div class="form-group">
+                    <label for="user">User:</label>
+                    <input type="text" id="user" name="user" class="form-control" placeholder="Nhập user của cơ sở dữ liệu" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Nhập mật khẩu của cơ sở dữ liệu">
+                </div>
+                <div class="form-group">
+                    <label for="database">Database:</label>
+                    <input type="text" id="database" name="database" class="form-control" placeholder="Nhập tên cơ sở dữ liệu" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Backup</button>
+            </form>
+        </div>
+    </section>
+
+    
+    <!-- Kiểm tra loại tin nhắn trả về khác undefined nghĩa là success hoặc error -->
+    <% if (typeof message !== 'undefined') { %>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: '<%= message.type === "success" ? "Success!" : "Error!" %>',
+                text: '<%= message.text %>',
+                icon: '<%= message.type %>'
+            });
+        });
+        </script>
+    <% } %>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

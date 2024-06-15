@@ -10,7 +10,7 @@
 
 const char* ssid = "Phong Truong";            //tên wifi
 const char* password = "cuong1972";           //mật khẩu wifi
-const char* serverAddress = "192.168.55.108"; // Địa chỉ IP của máy chủ Node.js (cmd -> ipconfig)
+const char* serverAddress = "192.168.55.104"; // Địa chỉ IP của máy chủ Node.js (cmd -> ipconfig)
 const int serverPort = 3000;                  // Cổng của máy chủ Node.js
 
 WiFiClient wifiClient;
@@ -35,7 +35,7 @@ void setup() {
 
 void loop() {
   webSocket.loop();
-  // receiveArduinoIN();
+  receiveArduinoIN();
   sendServer();
 }
 

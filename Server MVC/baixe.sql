@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 25, 2024 lúc 02:48 PM
+-- Thời gian đã tạo: Th6 10, 2024 lúc 05:30 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
 
@@ -40,8 +40,8 @@ CREATE TABLE `camera` (
 --
 
 INSERT INTO `camera` (`id_camera`, `id_cong`, `tencamera`, `trangthai`, `active`) VALUES
-(1, 1, 'Camera vào A', 'Hoạt động]', 1),
-(2, 2, 'Camera ra A', 'Hoạt động]', 1);
+(1, 1, 'Camera vào A', 'Hoạt động', 1),
+(2, 2, 'Camera ra A', 'Hoạt động', 1);
 
 -- --------------------------------------------------------
 
@@ -80,10 +80,12 @@ CREATE TABLE `khachhang` (
 --
 
 INSERT INTO `khachhang` (`id_khachhang`, `hoten`, `socanho`, `active`) VALUES
-(1, 'Trần Tuấn Phong', 'LOTUS 10-23', 1),
-(2, 'Nguyễn Trịnh Tấn Phát', 'VENICE 01-01', 1),
-(3, 'Đinh Thị Mây', 'PARIS 12-03', 1),
-(4, 'Lê Minh Hiếu', 'MONACO 01-01', 1);
+(1, 'Trần Tuấn Phong', 'Skylake 04-01', 1),
+(2, 'Nguyễn Trịnh Tấn Phát', 'Lotus 08-05', 1),
+(3, 'Đinh Thị Mây', 'Sunshine 04-06', 1),
+(4, 'Lê Minh Hiếu', 'Ocean 12-04', 1),
+(5, 'Hoàng Thị Thùy Linh', 'Diamond 06-07', 1),
+(6, 'Hoàng Trọng Nghĩa', 'Horizon 09-02', 1);
 
 -- --------------------------------------------------------
 
@@ -108,11 +110,18 @@ CREATE TABLE `lichsu` (
 --
 
 INSERT INTO `lichsu` (`id_lichsu`, `id_cong`, `sothe`, `bienso`, `id_khachhang`, `id_nhanvien`, `thoigianmo`, `path_anhphuongtien`, `path_anhbienso`) VALUES
-(40, 1, 'A1 68 22', '15B311111', NULL, 1, '2024-05-24 19:09:16', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
-(41, 1, 'A1 68 22', '15B322222', NULL, 1, '2024-05-24 19:09:26', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
-(42, 2, 'A1 68 22', '15B322222', NULL, 1, '2024-05-24 19:09:36', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
-(43, 1, 'A1 68 11', '15B311111', 1, 1, '2024-05-25 09:57:04', '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg'),
-(44, 2, 'A1 68 11', '15B311111', 1, 1, '2024-05-25 12:52:46', '', '');
+(65, 1, '11 9C A9 23', '15A16622', 1, 1, '2024-06-10 12:03:01', 'public\\images\\anhlichsu\\2024-10-06 12 03 01_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 12 03 01_crop.jpg'),
+(66, 1, '11 9C A9 23', '15AT00229', 1, 1, '2024-06-10 12:16:56', 'public\\images\\anhlichsu\\2024-10-06 12 16 56_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 12 16 56_crop.jpg'),
+(67, 2, '11 9C A9 23', '15AT00229', 1, 1, '2024-06-10 12:51:21', 'public\\images\\anhlichsu\\2024-10-06 12 51 21_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 12 51 21_crop.jpg'),
+(68, 1, '1A 0F 9C 17', '15B411686', 2, 1, '2024-06-10 13:16:56', 'public\\images\\anhlichsu\\2024-10-06 13 16 56_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 13 16 56_crop.jpg'),
+(69, 2, '11 9C A9 23', '15A16622', 1, 1, '2024-06-10 13:21:46', 'public\\images\\anhlichsu\\2024-10-06 13 21 46_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 13 21 46_crop.jpg'),
+(70, 1, 'A1 E4 0E 1B', '15A16622', NULL, 1, '2024-06-10 13:23:33', 'public\\images\\anhlichsu\\2024-10-06 13 23 33_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 13 23 33_crop.jpg'),
+(71, 1, 'A1 E4 0E 1B', '15A16622', NULL, 1, '2024-06-10 13:36:23', 'public\\images\\anhlichsu\\2024-10-06 13 36 23_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 13 36 23_crop.jpg'),
+(72, 1, 'A1 E4 0E 1B', '15A16622', 1, 1, '2024-06-10 13:47:00', 'public\\images\\anhlichsu\\2024-10-06 13 47 00_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 13 47 00_crop.jpg'),
+(73, 2, 'A1 E4 0E 1B', '15A16622', NULL, 1, '2024-06-10 13:58:44', 'public\\images\\anhlichsu\\2024-10-06 13 58 44_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 13 58 44_crop.jpg'),
+(74, 1, 'A1 E4 0E 1B', '15A63635', NULL, 1, '2024-06-10 14:05:05', 'public\\images\\anhlichsu\\2024-10-06 14 05 05_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 14 05 05_crop.jpg'),
+(75, 2, '11 9C A9 23', '15A16622', 1, 1, '2024-06-10 17:50:05', 'public\\images\\anhlichsu\\2024-10-06 17 50 05_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 17 50 05_crop.jpg'),
+(76, 1, '11 9C A9 23', '15A16622', 1, 1, '2024-06-10 18:05:43', 'public\\images\\anhlichsu\\2024-10-06 18 05 43_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 18 05 43_crop.jpg');
 
 --
 -- Bẫy `lichsu`
@@ -189,8 +198,9 @@ CREATE TABLE `nhanvien` (
 --
 
 INSERT INTO `nhanvien` (`id_nhanvien`, `hoten`, `ngayvaolam`, `active`) VALUES
-(1, 'Phát Nguyễn', '0000-00-00', 1),
-(2, 'Phong Trần', '2024-03-16', 1);
+(1, 'Phong Trần', '2024-02-29', 1),
+(2, 'Phát Nguyễn', '2024-03-06', 1),
+(3, 'Mây Đinh', '2024-03-03', 1);
 
 -- --------------------------------------------------------
 
@@ -212,13 +222,13 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`id_taikhoan`, `id_khachhang`, `id_nhanvien`, `tendangnhap`, `matkhau`, `phanquyen`) VALUES
-(1, 1, NULL, 'phong', '1', 'khachhang'),
-(2, 2, NULL, 'phat', '1', 'khachhang'),
-(3, 3, NULL, 'may', '1', 'khachhang'),
-(4, 4, NULL, 'hieu', '1', 'khachhang'),
-(5, NULL, 1, 'nvphat', '1', 'nhanvien'),
-(6, NULL, 2, 'nvphong', '1', 'nhanvien'),
-(8, 1, 1, 'admin', '1', 'admin');
+(1, NULL, NULL, 'admin', '1', 'admin'),
+(2, NULL, 1, 'nvphong', '1', 'nhanvien'),
+(3, NULL, 2, 'nvphat', '1', 'nhanvien'),
+(4, NULL, 3, 'nvmay', '1', 'nhanvien'),
+(5, 1, NULL, 'phong', '1', 'khachhang'),
+(6, 2, NULL, 'phat', '1', 'khachhang'),
+(7, 3, NULL, 'may', '1', 'khachhang');
 
 -- --------------------------------------------------------
 
@@ -239,14 +249,14 @@ CREATE TABLE `the` (
 --
 
 INSERT INTO `the` (`sothe`, `id_khachhang`, `loaithe`, `ngaytaothe`, `active`) VALUES
-('A1 68 11', 1, 'Thẻ cư dân', '2024-05-24', 1),
-('A1 68 22', 2, 'Thẻ cư dân', '2024-05-24', 1),
-('A1 68 33', 3, 'Thẻ cư dân', '2024-05-24', 1),
-('A1 68 44', 4, 'Thẻ cư dân', '2024-05-24', 1),
-('B1 68 11', 1, 'Thẻ cư dân', '0000-00-00', 1),
-('B1 68 22', NULL, 'Thẻ vãng lai', '2024-05-24', 1),
-('B1 68 33', NULL, 'Thẻ vãng lai', '2024-05-24', 1),
-('B1 68 44', NULL, 'Thẻ vãng lai', '2024-05-24', 1);
+('11 9C A9 23', 1, 'Thẻ cư dân', '2024-04-30', 1),
+('1A 0F 9C 17', 2, 'Thẻ cư dân', '2024-06-06', 1),
+('8C 20 81 9E', NULL, 'Thẻ cư dân', '2024-02-12', 1),
+('A1 E4 0E 1B', NULL, 'Thẻ vãng lai', '2024-04-26', 1),
+('F8 1A 2F 15', NULL, 'Thẻ cư dân', '2024-01-05', 1),
+('F8 4C 2C 28', NULL, 'Thẻ cư dân', '2024-05-13', 1),
+('F8 6B D4 32', NULL, 'Thẻ vãng lai', '2024-03-05', 1),
+('F8 7E 4C 69', NULL, 'Thẻ vãng lai', '2024-06-07', 1);
 
 -- --------------------------------------------------------
 
@@ -270,11 +280,9 @@ CREATE TABLE `xecudan` (
 --
 
 INSERT INTO `xecudan` (`id_phuongtien`, `sothe`, `loaiphuongtien`, `bienso`, `inside`, `path_anhphuongtien`, `path_anhbienso`, `active`) VALUES
-(18, 'A1 68 11', 'xe máy', '15B311111', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
-(19, 'A1 68 11', 'xe máy', '15B322222', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
-(20, 'A1 68 22', 'xe máy', '15B333333', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
-(21, 'A1 68 33', 'xe máy', '15B344444', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
-(22, 'A1 68 44', 'xe máy', '15B355555', 0, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1);
+(57, '11 9C A9 23', 'oto', '15A16622', 1, 'public\\images\\anhxecudan\\1x.jpg', 'public\\images\\anhxecudan\\1s.jpg', 1),
+(58, '11 9C A9 23', 'xe máy', '15AT00229', 0, 'public\\images\\anhxecudan\\2x.jpg', 'public\\images\\anhxecudan\\2s.jpg', 1),
+(59, '1A 0F 9C 17', 'xe máy', '15B411686', 1, 'public\\images\\anhxecudan\\3x.jpg', 'public\\images\\anhxecudan\\3s.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -284,7 +292,7 @@ INSERT INTO `xecudan` (`id_phuongtien`, `sothe`, `loaiphuongtien`, `bienso`, `in
 
 CREATE TABLE `xevanglai` (
   `id_phuongtien` int(11) NOT NULL,
-  `sothe` varchar(20) NOT NULL,
+  `sothe` varchar(20) DEFAULT NULL,
   `bienso` varchar(20) NOT NULL,
   `inside` tinyint(1) NOT NULL DEFAULT 1,
   `path_anhphuongtien` varchar(255) NOT NULL,
@@ -297,10 +305,9 @@ CREATE TABLE `xevanglai` (
 --
 
 INSERT INTO `xevanglai` (`id_phuongtien`, `sothe`, `bienso`, `inside`, `path_anhphuongtien`, `path_anhbienso`, `active`) VALUES
-(1, 'B1 68 22', '15B377777', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
-(2, 'B1 68 11', '15B366666', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
-(3, 'B1 68 33', '15B388888', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1),
-(4, 'B1 68 44', '15B399999', 1, '/public/images/anhphuongtien/1/2933362ce1ae682e4b699c0481c097cc.jpg', '/public/images/anhbienso/1/2c462ab845c8a91ac0ef9b5feb249bdf.jpg', 1);
+(20, NULL, '15A16622', 0, 'public\\images\\anhlichsu\\2024-10-06 13 51 17_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 13 51 17_crop.jpg', 0),
+(21, NULL, '15A63635', 0, 'public\\images\\anhlichsu\\2024-10-06 14 05 05_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 14 05 05_crop.jpg', 0),
+(22, 'A1 E4 0E 1B', '15A16622', 1, 'public\\images\\anhlichsu\\2024-10-06 14 07 52_full.jpg', 'public\\images\\anhlichsu\\2024-06-10 14 07 52_crop.jpg', 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -360,7 +367,8 @@ ALTER TABLE `taikhoan`
 -- Chỉ mục cho bảng `the`
 --
 ALTER TABLE `the`
-  ADD PRIMARY KEY (`sothe`);
+  ADD PRIMARY KEY (`sothe`),
+  ADD KEY `id_khachhang` (`id_khachhang`);
 
 --
 -- Chỉ mục cho bảng `xecudan`
@@ -396,13 +404,13 @@ ALTER TABLE `cong`
 -- AUTO_INCREMENT cho bảng `khachhang`
 --
 ALTER TABLE `khachhang`
-  MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_khachhang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `lichsu`
 --
 ALTER TABLE `lichsu`
-  MODIFY `id_lichsu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id_lichsu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT cho bảng `mayquetthe`
@@ -420,19 +428,19 @@ ALTER TABLE `nhanvien`
 -- AUTO_INCREMENT cho bảng `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `id_taikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_taikhoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `xecudan`
 --
 ALTER TABLE `xecudan`
-  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT cho bảng `xevanglai`
 --
 ALTER TABLE `xevanglai`
-  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_phuongtien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -465,6 +473,12 @@ ALTER TABLE `mayquetthe`
 ALTER TABLE `taikhoan`
   ADD CONSTRAINT `taikhoan_ibfk_1` FOREIGN KEY (`id_khachhang`) REFERENCES `khachhang` (`id_khachhang`),
   ADD CONSTRAINT `taikhoan_ibfk_2` FOREIGN KEY (`id_nhanvien`) REFERENCES `nhanvien` (`id_nhanvien`);
+
+--
+-- Các ràng buộc cho bảng `the`
+--
+ALTER TABLE `the`
+  ADD CONSTRAINT `the_ibfk_1` FOREIGN KEY (`id_khachhang`) REFERENCES `khachhang` (`id_khachhang`);
 
 --
 -- Các ràng buộc cho bảng `xecudan`

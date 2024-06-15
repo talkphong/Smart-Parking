@@ -16,6 +16,16 @@
             margin: 20px auto;
             width: 70%;
         }
+        .left {
+            flex: 1;
+            padding: 20px;
+        }
+        .right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +89,12 @@
                     <li class="nav-item">
                         <a class="nav-link active text-muted" aria-current="page" href="/thongke">Thống kê</a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/backupdb">Sao lưu cơ sở dữ liệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/restoredb">Khôi phục cơ sở dữ liệu</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -86,29 +102,52 @@
 </section>
 
 <section class="mymaincontent">
-    <h1 class="text-center mt-4">Báo cáo thống kê năm <%= year %></h1>
-    <div class="card">
-        <div class="card-body">
-          <h3>Số lượt phương tiện vào bãi xe theo từng tháng</h3>
-          <canvas id="vaoChart"></canvas>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-          <h3>Số lượt phương tiện ra khỏi bãi xe theo từng tháng</h3>
-          <canvas id="raChart"></canvas>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-          <h3>Số thẻ được tạo từng tháng</h3>
-          <canvas id="taotheChart"></canvas>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-          <h3>Doanh thu theo từng tháng</h3>
-          <canvas id="doanhthuChart"></canvas>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center">Thống kê theo từng tháng trong năm <%= year %></h3>
+                        <canvas id="combinedChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Tổng số lượng phương tiện</h5>
+                                <h1 class="card-text text-center" id="slpt"></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card text-white bg-secondary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Tổng số lượng khách hàng</h5>
+                                <h1 class="card-text text-center" id="slkh"></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card text-black bg-danger mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Số lượng người dùng hoạt động</h5>
+                                <h1 class="card-text text-center" id="userloggedin"></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-body">
+                          <h3>Doanh thu theo từng tháng năm <%= year %></h3>
+                          <canvas id="doanhthuChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -130,20 +169,45 @@
     const raData = <%- JSON.stringify(raResults) %>;
     const taotheData = <%- JSON.stringify(taotheResults) %>;
     const doanhthuvanglaiData = <%- JSON.stringify(doanhthuvanglaiResults) %>;
+    const soluongkhachhangData = <%- JSON.stringify(soluongkhachhangData) %>;
+    const soluongphuongtienData = <%- JSON.stringify(soluongphuongtienData) %>;
+    const numberOfLoggedInUsers = <%- JSON.stringify(numberOfLoggedInUsers) %>;
 
-    const ctx1 = document.getElementById('vaoChart').getContext('2d');
-    const vaoChart = new Chart(ctx1, {
-        type: 'line', // You can use 'line' or 'bar'
+    document.getElementById('slkh').innerText = soluongkhachhangData[0].slkh;
+    document.getElementById('slpt').innerText = soluongphuongtienData[0].slpt;
+    document.getElementById('userloggedin').innerText = numberOfLoggedInUsers;
+
+    const combinedCtx = document.getElementById('combinedChart').getContext('2d');
+    const combinedChart = new Chart(combinedCtx, {
+        type: 'line',
         data: {
             labels: labels,
-            datasets: [{
-                label: 'Số lượt phương tiện vào bãi xe',
-                data: vaoData,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: true
-            }]
+            datasets: [
+                {
+                    label: 'Số lượt phương tiện vào bãi xe',
+                    data: vaoData.map((item, index) => item ? item : 0),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: true
+                },
+                {
+                    label: 'Số lượt phương tiện ra bãi xe',
+                    data: raData.map((item, index) => item ? item : 0),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: true
+                },
+                {
+                    label: 'Số thẻ được tạo',
+                    data: taotheData.map((item, index) => item ? item : 0),
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1,
+                    fill: true
+                }
+            ]
         },
         options: {
             scales: {
@@ -154,54 +218,8 @@
         }
     });
 
-    const ctx2 = document.getElementById('raChart').getContext('2d');
-    const raChart = new Chart(ctx2, {
-        type: 'line', // You can use 'line' or 'bar'
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Số lượt phương tiện ra bãi xe',
-                data: raData,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: true
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    const ctx3 = document.getElementById('taotheChart').getContext('2d');
-    const taotheChart = new Chart(ctx3, {
-        type: 'line', // You can use 'line' or 'bar'
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Số thẻ được tạo',
-                data: taotheData,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: true
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-    const ctx4 = document.getElementById('doanhthuChart').getContext('2d');
-    const doanhthuChart = new Chart(ctx4, {
+    const ctx1 = document.getElementById('doanhthuChart').getContext('2d');
+    const doanhthuChart = new Chart(ctx1, {
         type: 'line', // You can use 'line' or 'bar'
         data: {
             labels: labels,
@@ -234,5 +252,3 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-</body>
-</html>

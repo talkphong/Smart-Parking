@@ -1,0 +1,61 @@
+const { exec } = require('child_process');
+const path = require('path');
+const moment = require('moment-timezone');
+const { type } = require('os');
+const nodemailer = require('nodemailer');
+
+function backupDatabase(host, user, password, database, res) {
+    // Sử dụng moment-timezone để lấy thời gian hiện tại theo múi giờ mong muốn (VD: 'Asia/Ho_Chi_Minh')
+    const now = moment().tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DDTHH-mm-ss');
+    const fileName = path.join(__dirname, '../bin/db-backup', `backup_${now}.sql`);
+    const passwordPart = password ? `-p${password}` : '';
+
+    const mysqldumpPath = `"C:\\xampp\\mysql\\bin\\mysqldump.exe"`;
+    const command = `${mysqldumpPath} -h ${host} -u ${user} ${passwordPart} ${database}`;
+
+    exec(`cmd.exe /c ${command} > "${fileName}"`, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Sao lưu thất bại: ${error.message}`);
+            res.render('backupdb', { message: { type: 'error', text: `Sao lưu thất bại: ${error.message}` } });
+            sendEmail('Sao lưu thất bại', `Sao lưu thất bại: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.error(`Sao lưu thất bại: ${stderr}`);
+            res.render('backupdb', { message: { type: 'error', text: `Sao lưu thất bại: ${stderr}` } });
+            sendEmail('Sao lưu thất bại', `Sao lưu thất bại: ${stderr}`);
+            return;
+        }
+        console.log('Sao lưu cơ sở dữ liệu thành công!');
+        res.render('backupdb', { message: { type: 'success', text: 'Sao lưu cơ sở dữ liệu thành công!' } });
+        sendEmail('Sao lưu thành công', 'Sao lưu cơ sở dữ liệu thành công!');
+    });
+}
+
+// Hàm để gửi email thông báo
+function sendEmail(subject, text) {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'phat86940@st.vimaru.edu.vn', // Thay bằng email của bạn
+            pass: 'csfn zvqm uddh njpw' // Thay bằng mật khẩu ứng dụng bảo mật 2 lớp của google
+        }
+    });
+
+    let mailOptions = {
+        from: 'phat86940@st.vimaru.edu.vn',
+        to: 'phat86940@st.vimaru.edu.vn', // Thay bằng email của khách hàng
+        subject: subject,
+        text: text
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.error(`Không thể gửi email: ${error.message}`);
+        } else {
+            console.log('Email đã được gửi: ' + info.response);
+        }
+    });
+}
+
+module.exports = { backupDatabase };

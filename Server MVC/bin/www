@@ -7,6 +7,15 @@
 var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
+const {scheduleBackup} = require('../models/backupdb');
+
+// Bắt đầu chức năng sao lưu tự động khi server khởi động
+const host = 'localhost';
+const user = 'root';
+const password = ''; // Thay thế bằng mật khẩu của bạn nếu có
+const database = 'baixe';
+
+scheduleBackup(host, user, password, database);
 
 /**
  * Get port from environment and store in Express.
@@ -133,5 +142,12 @@ ws.on('connection', function connection(socket) {
   });
 });
 
+//Đảm bảo thư mục backupdb có sẵn hoặc tạo thêm nếu chưa có
+const path = require('path');
+const fs = require('fs');
+const backupsDir = path.join(__dirname, 'db-backup');
 
+if (!fs.existsSync(backupsDir)) {
+    fs.mkdirSync(backupsDir);
+}
 

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thống kê</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .table-hover tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        .table-hover thead th:hover {
+            background-color: initial;
+        }
+        .chart-container {
+            margin: 20px auto;
+            width: 70%;
+        }
+        .left {
+            flex: 1;
+            padding: 20px;
+        }
+        .right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<section class="myheader">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-center bg-light">
+                <h1>VMU</h1>
+                <p>Welcome to VMU</p>
+            </div>
+            <div class="col-12 text-right mb-4">
+                <button id="logoutBtn" class="btn btn-secondary mt-4">Đăng xuất</button>
+                <script>
+                    document.getElementById('logoutBtn').addEventListener('click', function() {
+                        fetch('/dangxuat', {
+                            method: 'POST',
+                            credentials: 'same-origin'
+                        }).then(function(response) {
+                            if (response.ok) {
+                                window.location.href = '/';
+                            } else {
+                                console.error('Đã xảy ra lỗi khi đăng xuất');
+                            }
+                        }).catch(function(error) {
+                            console.error('Lỗi kết nối: ', error);
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mymainmenu">
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index">Trang chủ</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/khachhang">Khách hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/nhanvien">Nhân viên</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/the">Thẻ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/phuongtien">Phương tiện</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/taikhoan">Tài khoản</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/lichsu">Lịch sử</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-muted" aria-current="page" href="/thongke">Thống kê</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/backupdb">Sao lưu cơ sở dữ liệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/restoredb">Khôi phục cơ sở dữ liệu</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>    
+</section>
+
+<section class="mymaincontent">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center">Thống kê theo từng tháng trong năm <%= year %></h3>
+                        <canvas id="combinedChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card text-white bg-primary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Tổng số lượng phương tiện</h5>
+                                <h1 class="card-text text-center" id="slpt"></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card text-white bg-secondary mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Tổng số lượng khách hàng</h5>
+                                <h1 class="card-text text-center" id="slkh"></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card text-black bg-danger mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Số lượng người dùng hoạt động</h5>
+                                <h1 class="card-text text-center" id="userloggedin"></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-body">
+                          <h3>Doanh thu theo từng tháng</h3>
+                          <canvas id="doanhthuChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="myfooter">
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">© 2024 Quản Lý Phương Tiện Bãi Xe Chung Cư</span>
+        </div>
+    </footer>
+</section>
+
+<!-- Thêm các thư viện JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+    const labels = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+
+    const vaoData = <%- JSON.stringify(vaoResults) %>;
+    const raData = <%- JSON.stringify(raResults) %>;
+    const taotheData = <%- JSON.stringify(taotheResults) %>;
+    const doanhthuvanglaiData = <%- JSON.stringify(doanhthuvanglaiResults) %>;
+    const soluongkhachhangData = <%- JSON.stringify(soluongkhachhangData) %>;
+    const soluongphuongtienData = <%- JSON.stringify(soluongphuongtienData) %>;
+    const numberOfLoggedInUsers = <%- JSON.stringify(numberOfLoggedInUsers) %>;
+
+    document.getElementById('slkh').innerText = soluongkhachhangData[0].slkh;
+    document.getElementById('slpt').innerText = soluongphuongtienData[0].slpt;
+    document.getElementById('userloggedin').innerText = numberOfLoggedInUsers;
+
+    const combinedCtx = document.getElementById('combinedChart').getContext('2d');
+    const combinedChart = new Chart(combinedCtx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Số lượt phương tiện vào bãi xe',
+                    data: vaoData.map((item, index) => item ? item : 0),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: true
+                },
+                {
+                    label: 'Số lượt phương tiện ra bãi xe',
+                    data: raData.map((item, index) => item ? item : 0),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: true
+                },
+                {
+                    label: 'Số thẻ được tạo',
+                    data: taotheData.map((item, index) => item ? item : 0),
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const ctx1 = document.getElementById('doanhthuChart').getContext('2d');
+    const doanhthuChart = new Chart(ctx1, {
+        type: 'line', // You can use 'line' or 'bar'
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Doanh thu',
+                data: doanhthuvanglaiData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value, index, values) {
+                            return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+</script>
+
+<!-- Thêm các thư viện JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>

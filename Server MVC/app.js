@@ -25,10 +25,13 @@ var lichsuRouter = require('./routes/lichsu');
 var cus_historyRouter = require('./routes/cus_history');
 //var congRouter = require('./routes/cong');
 var thongkeRouter = require('./routes/thongke');
+var backupdbRouter = require('./routes/backupdb');
+var restoredbRouter = require('./routes/restoredb');
 
 var app = express();
 
 const session = require('express-session');
+
 app.use(session({
     secret: 'your_secret_key',
     resave: false,
@@ -67,6 +70,10 @@ app.use('/lichsu', lichsuRouter);
 app.use('/cus_history',cus_historyRouter);
 //app.use('/cong',congRouter);
 app.use('/thongke',thongkeRouter);
+app.use('/backupdb', backupdbRouter);
+app.use('/restoredb', restoredbRouter);
+
+
 
 // Cấu hình để phục vụ tệp tĩnh từ thư mục "public"
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -88,3 +95,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+

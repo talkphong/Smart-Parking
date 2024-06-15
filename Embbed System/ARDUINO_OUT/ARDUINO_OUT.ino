@@ -51,7 +51,7 @@ bool sensor_preState;
 bool sensor_State;      // Trạng thái của cảm biến: (0)-có vật thể , (1)-không có vật thể 
 
 int servo_Open = 90;    // Góc để servo quay khi mở
-int servo_Close = 0;  // Góc để servo quay khi đóng
+int servo_Close = 180;  // Góc để servo quay khi đóng
 
 int buttonState = 0;       // biến lưu trạng thái hiện tại của nút nhấn
 int lastButtonState = 0;   // biến lưu trạng thái trước đó của nút nhấn

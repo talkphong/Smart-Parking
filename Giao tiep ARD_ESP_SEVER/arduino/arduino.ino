@@ -6,6 +6,8 @@ void setup() {
  Wire.onReceive(receiveEvent); // Đăng ký hàm nhận dữ liệu
  Wire.onRequest(requestEvent); // Đăng ký hàm gửi dữ liệu
   Serial.begin(9600);          // khởi tạo UART cứng (Để giao tiếp với máy tính, in ra serial monitor)
+  Serial.println("arduino 8 start");             
+
 }
 
 void loop() {
@@ -23,8 +25,9 @@ void receiveEvent(int howMany) {
 
 // GỬI DỮ LIỆU ĐẾN ESP
 void requestEvent() {
+  Serial.println("b");
   String a = String(random(100)) + " " + String(random(100)); // test dữ liệu gủi đi. ở đây có thay bằng UID đọc được
   Wire.write(a.c_str());
   Wire.write("\n");
-  
+  Serial.println("a");
 }

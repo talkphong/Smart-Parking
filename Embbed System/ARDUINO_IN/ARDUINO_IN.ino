@@ -95,7 +95,7 @@ void setup() {
 void loop() {
   controlServo();
   sensorControl();
-  //lightControl();
+  lightControl();
   readCard();
 }
 /*____________________________________________________________________________________________*/
@@ -200,7 +200,7 @@ void controlServo() {
   if (buttonState != lastButtonState) {
     // nếu trạng thái nút đã thay đổi và nút đang được nhấn
     if (buttonState == HIGH) {
-      // thay đổi22222222 trạng thái của servo
+      // thay đổi trạng thái của servo
       if (isServoOpen) {
         myservo.write(servo_Close);
         Serial.println("Dong servo");

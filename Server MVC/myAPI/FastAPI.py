@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
+import uvicorn
 import cv2
 import numpy as np
 import main
@@ -20,5 +21,4 @@ async def process_image(image: UploadFile = File(...)):
 
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
